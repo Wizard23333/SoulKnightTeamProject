@@ -108,25 +108,28 @@ bool onContactSeparate(cocos2d::PhysicsContact & contact)
 {
     auto nodeA = contact.getShapeA()->getBody()->getNode();
     auto nodeB = contact.getShapeB()->getBody()->getNode();
-    
-    
-    
     return true;
 }
 void Hero::attack(cocos2d::Touch * touch)
 {
-    //this->_weapon.shoot(touch);//传入点击位置射击//子弹射出点出点在武器自己的位置上
+    //this->_weapon.shoot(touch);//传入点击位置来射击//子弹射出点出点在武器自己的位置上
     //_heroValue->setEnergy(_heroValue.energy - _weapon.getCost);//消耗能量
     //....
-    
 }
 
 void Hero::colletWeapon(cocos2d::Node * weaponNode)
 {
     /*
-    _weapon.reset(weaponNode->getTag());//用节点Tag来重新设置武器
+    _weapon.reset(weaponNode->getTag());//用节点的Tag来重新设置武器
     weaponNode->removeFromParentAndCleanup(true)//清除放在地上的武器
     */
 }
+/*
+ 之前weapon的设计感觉有点问题:
+ 因为碰撞监测得不到原来的碰撞对象的本体,所以武器拾起只能用Tag值
+ 就是通过碰撞获得的Node的Tag值来确定获得的武器的种类,然后将hero持有的武器直接根据Tag值来转换成放在地上的武器
+ 然后将地上的武器清除//好像还没想到好的方法来交换两个武器
+ */
+
 
 
