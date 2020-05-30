@@ -1,37 +1,44 @@
 #include"Props.h"
 
 //创建子弹
-Bullet::Bullet(const char* pngName, int _attack, int _costenergy, int _knock, int _accurate) {
+Bullet::Bullet(const std::string pngName, int _attack, int _costenergy, int _knock, int _accurate) {
 	Props(pngName);
-	_sprite->setTag(9);
+	//设置标记
+	_sprite->setTag(20);
 
 	(this->attack) = _attack;
 	(this->costenergy) = _costenergy;
 	(this->knock) = _knock;
 	(this->accurate) = _accurate;
-	//添加到场景中
-	this->addChild(_sprite);
-};
+}
+
+Bullet::Bullet(const std::string pngName) {
+	Props(pngName);
+	//设置标记
+	_sprite->setTag(20);
+}
+
 //修改属性
 void Bullet::setattack(int _attack) {
     (this->attack) = _attack;
-};
+}
 
 void Bullet::setcostenergy(int _costenergy) {
 	(this->costenergy) = _energy;
-};
+}
 
 void Bullet::setknock(int _knock) {
 	(this->knock) = _knock;
-};
+}
 
 void Bullet::setattack(int _attack) {
 	(this->accurate) = _accurate;
-};
+}
+
 //发射子弹
-bool Bullet::onTouchBegan(Touch* touch, Event* unused_event, const char* pngName, int _attack, int _costenergy, int _knock, int _accurate) {
-	// 在武器所在的位置创建一个子弹，将其添加到场景中。
-	auto bullet = Bullet(pngName,_attack,_costenergy,_knock,_accurate);
+bool Bullet::onTouchBegan(Touch* touch, Event* unused_event) {
+	// 在武器所在的位置创建一个子弹。
+	auto bullet = Bullet(pngName);
 
 	//获取触摸点的坐标，并计算这个点相对于_player的偏移量。
 	Vec2 touchLocation = touch->getLocation();
@@ -55,16 +62,13 @@ bool Bullet::onContactBegin(cocos2d::PhysicsContact& contact)
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
 
-	if (nodeA && nodeB)
+	if (nodeA->getTag() == 10)
 	{
-		if (nodeA->getTag() == 10)
-		{
-			nodeB->removeFromParentAndCleanup(true);
-		}
-		else if (nodeB->getTag() == 10)
-		{
-			nodeA->removeFromParentAndCleanup(true);
-		}
+		nodeB->removeFromParentAndCleanup(true);
+	}
+	else if (nodeB->getTag() == 10)
+	{
+		nodeA->removeFromParentAndCleanup(true);
 	}
 
 	return true;
