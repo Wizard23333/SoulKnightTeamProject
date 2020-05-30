@@ -2,13 +2,19 @@
 #include "Hero.h"
 #include <iostream>
 Hero::Hero(const std::string pngName, int blood, int energy, int sheild)
-:_heroValue(blood, energy, sheild), Actor(pngName)
+:_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("projectile.png"))
 {
     changeWeapon = false;
+    _sprite->setTag(999);
 }
 
-Hero * Hero::HeroCreate(const std::string pngName)
+Hero * Hero::HeroCreate(const std::string pngName, int blood, int energy, int sheild)
 {
+    _heroValue.setBlood(blood);
+    _heroValue.setEnergy(energy);
+    _heroValue.setShield(sheild);
+    _sprite->setTag(999);
+    changeWeapon = false;
     actorCreate(pngName);
     return this;
 }
@@ -20,28 +26,28 @@ bool Hero::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
         auto moveRight = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(15, 0));
         auto repeatRight = cocos2d::RepeatForever::create(moveRight);
         repeatRight->setTag(101);
-        this->_sprite->runAction(repeatRight);
+        this->moveAll(repeatRight);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_S)
     {
         auto moveDown = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(0, -15));
         auto repeatDown = cocos2d::RepeatForever::create(moveDown);
         repeatDown->setTag(102);
-        this->_sprite->runAction(repeatDown);
+        this->moveAll(repeatDown);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_W)
     {
         auto moveUp = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(0, 15));
         auto repeatUp = cocos2d::RepeatForever::create(moveUp);
         repeatUp->setTag(103);
-        this->_sprite->runAction(repeatUp);
+        this->moveAll(repeatUp);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_A)
     {
         auto moveLeft = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(-15, 0));
         auto repeatLeft = cocos2d::RepeatForever::create(moveLeft);
         repeatLeft->setTag(104);
-        this->_sprite->runAction(repeatLeft);
+        this->moveAll(repeatLeft);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_G)
     {
@@ -54,19 +60,19 @@ bool Hero::onKeyRelesed(cocos2d::EventKeyboard::KeyCode keycode)
 {
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_D)
     {
-        this->_sprite->stopActionByTag(101);
+        this->stopMoveByTag(101);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_S)
     {
-        this->_sprite->stopActionByTag(102);
+        this->stopMoveByTag(102);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_W)
     {
-        this->_sprite->stopActionByTag(103);
+        this->stopMoveByTag(103);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_A)
     {
-        this->_sprite->stopActionByTag(104);
+        this->stopMoveByTag(104);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_G)
     {
@@ -77,13 +83,14 @@ bool Hero::onKeyRelesed(cocos2d::EventKeyboard::KeyCode keycode)
 
 bool Hero::onTouchBegin(cocos2d::Touch* touch)
 {
-    /*
+    
     if(_heroValue.energy >= _weapon.getCost())
-     {
-      this-> attack(touch);
-     }
-    ....
-    */
+    {
+        this->attack(touch);
+        
+    
+    }
+    
     return true;
 }
 /*
@@ -100,36 +107,62 @@ bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
     {
      this->colletWeapon(nodeA)
     }
+     if(如果是子弹和人)
+     {
+     
+     }
     */
+    cocos2d::log("%d", nodeA->getTag());
+    cocos2d::log("%d", nodeB->getTag());
+    if(nodeA->getTag() == 999 && nodeB ->getTag() == 333)
+    {
+        cocos2d::log("afdd");
+        nodeB->removeFromParentAndCleanup(true);
+    }
+    if(nodeB->getTag() == 999 && nodeA ->getTag() == 333)
+    {
+        cocos2d::log("abdsdf");
+        nodeA->removeFromParentAndCleanup(true);
+    }
     return true;
 }
 
-bool onContactSeparate(cocos2d::PhysicsContact & contact)
+bool Hero::onContactSeparate(cocos2d::PhysicsContact & contact)
 {
     auto nodeA = contact.getShapeA()->getBody()->getNode();
     auto nodeB = contact.getShapeB()->getBody()->getNode();
     return true;
 }
+
 void Hero::attack(cocos2d::Touch * touch)
 {
-    //this->_weapon.shoot(touch);//传入点击位置来射击//子弹射出点出点在武器自己的位置上
-    //_heroValue->setEnergy(_heroValue.energy - _weapon.getCost);//消耗能量
+    this->_weapon.shoot(touch);//传入点击位置射击//子弹射出点出点在武器自己的位置上
+    this->_heroValue.setEnergy(_heroValue.energy - _weapon.getCost());//消耗能量
     //....
 }
 
 void Hero::colletWeapon(cocos2d::Node * weaponNode)
 {
     /*
-    _weapon.reset(weaponNode->getTag());//用节点的Tag来重新设置武器
+    _weapon.reset(weaponNode->getTag());//用节点的Tag来重新设置武器//
     weaponNode->removeFromParentAndCleanup(true)//清除放在地上的武器
     */
 }
-/*
- 之前weapon的设计感觉有点问题:
- 因为碰撞监测得不到原来的碰撞对象的本体,所以武器拾起只能用Tag值
- 就是通过碰撞获得的Node的Tag值来确定获得的武器的种类,然后将hero持有的武器直接根据Tag值来转换成放在地上的武器
- 然后将地上的武器清除//好像还没想到好的方法来交换两个武器
- */
 
 
 
+
+void Hero::moveAll(cocos2d::Action * move)
+{
+    auto move1 = move->clone();
+    move1->setTag(move->getTag());
+    this->_sprite->runAction(move1);
+    //this->_weapon._sprite->runAction(move);
+    
+}
+
+void Hero::stopMoveByTag(int tag)
+{
+    this->_sprite->stopActionByTag(tag);
+    //this->_weapon._sprite->stopActionByTag(tag);
+}
