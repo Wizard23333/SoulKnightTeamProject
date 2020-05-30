@@ -2,6 +2,7 @@
 #define Hero_h
 #include "cocos2d.h"
 #include "Actor.h"
+#include "Weapons.h"
 
 class heroValue
 {
@@ -18,13 +19,17 @@ public:
         fullEnergy = energy = b;
         fullShield = shield = c;
     }
+    void setBlood(int blood) { this->blood = blood; }
+    void setEnergy(int energy) { this->energy = energy; }
+    void setShield(int shield) { this->shield = shield; }
 };
 
 class Hero : public Actor
 {
 public:
+    Weapon _weapon;//武器
     Hero(const std::string pngName = "HelloWorld.png", int blood = 10, int energy = 20, int sheild = 2);
-    Hero * HeroCreate(const std::string pngName);
+    Hero * HeroCreate(const std::string pngName = "HelloWorld.png", int blood = 10, int energy = 20, int sheild = 2);
     bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode);
     bool onKeyRelesed(cocos2d::EventKeyboard::KeyCode keycode);
     bool onTouchBegin(cocos2d::Touch * touch);
@@ -32,15 +37,14 @@ public:
     bool onContactSeparate(cocos2d::PhysicsContact & contact);
 private:
     class  heroValue _heroValue;
-    //weapon _weapon;//武器
     bool changeWeapon;
     void attack(cocos2d::Touch * touch);
     void colletWeapon(cocos2d::Node * weaponNode);
+    void moveAll(cocos2d::Action * move);
+    void stopMoveByTag(int tag);
     void usePotion();
-    void setBlood();
-    void setEnergy();
-    void setSheild();
-    
 };
+
+
 
 #endif /* Hero_h */
