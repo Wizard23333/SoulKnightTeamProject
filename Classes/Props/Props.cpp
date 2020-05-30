@@ -2,7 +2,7 @@
 
 USING_NS_CC;
 //道具生成
-Props::Props(const char* pngName) {
+Props::Props(const std::string pngName) {
 	//在玩家位置创建道具
 	_sprite = Sprite::create("pngName.png");
 	_sprite->setPosition(_player->getPosition());
@@ -12,10 +12,9 @@ Props::Props(const char* pngName) {
 	physicsBody->setDynamic(false);
 	physicsBody->setContactTestBitmask(0xFFFFFFFF);
 	_sprite->setPhysicsBody(physicsBody);
+}
 
-};
-
-Props::Props(const char* pngName, Node* Box) {
+Props::Props(const std::string pngName, Node* Box) {
 	//在玩家位置创建道具（可改为在宝箱位置）
 	_sprite = Sprite::create("pngName.png");
 	_sprite->setPosition(Box->getPosition());
@@ -25,9 +24,7 @@ Props::Props(const char* pngName, Node* Box) {
 	physicsBody->setDynamic(false);
 	physicsBody->setContactTestBitmask(0xFFFFFFFF);
 	_sprite->setPhysicsBody(physicsBody);
+}
 
-};;
-//碰撞检测
-bool Props::onContactWithHero(cocos2d::Node* Hero) {};
 
 
