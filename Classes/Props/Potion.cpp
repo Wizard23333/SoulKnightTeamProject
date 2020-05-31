@@ -25,19 +25,42 @@ void Potion::setenergy(int _energy) {
 }
 
 //药水碰撞函数
-bool Potion::onContactBegin(cocos2d::PhysicsContact& contact)
+bool Potion::onContactpresolve(cocos2d::PhysicsContact& contact)
 {
 	auto nodeA = contact.getShapeA()->getBody()->getNode();
 	auto nodeB = contact.getShapeB()->getBody()->getNode();
 
-	if (nodeA->getTag() == tag_of_the_hero)//英雄的标记
+	if (nodeA->getTag()>=100||nodeB->getTag()>=100)
 	{
-		nodeB->removeFromParentAndCleanup(true);
+		if (nodeA->getTag() == tag_of_the_hero)//英雄的标记
+		{
+			nodeB->removeFromParentAndCleanup(true);
+		}
+		else if (nodeB->getTag() == tag_of_the_hero)//英雄的标记
+		{
+			nodeA->removeFromParentAndCleanup(true);
+		}
 	}
-	else if (nodeB->getTag() == tag_of_the_hero)//英雄的标记
-	{
-		nodeA->removeFromParentAndCleanup(true);
-	}
+	return true;
+}
 
+//药水使用
+bool Potion::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
+{
+	if (keycode == cocos2d::EventKeyboard::KeyCode::KEY_T)
+	{
+		auto temptag = 100 + this->_sprite->getTag();
+		this->_sprite->setTag(temptag);
+	}
+	return true;
+}
+
+bool Potion::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode)
+{
+	if (keycode == cocos2d::EventKeyboard::KeyCode::KEY_T)
+	{
+		auto temptag = -100 + this->_sprite->getTag();
+		this->_sprite->setTag(temptag);
+	}
 	return true;
 }

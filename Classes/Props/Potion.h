@@ -20,7 +20,10 @@ public:
 	void Getblood() { return this->blood };
 	void Getenergy() { return this->energy };
 	//药水碰撞函数
-	bool onContactBegin(cocos2d::PhysicsContact& contact)
+	bool onContactpresolve(cocos2d::PhysicsContact& contact);
+	//药水使用函数
+	bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode);
+	bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode)
 };
 
 #endif
