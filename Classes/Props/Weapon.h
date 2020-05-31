@@ -10,11 +10,10 @@ protected:
 	Bullet bullet;
 public:
 	//武器构造函数
-	Weapon(const std::string pngName);
+	Weapon(const std::string pngName,Bullet _bullet);
 	//获取子弹消耗的能量
 	int GetBulletenergycost() { return this->bullet.costenergy; };
-	//交换武器
-	void ChangeWeapon(int tag);
+
 };
 
 #endif
