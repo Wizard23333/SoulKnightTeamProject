@@ -2,7 +2,8 @@
 #define BULLET_H
 
 #include"cocos2d.h"
-
+#include"Props.h"
+USING_NS_CC;
 //子弹类
 class Bullet :public Props {
 protected:
@@ -19,12 +20,14 @@ public:
 	//发射子弹
 	bool onTouchBegan(Touch* touch, Event* unused_event);
 	//子弹射中
-	bool onContactBegin(cocos2d::PhysicsContact& contact)
+	bool onContactBegin(cocos2d::PhysicsContact& contact);
 	//设置属性
 	void setattack(int _attack);
 	void setcostenergy(int _costenergy);
 	void setknock(int _knock);
 	void setaccurate(int _accurate);
+	//获取消耗能量
+	int getcostenergy() { return this->costenergy; };
 };
 
 #endif

@@ -1,4 +1,6 @@
+#include"cocos2d.h"
 #include"Props.h"
+#include"Potion.h"
 
 USING_NS_CC;
 
