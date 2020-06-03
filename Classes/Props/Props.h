@@ -5,8 +5,10 @@
 //子弹标记数字10-14
 #ifndef PROPS_H
 #define PROPS_H
-
+#include<iostream>
 #include"cocos2d.h"
+using namespace std;
+USING_NS_CC;
 //各类道具属性常量
 class Propsvalue {
 private:

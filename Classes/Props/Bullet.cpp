@@ -1,4 +1,7 @@
 #include"Props.h"
+#include"Bullet.h"
+#include"cocos2d.h"
+USING_NS_CC;
 
 //´´½¨×Óµ¯
 Bullet::Bullet(const std::string pngName, int _attack, int _costenergy, int _knock, int _accurate) {

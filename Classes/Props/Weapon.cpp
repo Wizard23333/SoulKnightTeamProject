@@ -1,5 +1,6 @@
+#include"cocos2d.h"
 #include"Props.h"
-
+#include"Bullet.h"
 USING_NS_CC;
 
 //´´½¨ÎäÆ÷

@@ -2,7 +2,8 @@
 #define POTION_H
 
 #include"cocos2d.h"
-
+#include"Props.h"
+USING_NS_CC;
 //Ò©Ë®Àà
 class Potion :public Props {
 protected:
