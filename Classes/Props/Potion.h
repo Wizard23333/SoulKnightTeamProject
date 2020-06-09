@@ -18,13 +18,13 @@ public:
 	void setblood(int _blood);
 	void setenergy(int _energy);
 	//属性获取函数
-	void Getblood() { return this->blood };
-	void Getenergy() { return this->energy };
+    int Getblood() { return this->blood; };
+    int Getenergy() { return this->energy; };
 	//药水碰撞函数
 	bool onContactpresolve(cocos2d::PhysicsContact& contact);
 	//药水使用函数
 	bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode);
-	bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode)
+    bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode);
 };
 
 #endif
