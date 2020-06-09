@@ -34,7 +34,7 @@ void Bullet::setknock(int _knock) {
 	(this->knock) = _knock;
 }
 
-void Bullet::setattack(int _attack) {
+void Bullet::setaccurate(int _accurate) {
 	(this->accurate) = _accurate;
 }
 
