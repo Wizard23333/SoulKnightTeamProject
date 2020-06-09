@@ -3,6 +3,7 @@
  */
 #include "FightGroundScene.h"
 #include "SimpleAudioEngine.h"
+//#include "../cocos/audio/mac/CocosDenshion.h"
 
 USING_NS_CC;
 Scene * FightGround::createScene()
@@ -43,12 +44,55 @@ bool FightGround::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     
+    char temp1[20];
+    sprintf(temp1, "Blood:%d/%d", myHero._heroValue.blood, myHero._heroValue.fullBlood);
+    blood = cocos2d::Label::createWithTTF(temp1, "fonts/Marker Felt.ttf", 30);
+    blood->setColor(Color3B::RED);
+    blood->setPosition(Vec2(blood->getContentSize().width / 2, visibleSize.height - blood->getContentSize().height));
+    this->addChild(blood, 1);
+    
+    char temp2[20];
+    sprintf(temp2, "Energy:%d/%d", myHero._heroValue.energy, myHero._heroValue.fullEnergy);
+    energy = cocos2d::Label::createWithTTF(temp2, "fonts/Marker Felt.ttf", 30);
+    energy->setColor(Color3B::BLUE);
+    energy->setPosition(Vec2(energy->getContentSize().width / 2, visibleSize.height - blood->getContentSize().height - energy->getContentSize().height));
+    this->addChild(energy, 1);
+    
+    char temp3[20];
+    sprintf(temp3, "Sheild:%d/%d", myHero._heroValue.shield, myHero._heroValue.fullShield);
+    sheild = cocos2d::Label::createWithTTF(temp3, "fonts/Marker Felt.ttf", 30);
+    sheild->setColor(Color3B::BLACK);
+    sheild->setPosition(Vec2(sheild->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height));
+    this->addChild(sheild, 1);
+    this->schedule(schedule_selector(FightGround::updateBlood), 0.1f);
+    
     myHero.HeroCreate("Ninja.png");//创建英雄
     myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
+    myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
+    myHero._weapon._sprite->setScale(0.03);
     this->addChild(myHero._sprite, 1);
+    this->addChild(myHero._weapon._sprite, 1);
     myHero._sprite->setTag(999);//添加Tag值
     
-    this->monsterinit();//初始化怪物设置
+    myHero._heroValue.setBlood(5);//加血演示
+    myHero._heroValue.setEnergy(10);
+    //添加药水
+    potion1 = Potion("HelloWorld.png");
+    potion1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 + 200));
+    potion1._sprite->setScale(0.10);
+    potion1._sprite->setTag(5);
+    this->addChild(potion1._sprite, 1);
+
+    potion2 = Potion("HelloWorld.png");
+    potion2._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 - 200));
+    potion2._sprite->setScale(0.10);
+    potion2._sprite->setTag(5);
+    
+    this->addChild(potion2._sprite, 1);
+    
+    
+    
+    //this->monsterinit();//初始化怪物设置
     
     auto eventListener = EventListenerTouchOneByOne::create();//触摸事件监听
     eventListener->onTouchBegan = CC_CALLBACK_2(FightGround::onTouchBegan, this);
@@ -76,24 +120,49 @@ void FightGround::menucloseCallBack(Ref* pSender)//关闭按钮的回调
 
 bool FightGround::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
+    
+    
     return true;
 }
 
 bool FightGround::onContactBegan(cocos2d::PhysicsContact & contact)//碰撞的回调
 {
-    myHero.onContactBegin(contact);//成员函数处理碰撞信息
+    if(myHero.onContactBegin(contact) == false)//成员函数处理碰撞信息
+    {
+        auto contactPosA = contact.getShapeA()->getBody()->getNode()->getPosition();
+        auto contactPosB = contact.getShapeB()->getBody()->getNode()->getPosition();
+        if(potion1.isItUsed == false)
+        {
+            if(contactPosA == potion1._sprite->getPosition() || contactPosB == potion1._sprite->getPosition())
+            {
+                potion1.onContactpresolve(contact);
+            }
+        }
+        if(potion2.isItUsed == false)
+        {
+            if(contactPosA == potion2._sprite->getPosition() || contactPosB == potion2._sprite->getPosition())
+            {
+                potion2.onContactpresolve(contact);
+            }
+        }
+    }
+    
     return true;
 }
 
 bool  FightGround::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)//按键按下的回调
 {
     myHero.onKeyPressed(keycode);//成员函数处理键盘信息//下同
+    potion1.onKeyPressed(keycode);
+    potion2.onKeyPressed(keycode);
     return true;
 }
 
 bool FightGround::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)
 {
     myHero.onKeyRelesed(keycode);
+    potion1.onKeyPressed(keycode);
+    potion2.onKeyPressed(keycode);
     return true;
 }
 
@@ -161,20 +230,20 @@ void FightGround::autoshootM(float dt)//自动攻击
     //设置physicsbody
     auto physicbody1 = cocos2d::PhysicsBody::createBox(bullet1->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicbody1->setDynamic(false);
-    physicbody1->setCategoryBitmask(0x01);
-    physicbody1->setContactTestBitmask(0x01);
+    physicbody1->setCategoryBitmask(8);
+    physicbody1->setContactTestBitmask(1);
     bullet1->setPhysicsBody(physicbody1);
     
     auto physicbody2 = cocos2d::PhysicsBody::createBox(bullet2->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicbody2->setDynamic(false);
-    physicbody2->setCategoryBitmask(0x01);
-    physicbody2->setContactTestBitmask(0x01);
+    physicbody2->setCategoryBitmask(8);
+    physicbody2->setContactTestBitmask(1);
     bullet2->setPhysicsBody(physicbody2);
     
     auto physicbody3 = cocos2d::PhysicsBody::createBox(bullet3->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicbody3->setDynamic(false);
-    physicbody3->setCategoryBitmask(0x01);
-    physicbody3->setContactTestBitmask(0x01);
+    physicbody3->setCategoryBitmask(8);
+    physicbody3->setContactTestBitmask(1);
     bullet3->setPhysicsBody(physicbody3);
     
     //定义运动方向
@@ -188,3 +257,24 @@ void FightGround::autoshootM(float dt)//自动攻击
     bullet3->runAction(cocos2d::Sequence::create(moveBy3, remove, nullptr));
     
 }
+
+void FightGround::updateBlood(float dt)
+{
+    char temp1[20];
+    sprintf(temp1, "Blood:%d/%d", myHero._heroValue.blood, myHero._heroValue.fullBlood);
+    blood->setString(temp1);
+    blood->setVisible(true);
+    
+    char temp2[20];
+    sprintf(temp2, "Energy:%d/%d", myHero._heroValue.energy, myHero._heroValue.fullEnergy);
+    energy->setString(temp2);
+    energy->setVisible(true);
+    
+    char temp3[20];
+    sprintf(temp3, "Sheild:%d/%d", myHero._heroValue.shield, myHero._heroValue.fullShield);
+    sheild->setString(temp3);
+    sheild->setVisible(true);
+    
+    
+}
+

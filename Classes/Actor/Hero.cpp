@@ -2,7 +2,7 @@
 #include "Hero.h"
 #include <iostream>
 Hero::Hero(const std::string pngName, int blood, int energy, int sheild)
-:_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("projectile.png"))
+:_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("projectile.png"), Bullet("Bullet.png"))
 {
     changeWeapon = false;
     _sprite->setTag(999);
@@ -84,7 +84,7 @@ bool Hero::onKeyRelesed(cocos2d::EventKeyboard::KeyCode keycode)
 bool Hero::onTouchBegin(cocos2d::Touch* touch)
 {
     
-    if(_heroValue.energy >= _weapon.getCost())
+    if(_heroValue.energy >= _weapon.GetBulletenergycost())
     {
         this->attack(touch);
         
@@ -112,19 +112,38 @@ bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
      
      }
     */
-    cocos2d::log("%d", nodeA->getTag());
-    cocos2d::log("%d", nodeB->getTag());
-    if(nodeA->getTag() == 999 && nodeB ->getTag() == 333)
+    //cocos2d::log("%d", nodeA->getTag());
+    //cocos2d::log("%d", nodeB->getTag());
+    if(nodeA->getTag() == 999 && nodeB ->getTag() == 333)//子弹和英雄
     {
-        cocos2d::log("afdd");
+        //cocos2d::log("afdd");
+        this->getShot();
         nodeB->removeFromParentAndCleanup(true);
+        return true;
     }
     if(nodeB->getTag() == 999 && nodeA ->getTag() == 333)
     {
-        cocos2d::log("abdsdf");
+        //cocos2d::log("abdsdf");
+        this->getShot();
         nodeA->removeFromParentAndCleanup(true);
+        return true;
     }
-    return true;
+    if(nodeA->getTag() == 999 && (nodeB->getTag() >= 100 && nodeB->getTag() <= 110))
+    {
+        auto bloodAdd = parameter[nodeB->getTag() - 100].getparameter1();
+        auto energyAdd = parameter[nodeB->getTag() - 100].getparameter2();
+        this->_heroValue.setBlood(_heroValue.blood + bloodAdd);
+        this->_heroValue.setEnergy(_heroValue.energy + energyAdd);
+        
+    }
+    if(nodeB->getTag() == 999 && (nodeA->getTag() >= 100 && nodeA->getTag() <= 110))
+    {
+        auto bloodAdd = parameter[nodeA->getTag() - 100].getparameter1();
+        auto energyAdd = parameter[nodeA->getTag() - 100].getparameter2();
+        this->_heroValue.setBlood(_heroValue.blood + bloodAdd);
+        this->_heroValue.setEnergy(_heroValue.energy + energyAdd);
+    }
+    return false;
 }
 
 bool Hero::onContactSeparate(cocos2d::PhysicsContact & contact)
@@ -136,11 +155,22 @@ bool Hero::onContactSeparate(cocos2d::PhysicsContact & contact)
 
 void Hero::attack(cocos2d::Touch * touch)
 {
-    this->_weapon.shoot(touch);//传入点击位置射击//子弹射出点出点在武器自己的位置上
-    this->_heroValue.setEnergy(_heroValue.energy - _weapon.getCost());//消耗能量
+    //this->_weapon.shoot(touch);//传入点击位置射击//子弹射出点出点在武器自己的位置上
+    this->_heroValue.setEnergy(_heroValue.energy - _weapon.GetBulletenergycost());//消耗能量
     //....
 }
 
+void Hero::getShot(int value)
+{
+    if(this->_heroValue.shield > 0)
+    {
+        this->_heroValue.setShield(this->_heroValue.shield - value);
+    }
+    else if(this->_heroValue.blood > 0)
+    {
+        this->_heroValue.setBlood(this->_heroValue.blood - value);
+    }
+}
 void Hero::colletWeapon(cocos2d::Node * weaponNode)
 {
     /*
@@ -157,12 +187,12 @@ void Hero::moveAll(cocos2d::Action * move)
     auto move1 = move->clone();
     move1->setTag(move->getTag());
     this->_sprite->runAction(move1);
-    //this->_weapon._sprite->runAction(move);
+    this->_weapon._sprite->runAction(move);
     
 }
 
 void Hero::stopMoveByTag(int tag)
 {
     this->_sprite->stopActionByTag(tag);
-    //this->_weapon._sprite->stopActionByTag(tag);
+   this->_weapon._sprite->stopActionByTag(tag);
 }

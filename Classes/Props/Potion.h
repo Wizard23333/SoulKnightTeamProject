@@ -25,6 +25,9 @@ public:
 	//药水使用函数
 	bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode);
     bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode);
+    
+    //add
+    bool isItUsed;
 };
 
 #endif

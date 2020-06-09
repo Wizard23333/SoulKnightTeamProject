@@ -2,7 +2,8 @@
 #define Hero_h
 #include "cocos2d.h"
 #include "Actor.h"
-#include "Weapons.h"
+#include "Weapon.h"
+#include "Props.h"
 
 class heroValue
 {
@@ -19,9 +20,25 @@ public:
         fullEnergy = energy = b;
         fullShield = shield = c;
     }
-    void setBlood(int blood) { this->blood = blood; }
-    void setEnergy(int energy) { this->energy = energy; }
-    void setShield(int shield) { this->shield = shield; }
+    void setBlood(int blood)
+    {
+        if(blood <= fullBlood)
+            this->blood = blood;
+
+        
+    }
+    void setEnergy(int energy)
+    {
+        if(energy <= fullEnergy)
+        this->energy = energy;
+        
+    }
+    void setShield(int shield)
+    {
+        if(shield <= fullShield)
+        this->shield = shield;
+        
+    }
 };
 
 class Hero : public Actor
@@ -35,10 +52,12 @@ public:
     bool onTouchBegin(cocos2d::Touch * touch);
     bool onContactBegin(cocos2d::PhysicsContact & contact);
     bool onContactSeparate(cocos2d::PhysicsContact & contact);
-private:
     class  heroValue _heroValue;
+private:
+    
     bool changeWeapon;
     void attack(cocos2d::Touch * touch);
+    void getShot(int value = 1);
     void colletWeapon(cocos2d::Node * weaponNode);
     void moveAll(cocos2d::Action * move);
     void stopMoveByTag(int tag);
