@@ -36,14 +36,24 @@ const Propsvalue parameter[20] = {
 	Propsvalue("pngName11",1,1,1,1),Propsvalue("pngName12",1,1,1,1),Propsvalue("pngName13",1,1,1,1),Propsvalue("pngName14",1,1,1,1),Propsvalue("pngName15",1,1,1,1),
 	Propsvalue("pngName16",1,1,1,1),Propsvalue("pngName17",1,1,1,1),Propsvalue("pngName18",1,1,1,1),Propsvalue("pngName19",1,1,1,1),Propsvalue("pngName20",1,1,1,1),
 };
-
+/*
 //道具基类
 class Props {
 protected:
-	cocos2d::Sprite* _sprite;
+	//
 public:
 	//道具构造函数
+    cocos2d::Sprite* _sprite;
 	Props(const std::string pngName, Node* Box);
 };
+*/
+class Props
+{
+public:
+    Sprite * _sprite;
+    Props(const std::string pngName = "HelloWorld.png");
+    Props(const std::string pngName, Node* Box);
 
+    
+};
 #endif

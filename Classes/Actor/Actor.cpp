@@ -7,8 +7,8 @@ Actor::Actor(const std::string name)
     _sprite = cocos2d::Sprite::create(name);
     auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicbody->setDynamic(false);
-    physicbody->setCategoryBitmask(0x01);
-    physicbody->setContactTestBitmask(0x01);
+    physicbody->setCategoryBitmask(3);
+    physicbody->setContactTestBitmask(12);
     this->_sprite->setPhysicsBody(physicbody);
 }
 
@@ -17,8 +17,8 @@ Actor * Actor::actorCreate(const std::string name)
     _sprite = cocos2d::Sprite::create(name);
     auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicbody->setDynamic(false);
-    physicbody->setCategoryBitmask(0x01);
-    physicbody->setContactTestBitmask(0x01);
+    physicbody->setCategoryBitmask(3);
+    physicbody->setContactTestBitmask(12);
     this->_sprite->setPhysicsBody(physicbody);
     return this;
 }

@@ -3,6 +3,8 @@
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"
+#include "Potion.hpp"
+USING_NS_CC;
 class FightGround : public cocos2d::Scene
 {
 public:
@@ -19,7 +21,13 @@ private:
     void addmonster(float dt);//*****
     void automoveM(float dt);//*****
     void autoshootM(float dt);//****
+    void updateBlood(float dt);
+    Label * blood;
+    Label * energy;
+    Label * sheild;
     Hero myHero;
+    Potion potion1;
+    Potion potion2;
     Monster monster1;
     Monster monster2;
     Monster monster3;

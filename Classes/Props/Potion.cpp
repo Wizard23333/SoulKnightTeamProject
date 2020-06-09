@@ -29,40 +29,45 @@ void Potion::setenergy(int _energy) {
 //药水碰撞函数
 bool Potion::onContactpresolve(cocos2d::PhysicsContact& contact)
 {
-	auto nodeA = contact.getShapeA()->getBody()->getNode();
-	auto nodeB = contact.getShapeB()->getBody()->getNode();
-
-	if (nodeA->getTag()>=100||nodeB->getTag()>=100)
-	{
-		if (nodeA->getTag() == tag_of_the_hero)//英雄的标记
-		{
-			nodeB->removeFromParentAndCleanup(true);
-		}
-		else if (nodeB->getTag() == tag_of_the_hero)//英雄的标记
-		{
-			nodeA->removeFromParentAndCleanup(true);
-		}
-	}
-	return true;
+    auto nodeA = contact.getShapeA()->getBody()->getNode();
+    auto nodeB = contact.getShapeB()->getBody()->getNode();
+    log("%d",nodeA->getTag());
+    log("%d",nodeB->getTag());
+    if ((nodeA->getTag()>=100 && nodeA ->getTag() <= 110)||(nodeB->getTag()>=100 && nodeB->getTag() <= 110))
+    {
+        if (nodeA->getTag() == 999)//英雄的标记
+        {
+            isItUsed = true;
+            nodeB->removeFromParentAndCleanup(true);
+        }
+        else if (nodeB->getTag() == 999)//英雄的标记
+        {
+            isItUsed = true;
+            nodeA->removeFromParentAndCleanup(true);
+        }
+    }
+    return true;
 }
-
 //药水使用
 bool Potion::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
 {
-	if (keycode == cocos2d::EventKeyboard::KeyCode::KEY_T)
-	{
-		auto temptag = 100 + this->_sprite->getTag();
-		this->_sprite->setTag(temptag);
-	}
-	return true;
+    log("%d", isItUsed);
+    if (keycode == cocos2d::EventKeyboard::KeyCode::KEY_T && isItUsed == false)
+    {
+        //auto temptag = 100 + this->_sprite->getTag();
+        auto temptag = this->_sprite->getTag() < 100 ? this->_sprite->getTag() + 100 : this->_sprite->getTag();
+        this->_sprite->setTag(temptag);
+    }
+    return true;
 }
 
 bool Potion::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode)
 {
-	if (keycode == cocos2d::EventKeyboard::KeyCode::KEY_T)
-	{
-		auto temptag = -100 + this->_sprite->getTag();
-		this->_sprite->setTag(temptag);
-	}
-	return true;
+    if (keycode == cocos2d::EventKeyboard::KeyCode::KEY_T && isItUsed == false)
+    {
+        //auto temptag = -100 + this->_sprite->getTag();
+        auto temptag = this->_sprite->getTag() > 100 ? this->_sprite->getTag() - 100 : this->_sprite->getTag();
+        this->_sprite->setTag(temptag);
+    }
+    return true;
 }
