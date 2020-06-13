@@ -3,7 +3,7 @@
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"
-#include "Potion.hpp"
+#include "Potion.h"
 USING_NS_CC;
 class FightGround : public cocos2d::Scene
 {

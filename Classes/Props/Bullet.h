@@ -13,10 +13,8 @@ protected:
 	int knock;
 	int accurate;
 public:
-	//子弹构造函数(附带属性)
-	Bullet(const std::string pngName, int attack, int conenergy, int knock, int accurate);
-	//子弹构造函数(不附带属性)
-	Bullet(const std::string pngName);
+	//子弹构造函数
+	Bullet(const std::string pngName="HelloWorld.png");
 	//发射子弹
 	bool onTouchBegan(Touch* touch, Event* unused_event);
 	//子弹射中
