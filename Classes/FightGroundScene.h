@@ -1,9 +1,11 @@
 #ifndef FightGroundScene_h
 #define FightGroundScene_h
+#include "HelloWorldScene.h"
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"
-#include "Potion.hpp"
+#include "Potion.h"
+#include "Box.h"
 USING_NS_CC;
 class FightGround : public cocos2d::Scene
 {
@@ -22,15 +24,21 @@ private:
     void automoveM(float dt);//*****
     void autoshootM(float dt);//****
     void updateBlood(float dt);
+    void controlMoveArea(float dt);
+    void controlSprite(Sprite * sprite);
+    Size visibleSize;
+    Vec2 originPoint;
     Label * blood;
     Label * energy;
     Label * sheild;
     Hero myHero;
     Potion potion1;
     Potion potion2;
+    Box box1;
     Monster monster1;
     Monster monster2;
     Monster monster3;
+    Monster monster4;
 };
 
 
