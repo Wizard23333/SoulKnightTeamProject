@@ -18,7 +18,8 @@ public:
 	int GetBulletenergycost() { return parameter[tagofbullet].getparameter2(); };
 	//恢复武器透明度
 	bool onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* unused_event);
-	
+	//修改子弹类型
+	void changeTagofbullet() { this->tagofbullet = 5+this->_sprite->getTag(); };
 
 };
 
