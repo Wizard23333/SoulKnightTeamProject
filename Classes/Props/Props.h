@@ -31,9 +31,9 @@ public:
 
 
 const Propsvalue parameter[20] = {
-	Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),
-	Propsvalue("Sickle.png",1,1,1,1),Propsvalue("Sword.png",1,1,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("Rifle.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
-	Propsvalue("Sickle.png",1,1,1,1),Propsvalue("Sword.png",1,1,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
+	Propsvalue("Blood.png",2,0,0,0),Propsvalue("Energy.png",0,20,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),
+	Propsvalue("Sickle.png",1,1,1,1),Propsvalue("Sword.png",1,1,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("Gun.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
+	Propsvalue("Sickle.png",1,1,1,1),Propsvalue("Sword.png",1,1,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("Bullet.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
 	Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
 };
 /*
