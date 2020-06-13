@@ -22,21 +22,25 @@ public:
     }
     void setBlood(int blood)
     {
-        if(blood <= fullBlood)
+        if(blood <= fullBlood && blood >= 0)
             this->blood = blood;
-
-        
+        else if(blood < 0)
+            this->blood = 0;
     }
     void setEnergy(int energy)
     {
-        if(energy <= fullEnergy)
-        this->energy = energy;
+        if(energy <= fullEnergy && energy >= 0)
+            this->energy = energy;
+        else if(energy < 0)
+            this->energy = 0;
         
     }
     void setShield(int shield)
     {
-        if(shield <= fullShield)
-        this->shield = shield;
+        if(shield <= fullShield && shield >= 0)
+            this->shield = shield;
+        else if(shield < 0)
+            this->shield = 0;
         
     }
 };
@@ -45,8 +49,8 @@ class Hero : public Actor
 {
 public:
     Weapon _weapon;//武器
-    Hero(const std::string pngName = "HelloWorld.png", int blood = 10, int energy = 20, int sheild = 2);
-    Hero * HeroCreate(const std::string pngName = "HelloWorld.png", int blood = 10, int energy = 20, int sheild = 2);
+    Hero(const std::string pngName = "HelloWorld.png", int blood = 100, int energy = 20, int sheild = 2);
+    Hero * HeroCreate(const std::string pngName = "HelloWorld.png", int blood = 100, int energy = 20, int sheild = 2);
     bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode);
     bool onKeyRelesed(cocos2d::EventKeyboard::KeyCode keycode);
     bool onTouchBegin(cocos2d::Touch * touch);
@@ -58,6 +62,7 @@ private:
     bool changeWeapon;
     void attack(cocos2d::Touch * touch);
     void getShot(int value = 1);
+    void getCue(int value = 1);
     void colletWeapon(cocos2d::Node * weaponNode);
     void moveAll(cocos2d::Action * move);
     void stopMoveByTag(int tag);
