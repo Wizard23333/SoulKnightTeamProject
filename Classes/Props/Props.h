@@ -31,10 +31,10 @@ public:
 
 
 const Propsvalue parameter[20] = {
-	Propsvalue("pngName1",1,1,1,1),Propsvalue("pngName2",1,1,1,1),Propsvalue("pngName3",1,1,1,1),Propsvalue("pngName4",1,1,1,1),Propsvalue("pngName5",1,1,1,1),
-	Propsvalue("pngName6",1,1,1,1),Propsvalue("pngName7",1,1,1,1),Propsvalue("pngName8",1,1,1,1),Propsvalue("pngName9",1,1,1,1),Propsvalue("pngName10",1,1,1,1),
-	Propsvalue("pngName11",1,1,1,1),Propsvalue("pngName12",1,1,1,1),Propsvalue("pngName13",1,1,1,1),Propsvalue("pngName14",1,1,1,1),Propsvalue("pngName15",1,1,1,1),
-	Propsvalue("pngName16",1,1,1,1),Propsvalue("pngName17",1,1,1,1),Propsvalue("pngName18",1,1,1,1),Propsvalue("pngName19",1,1,1,1),Propsvalue("pngName20",1,1,1,1),
+	Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),
+	Propsvalue("Sickle.png",1,1,1,1),Propsvalue("Sword.png",1,1,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("Rifle.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
+	Propsvalue("Sickle.png",1,1,1,1),Propsvalue("Sword.png",1,1,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
+	Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
 };
 /*
 //道具基类
@@ -50,10 +50,9 @@ public:
 class Props
 {
 public:
-    Sprite * _sprite;
-    Props(const std::string pngName = "HelloWorld.png");
-    Props(const std::string pngName, Node* Box);
-
-    
+    cocos2d::Sprite * _sprite;
+    Props(const std::string name = "HelloWorld.png");
+	//Props* propsCreate(const std::string name = "HelloWorld.png");
+ 
 };
 #endif

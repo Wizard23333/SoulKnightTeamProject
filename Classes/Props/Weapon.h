@@ -1,19 +1,24 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
+#include"cocos2d.h"
 #include"Bullet.h"
 #include"Props.h"
 
 //武器类
 class Weapon :public Props {
-protected:
-	//子弹类型
-	Bullet bullet;
 public:
+	//子弹类型
+	int tagofbullet;
 	//武器构造函数
-	Weapon(const std::string pngName,Bullet _bullet);
+	Weapon(const std::string pngName="HelloWorld.png");
+	//发射子弹
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event);
 	//获取子弹消耗的能量
-	int GetBulletenergycost() { return (this->bullet).getcostenergy(); };
+	int GetBulletenergycost() { return parameter[tagofbullet].getparameter2(); };
+	//恢复武器透明度
+	bool onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* unused_event);
+	
 
 };
 

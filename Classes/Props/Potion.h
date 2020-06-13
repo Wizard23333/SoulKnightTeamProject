@@ -12,8 +12,8 @@ protected:
 	int energy;
 public:
 	//药水构造函数
-	Potion(const std::string pngName);
-	Potion(const std::string pngName, Node* Box);
+	Potion(const std::string pngName="HelloWorld.png");
+	//Potion* PotionCreate(const std::string pngName = "HelloWorld.png");
 	//属性设置函数
 	void setblood(int _blood);
 	void setenergy(int _energy);

@@ -5,18 +5,17 @@
 USING_NS_CC;
 
 //在英雄处创建药水
-Potion::Potion(const std::string pngName) {
-	Props(pngName);
+Potion::Potion(const std::string pngName):Props(pngName) {
 	//设置标记
 	_sprite->setTag(10);
 }
 
-//在宝箱处创建药水
-Potion::Potion(const std::string pngName, Node* Box) {
-	Props(pngName,Box);
-	//设置标记
+/*Potion* Potion::PotionCreate(const std::string pngName)
+{
 	_sprite->setTag(10);
-}
+	propsCreate(pngName);
+	return this;
+}*/
 
 //设置属性函数
 void Potion::setblood(int _blood) {

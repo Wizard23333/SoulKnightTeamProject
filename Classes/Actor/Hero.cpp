@@ -2,7 +2,7 @@
 #include "Hero.h"
 #include <iostream>
 Hero::Hero(const std::string pngName, int blood, int energy, int sheild)
-:_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("projectile.png"), Bullet("Bullet.png"))
+:_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("projectile.png"))
 {
     changeWeapon = false;
     _sprite->setTag(999);
