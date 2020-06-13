@@ -23,28 +23,28 @@ bool Hero::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
 {
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_D)
     {
-        auto moveRight = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(15, 0));
+        auto moveRight = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(40, 0));
         auto repeatRight = cocos2d::RepeatForever::create(moveRight);
         repeatRight->setTag(101);
         this->moveAll(repeatRight);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_S)
     {
-        auto moveDown = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(0, -15));
+        auto moveDown = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(0, -40));
         auto repeatDown = cocos2d::RepeatForever::create(moveDown);
         repeatDown->setTag(102);
         this->moveAll(repeatDown);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_W)
     {
-        auto moveUp = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(0, 15));
+        auto moveUp = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(0, 40));
         auto repeatUp = cocos2d::RepeatForever::create(moveUp);
         repeatUp->setTag(103);
         this->moveAll(repeatUp);
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_A)
     {
-        auto moveLeft = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(-15, 0));
+        auto moveLeft = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(-40, 0));
         auto repeatLeft = cocos2d::RepeatForever::create(moveLeft);
         repeatLeft->setTag(104);
         this->moveAll(repeatLeft);
@@ -114,34 +114,36 @@ bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
     */
     //cocos2d::log("%d", nodeA->getTag());
     //cocos2d::log("%d", nodeB->getTag());
-    if(nodeA->getTag() == 999 && nodeB ->getTag() == 333)//子弹和英雄
+    if(nodeA->getTag() == 999 && nodeB ->getTag() > 700 && nodeB->getTag() < 800)//子弹和英雄
     {
         //cocos2d::log("afdd");
-        this->getShot();
+        this->getShot(nodeB->getTag() - 700);
         nodeB->removeFromParentAndCleanup(true);
         return true;
     }
-    if(nodeB->getTag() == 999 && nodeA ->getTag() == 333)
+    if(nodeB->getTag() == 999 && nodeA ->getTag() > 700 && nodeA->getTag() < 800)
     {
         //cocos2d::log("abdsdf");
-        this->getShot();
+        this->getShot(nodeA->getTag() - 700);
         nodeA->removeFromParentAndCleanup(true);
         return true;
     }
-    if(nodeA->getTag() == 999 && (nodeB->getTag() >= 100 && nodeB->getTag() <= 110))
+    if(nodeA->getTag() == 999 && nodeB->getTag() > 800 && nodeB->getTag() < 900)//近战怪物
     {
-        auto bloodAdd = parameter[nodeB->getTag() - 100].getparameter1();
-        auto energyAdd = parameter[nodeB->getTag() - 100].getparameter2();
-        this->_heroValue.setBlood(_heroValue.blood + bloodAdd);
-        this->_heroValue.setEnergy(_heroValue.energy + energyAdd);
-        
+        this->getShot(nodeB->getTag() - 800);
     }
-    if(nodeB->getTag() == 999 && (nodeA->getTag() >= 100 && nodeA->getTag() <= 110))
+    if(nodeB->getTag() == 999 && nodeA->getTag() > 800 && nodeA->getTag() < 900)
     {
-        auto bloodAdd = parameter[nodeA->getTag() - 100].getparameter1();
-        auto energyAdd = parameter[nodeA->getTag() - 100].getparameter2();
-        this->_heroValue.setBlood(_heroValue.blood + bloodAdd);
-        this->_heroValue.setEnergy(_heroValue.energy + energyAdd);
+        this->getShot(nodeA->getTag() - 800);
+    }
+    if(nodeA->getTag() == 999 && (nodeB->getTag() >= 100 && nodeB->getTag() <= 150))//药水
+    {
+        getCue(nodeB->getTag() - 100);
+    }
+    if(nodeB->getTag() == 999 && (nodeA->getTag() >= 100 && nodeA->getTag() <= 150))
+    {
+        getCue(nodeA->getTag() - 100);
+        
     }
     return false;
 }
@@ -162,6 +164,7 @@ void Hero::attack(cocos2d::Touch * touch)
 
 void Hero::getShot(int value)
 {
+    
     if(this->_heroValue.shield > 0)
     {
         this->_heroValue.setShield(this->_heroValue.shield - value);
@@ -170,6 +173,45 @@ void Hero::getShot(int value)
     {
         this->_heroValue.setBlood(this->_heroValue.blood - value);
     }
+    auto  fadeIn = FadeIn::create(0.2f);
+    auto fadeOut = FadeOut::create(0.2f);
+    this->_sprite->runAction(Sequence::create(fadeOut, fadeIn, nullptr));
+    this->_weapon._sprite->runAction(Sequence::create(fadeOut->clone(), fadeIn->clone(), nullptr));
+    char temp[5];
+    sprintf(temp, "%d", value);
+    auto label = Label::createWithTTF(temp, "fonts/Marker Felt.ttf", 20);
+    label->setColor(Color3B::RED);
+    label->setPosition(this->_sprite->getPosition());
+    this->_sprite->getParent()->addChild(label, 1);
+    auto moveDown = MoveBy::create(0.2f, Vec2(0, -20));
+    auto removeSelf = RemoveSelf::create();
+    label->runAction(Sequence::create(moveDown, fadeOut->clone(), removeSelf, nullptr));
+}
+
+void Hero::getCue(int value)
+{
+    auto bloodAdd = parameter[value].getparameter1();
+    auto energyAdd = parameter[value].getparameter2();
+    this->_heroValue.setBlood(_heroValue.blood + bloodAdd);
+    this->_heroValue.setEnergy(_heroValue.energy + energyAdd);
+    char temp1[5];
+    char temp2[5];
+    auto position = this->_sprite->getPosition();
+    sprintf(temp1, "%d", bloodAdd);
+    sprintf(temp2, "%d", energyAdd);
+    auto bloodLabel = Label::createWithTTF(temp1, "fonts/Marker Felt.ttf", 20);
+    auto energyLabel = Label::createWithTTF(temp2, "fonts/Marker Felt.ttf", 20);
+    bloodLabel->setColor(Color3B::GREEN);
+    energyLabel->setColor(Color3B::BLUE);
+    bloodLabel->setPosition(Vec2(position.x - 10, position.y + 10));
+    energyLabel->setPosition(Vec2(position.x + 10, position.y + 10));
+    this->_sprite->getParent()->addChild(bloodLabel, 1);
+    this->_sprite->getParent()->addChild(energyLabel, 1);
+    auto moveUp = MoveBy::create(0.2, Vec2(0, 20));
+    auto fadeOut = FadeOut::create(0.2f);
+    auto removeSelf = RemoveSelf::create();
+    bloodLabel->runAction(Sequence::create(moveUp, fadeOut, removeSelf, nullptr));
+    energyLabel->runAction(Sequence::create(moveUp->clone(), fadeOut->clone(), removeSelf->clone(), nullptr));
 }
 void Hero::colletWeapon(cocos2d::Node * weaponNode)
 {
@@ -178,10 +220,6 @@ void Hero::colletWeapon(cocos2d::Node * weaponNode)
     weaponNode->removeFromParentAndCleanup(true)//清除放在地上的武器
     */
 }
-
-
-
-
 void Hero::moveAll(cocos2d::Action * move)
 {
     auto move1 = move->clone();
