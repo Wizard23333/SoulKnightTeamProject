@@ -30,21 +30,33 @@ bool Potion::onContactpresolve(cocos2d::PhysicsContact& contact)
 {
     auto nodeA = contact.getShapeA()->getBody()->getNode();
     auto nodeB = contact.getShapeB()->getBody()->getNode();
-    log("%d",nodeA->getTag());
-    log("%d",nodeB->getTag());
-    if ((nodeA->getTag()>=100 && nodeA ->getTag() <= 110)||(nodeB->getTag()>=100 && nodeB->getTag() <= 110))
+    if(isItUsed == true)
+        return false;
+    
+    if(nodeA && nodeB)
     {
-        if (nodeA->getTag() == 999)//英雄的标记
+        log("%d",nodeA->getTag());
+        log("%d",nodeB->getTag());
+        auto posA = nodeA->getPosition();
+        auto posB = nodeB->getPosition();
+        if(posA == this->_sprite->getPosition() || posB == this->_sprite->getPosition())
         {
-            isItUsed = true;
-            nodeB->removeFromParentAndCleanup(true);
-        }
-        else if (nodeB->getTag() == 999)//英雄的标记
-        {
-            isItUsed = true;
-            nodeA->removeFromParentAndCleanup(true);
+            if ((nodeA->getTag()>=100 && nodeA ->getTag() <= 110)||(nodeB->getTag()>=100 && nodeB->getTag() <= 110))
+            {
+                if (nodeA->getTag() == 999)
+                {
+                    isItUsed = true;
+                    nodeB->removeFromParentAndCleanup(true);
+                }
+                else if (nodeB->getTag() == 999)
+                {
+                    isItUsed = true;
+                    nodeA->removeFromParentAndCleanup(true);
+                }
+            }
         }
     }
+    
     return true;
 }
 //药水使用

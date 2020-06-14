@@ -75,27 +75,30 @@ bool FightGround::init()
     this->addChild(wall);
     */
    // myHero.HeroCreate("Ninja.png");//创建英雄
-    myHero = Hero("Ninja.png");
+    myHero = Hero("Knight.png");
     myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
+    myHero._sprite->setScale(0.08);
+    
+    myHero.setWeapon(5);//武器类型
     myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
-    myHero._weapon._sprite->setScale(0.03);
+    myHero._weapon._sprite->setScale(0.10);
     this->addChild(myHero._sprite, 1);
     this->addChild(myHero._weapon._sprite, 1);
     //myHero._sprite->setTag(999);//添加Tag值
     
     //myHero._heroValue.setBlood(5);//加血演示
-    myHero._heroValue.setEnergy(10);
+    //myHero._heroValue.setEnergy(10);
     //添加药水
-    potion1 = Potion("HelloWorld.png");
+    potion1 = Potion("Blood.png");
     potion1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 + 200));
-    potion1._sprite->setScale(0.10);
-    potion1._sprite->setTag(5);//药水的属性值
+    potion1._sprite->setScale(0.20);
+    potion1._sprite->setTag(1);//药水的属性值
     this->addChild(potion1._sprite, 1);
 
-    potion2 = Potion("HelloWorld.png");
+    potion2 = Potion("Energy.png");
     potion2._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 - 200));
     potion2._sprite->setScale(0.10);
-    potion2._sprite->setTag(5);
+    potion2._sprite->setTag(2);
     
     this->addChild(potion2._sprite, 1);
     
@@ -111,6 +114,7 @@ bool FightGround::init()
     
     auto eventListener = EventListenerTouchOneByOne::create();//触摸事件监听
     eventListener->onTouchBegan = CC_CALLBACK_2(FightGround::onTouchBegan, this);
+    eventListener->onTouchEnded = CC_CALLBACK_2(FightGround::onTouchEnded, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventListener, this);
     
     auto contactListener = EventListenerPhysicsContact::create();//碰撞事件监听
@@ -129,50 +133,35 @@ bool FightGround::init()
 }
 
 void FightGround::menucloseCallBack(Ref* pSender)//关闭按钮的回调
-{
-     Director::getInstance()->replaceScene(TransitionSlideInT::create(2.0f, HelloWorld::createScene()));
+{     Director::getInstance()->replaceScene(TransitionSlideInT::create(2.0f, HelloWorld::createScene()));
 }
 
 bool FightGround::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
     
-    
+    if(myHero.onTouchBegin(touch)== true)
+        myHero._weapon.onTouchBegan(touch, unused_event);
     return true;
 }
-
+bool FightGround::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* unused_event)
+{
+    
+    myHero._weapon.onTouchEnded(touch, unused_event);
+    return true;
+}
 bool FightGround::onContactBegan(cocos2d::PhysicsContact & contact)//碰撞的回调
 {
-    if(myHero.onContactBegin(contact) == false)//成员函数处理碰撞信息//==false意味着没有节点被清除
-    {
-        auto contactPosA = contact.getShapeA()->getBody()->getNode()->getPosition();
-        auto contactPosB = contact.getShapeB()->getBody()->getNode()->getPosition();
-        if(potion1.isItUsed == false)
-        {
-            if(contactPosA == potion1._sprite->getPosition() || contactPosB == potion1._sprite->getPosition())
-            {
-                //log("~~~");
-                potion1.onContactpresolve(contact);
-            }
-        }
-        if(potion2.isItUsed == false)
-        {
-            if(contactPosA == potion2._sprite->getPosition() || contactPosB == potion2._sprite->getPosition())
-            {
-                //log("¥¥¥");
-                potion2.onContactpresolve(contact);
-            }
-        }
-        if(box1._potion.isItUsed == false && box1.isOpen == true)
-        {
-            if(contactPosA == box1._potion._sprite->getPosition() || contactPosB == box1._potion._sprite->getPosition())
-            {
-                //log("$$$");
-                box1._potion.onContactpresolve(contact);
-            }
-        }
-    }
-    box1.onContactBegin(contact);
     
+    myHero.onContactBegin(contact);//成员函数处理碰撞信息//==false意味着没有节点被清除
+    potion1.onContactpresolve(contact);
+    potion2.onContactpresolve(contact);
+    box1.onContactBegin(contact);
+    if(box1.isOpen == true)
+        box1._potion.onContactpresolve(contact);
+    monster1.oncontactBegin(contact);
+    monster2.oncontactBegin(contact);
+    monster3.oncontactBegin(contact);
+    monster4.oncontactBegin(contact);
     return true;
 }
 
@@ -210,15 +199,19 @@ void FightGround::monsterinit()//怪物初始化
 
 void FightGround::addmonster(float dt)//创建并添加怪物
 {
-    monster1.monsterCreate(std::string("monster copy.png"), 20, 2);
+    
+    monster1.monsterCreate(std::string("monster copy.png"), 20, 1);
     monster2.monsterCreate(std::string("monster copy.png"), 20, 2);
     monster3.monsterCreate(std::string("monster copy.png"), 20, 3);
-    monster4.monsterCreate(std::string("monster copy.png"), 20, 3);
+    monster4.monsterCreate(std::string("monster copy.png"), 20, 4);
     auto visibleSize = Director::getInstance()->getVisibleSize();
     monster1._sprite->setPosition(visibleSize.width * 0.33, visibleSize.height / 2);
     monster2._sprite->setPosition(visibleSize.width * 0.66, visibleSize.height / 2);
     monster3._sprite->setPosition(visibleSize.width * 0.77, visibleSize.height / 2);
     monster4._sprite->setPosition(visibleSize.width * 0.88, visibleSize.height / 2);
+    monster1.setRemoteMstr();
+    monster2.setRemoteMstr();
+    monster3.setRemoteMstr();
     monster4.setCloseMstr();//设置近程怪物
     this->addChild(monster1._sprite, 1);
     this->addChild(monster2._sprite, 1);
@@ -238,10 +231,6 @@ void FightGround::automoveM(float dt)
 
 void FightGround::autoshootM(float dt)//自动攻击
 {
-    monster1.getShot();
-    monster2.getShot(2);
-    monster3.getShot(2);
-    monster4.getShot();
     auto destination = myHero._sprite->getPosition();//获取需要的坐标
     monster1.autoShoot(destination);
     monster2.autoShoot(destination);
