@@ -114,38 +114,49 @@ bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
     */
     //cocos2d::log("%d", nodeA->getTag());
     //cocos2d::log("%d", nodeB->getTag());
-    if(nodeA->getTag() == 999 && nodeB ->getTag() > 700 && nodeB->getTag() < 800)//子弹和英雄
+    auto nodeA = contact.getShapeA()->getBody()->getNode();
+    auto nodeB = contact.getShapeB()->getBody()->getNode();
+    if(nodeA && nodeB)
     {
-        //cocos2d::log("afdd");
-        this->getShot(nodeB->getTag() - 700);
-        nodeB->removeFromParentAndCleanup(true);
-        return true;
+        auto posA = nodeA->getPosition();
+        auto posB = nodeB->getPosition();
+        if(posA == this->_sprite->getPosition() || posB == this->_sprite->getPosition())
+        {
+            if(nodeA->getTag() == 999 && nodeB ->getTag() > 700 && nodeB->getTag() < 800)//子弹和英雄
+            {
+                //cocos2d::log("afdd");
+                this->getShot(nodeB->getTag() - 700);
+                nodeB->removeFromParentAndCleanup(true);
+                //return true;
+            }
+            if(nodeB->getTag() == 999 && nodeA ->getTag() > 700 && nodeA->getTag() < 800)
+            {
+                //cocos2d::log("abdsdf");
+                this->getShot(nodeA->getTag() - 700);
+                nodeA->removeFromParentAndCleanup(true);
+                //return true;
+            }
+            if(nodeA->getTag() == 999 && nodeB->getTag() > 800 && nodeB->getTag() < 900)//近战怪物
+            {
+                
+                this->getShot(nodeB->getTag() - 800);
+            }
+            if(nodeB->getTag() == 999 && nodeA->getTag() > 800 && nodeA->getTag() < 900)
+            {
+                this->getShot(nodeA->getTag() - 800);
+            }
+            if(nodeA->getTag() == 999 && (nodeB->getTag() >= 100 && nodeB->getTag() <= 150))//药水
+            {
+                getCue(nodeB->getTag() - 101);
+            }
+            if(nodeB->getTag() == 999 && (nodeA->getTag() >= 100 && nodeA->getTag() <= 150))
+            {
+                getCue(nodeA->getTag() - 101);
+                
+            }
+        }
     }
-    if(nodeB->getTag() == 999 && nodeA ->getTag() > 700 && nodeA->getTag() < 800)
-    {
-        //cocos2d::log("abdsdf");
-        this->getShot(nodeA->getTag() - 700);
-        nodeA->removeFromParentAndCleanup(true);
-        return true;
-    }
-    if(nodeA->getTag() == 999 && nodeB->getTag() > 800 && nodeB->getTag() < 900)//近战怪物
-    {
-        this->getShot(nodeB->getTag() - 800);
-    }
-    if(nodeB->getTag() == 999 && nodeA->getTag() > 800 && nodeA->getTag() < 900)
-    {
-        this->getShot(nodeA->getTag() - 800);
-    }
-    if(nodeA->getTag() == 999 && (nodeB->getTag() >= 100 && nodeB->getTag() <= 150))//药水
-    {
-        getCue(nodeB->getTag() - 100);
-    }
-    if(nodeB->getTag() == 999 && (nodeA->getTag() >= 100 && nodeA->getTag() <= 150))
-    {
-        getCue(nodeA->getTag() - 100);
-        
-    }
-    return false;
+    return true;
 }
 
 bool Hero::onContactSeparate(cocos2d::PhysicsContact & contact)
