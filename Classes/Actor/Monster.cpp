@@ -3,7 +3,7 @@ Monster::Monster(const std::string pngName, int Blood, int atk)
 :blood(Blood), Actor(pngName), ATK(atk)
 {
     _sprite->setTag(800 + atk);
-    _bulletSprite->create("Bullet.png");
+    _bulletSprite->create("Bullet2.png");
 }
 
 Monster * Monster::monsterCreate(const std::string pngName, int Blood, int atk)
@@ -11,7 +11,7 @@ Monster * Monster::monsterCreate(const std::string pngName, int Blood, int atk)
     actorCreate(pngName);
     blood = Blood;
     ATK = atk;
-    _bulletSprite->create("Bullet.png");
+    _bulletSprite->create("Bullet2.png");
     _sprite->setTag(800 + atk);
     return this;
 }
@@ -119,17 +119,22 @@ void Monster::oncontactBegin(PhysicsContact &contact)
 {
     auto nodeA = contact.getShapeA()->getBody()->getNode();
     auto nodeB = contact.getShapeB()->getBody()->getNode();
-    auto posA = nodeA->getPosition();
-    auto posB = nodeB->getPosition();
-    if(nodeA && nodeB && (posA == this->_sprite->getPosition() || posB == this->_sprite->getPosition()))
+    
+    if(nodeA && nodeB)
     {
-        if(nodeA->getTag() > 800 && nodeA->getTag() < 900 && nodeB->getTag() > 100 && nodeB->getTag() < 200)
+        auto posA = nodeA->getPosition();
+        auto posB = nodeB->getPosition();
+        if(posA == this->_sprite->getPosition() || posB == this->_sprite->getPosition())
         {
-            getShot(nodeB->getTag() - 100);
-        }
-        if(nodeB->getTag() > 800 && nodeB->getTag() < 900 && nodeA->getTag() > 100 && nodeA->getTag() < 200)
-        {
-            getShot(nodeA->getTag() - 100);
+            if(nodeA->getTag() > 800 && nodeA->getTag() < 900 && nodeB->getTag() >= 10 && nodeB->getTag() <= 13)
+            {
+                getShot(nodeB->getTag());
+            }
+            if(nodeB->getTag() > 800 && nodeB->getTag() < 900 && nodeA->getTag() >= 10 && nodeA->getTag() <= 13)
+            {
+                getShot(nodeA->getTag());
+            }
+        
         }
     }
 }
