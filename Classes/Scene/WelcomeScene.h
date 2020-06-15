@@ -16,7 +16,8 @@ public:
 	void menuStartCallBack(cocos2d::Ref* pSender);
 	void menuCloseMusic(cocos2d::Ref* pSender);
 	void menuCloseEffect(Ref* pSender);
-
+    //add
+    bool isMusicPlaying;
     // implement the "static create()" method manually
     CREATE_FUNC(Welcome);
 };

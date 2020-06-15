@@ -1,9 +1,10 @@
 
 #include "WelcomeScene.h"
-#include "SaveMapScene.h"
-
+//#include "SaveMapScene.h"
+#include "FightGroundScene.h"
 #include "cocos2d.h"
-#include"..\cocos\editor-support\cocostudio\SimpleAudioEngine.h"
+#include "SimpleAudioEngine.h"
+//#include"..\cocos\editor-support\cocostudio\SimpleAudioEngine.h"
 
 
 
@@ -31,9 +32,9 @@ bool Welcome::init()
 	/* 设置背景音乐 */
 	auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
 	if (!audio->isBackgroundMusicPlaying()) {
-		audio->playBackgroundMusic("MenuBgm.mp3", true);
+		audio->playBackgroundMusic("Soulknightbgm.mp3", true);
 	}
-
+    isMusicPlaying = true;
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -41,6 +42,10 @@ bool Welcome::init()
 	/* 音乐控制按钮 */
 	auto offMusic = MenuItemImage::create("MusicSelected.png", "MusicSelected.png");
 	auto onMusic = MenuItemImage::create("MusicNormal.png", "MusicNormal.png");
+    //add
+    offMusic->setScale(0.5);
+    onMusic->setScale(0.5);
+    
 	MenuItemToggle *musicItem = MenuItemToggle::createWithCallback(
 		CC_CALLBACK_1(Welcome::menuCloseMusic, this),
 		onMusic, offMusic, NULL
@@ -48,9 +53,11 @@ bool Welcome::init()
 	musicItem->setPosition(Vec2(130, visibleSize.height / 2-300));
 
 	/* 进入游戏按钮 */
-	auto startItem = MenuItemImage::create("NewGameIcon.png", "NewGameIcon.png", CC_CALLBACK_1(Welcome::menuStart, this));
+	auto startItem = MenuItemImage::create("NewGameIcon.png", "NewGameIcon.png", CC_CALLBACK_1(Welcome::menuStartCallBack, this));
 	startItem->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 3 - 120));
-
+    //add
+    startItem->setScale(0.5);
+    
 	/* 菜单 */
     auto menu = Menu::create(musicItem,startItem,NULL);
     menu->setPosition(Vec2::ZERO);
@@ -58,6 +65,12 @@ bool Welcome::init()
 
 	
     auto sprite = Sprite::create("CoverSelected.png");
+    //add
+    auto scaleX = visibleSize.width / sprite->getContentSize().width;
+    auto scaleY = visibleSize.height / sprite->getContentSize().height;
+    auto realScale = scaleX > scaleY ? scaleX : scaleY;
+    sprite->setScale(realScale);
+    
     if (sprite == nullptr)
     {
         problemLoading("CoverSelected.png");
@@ -78,17 +91,19 @@ void Welcome::menuCloseCallback(Ref* pSender)
 
 void Welcome::menuStartCallBack(Ref* pSender)
 {
-	auto nextScene = SaveMap::createScene();
+	auto nextScene = FightGround::createScene();
 	Director::getInstance()->replaceScene(nextScene);
 }
 
 void Welcome::menuCloseMusic(Ref* pSender)
 {
 	auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
-	if (audio->isBackgroundMusicPlaying()) {
+	if (isMusicPlaying == true) {
 		audio->pauseBackgroundMusic();
+        isMusicPlaying = false;
 	}
 	else {
 		audio->resumeBackgroundMusic();
+        isMusicPlaying = true;
 	}
 }
