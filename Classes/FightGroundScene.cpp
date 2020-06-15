@@ -36,14 +36,31 @@ bool FightGround::init()
     background->drawSolidRect(originPoint, visibleSize, cocos2d::Color4F::GRAY);
     this->addChild(background, 0);
     
+    auto audioBgm = CocosDenshion::SimpleAudioEngine::getInstance();
+    isMusicPlaying = audioBgm->isBackgroundMusicPlaying() ? true : false;
+    
+    auto offMusic = MenuItemImage::create("MusicSelected.png", "MusicSelected.png");
+    auto onMusic = MenuItemImage::create("MusicNormal.png", "MusicNormal.png");
+    //add
+    offMusic->setScale(0.15);
+    onMusic->setScale(0.15);
+    
+    MenuItemToggle *musicItem = MenuItemToggle::createWithCallback(
+        CC_CALLBACK_1(FightGround::menucloseMusic, this),
+        onMusic, offMusic, NULL
+    );
+    //musicItem->setPosition(Vec2(visibleSize.width - musicItem->getContentSize().width / 2, visibleSize.height - musicItem->getContentSize().height / 2));
+    
     auto closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png",CC_CALLBACK_1(FightGround::menucloseCallBack, this));//退出按钮
     float x = originPoint.x + visibleSize.width - closeItem->getContentSize().width/2;
-    float y = originPoint.y + visibleSize.height - closeItem->getContentSize().height/2;
+    float y = originPoint.y + visibleSize.height - closeItem->getContentSize().height/2 ;
     closeItem->setPosition(Vec2(x,y));
-    auto menu = Menu::create(closeItem, nullptr);//主菜单
+    musicItem->setPosition(Vec2(x, y - closeItem->getContentSize().height));
+    auto menu = Menu::create(closeItem, musicItem, nullptr);//主菜单
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
     //血条
+    Monster::mstrNum = 4;
     char temp1[20];
     sprintf(temp1, "Blood:%d/%d", myHero._heroValue.blood, myHero._heroValue.fullBlood);
     blood = cocos2d::Label::createWithTTF(temp1, "fonts/Marker Felt.ttf", 30);
@@ -133,9 +150,22 @@ bool FightGround::init()
 }
 
 void FightGround::menucloseCallBack(Ref* pSender)//关闭按钮的回调
-{     Director::getInstance()->replaceScene(TransitionSlideInT::create(2.0f, HelloWorld::createScene()));
+{
+    Director::getInstance()->pushScene(PauseScene::createScene());
 }
 
+void FightGround::menucloseMusic(cocos2d::Ref *pSender)
+{
+    auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+    if (isMusicPlaying == true) {
+        audio->pauseBackgroundMusic();
+        isMusicPlaying = false;
+    }
+    else {
+        audio->resumeBackgroundMusic();
+        isMusicPlaying = true;
+    }
+}
 bool FightGround::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
     
@@ -217,7 +247,7 @@ void FightGround::addmonster(float dt)//创建并添加怪物
     this->addChild(monster2._sprite, 1);
     this->addChild(monster3._sprite, 1);
     this->addChild(monster4._sprite, 1);
-    
+    //monster1.setMonsterNum(4);
 }
 
 void FightGround::automoveM(float dt)
@@ -257,7 +287,11 @@ void FightGround::updateBlood(float dt)
     
     if(myHero._heroValue.blood == 0)
     {
-        Director::getInstance()->replaceScene(TransitionFade::create(2.0f, HelloWorld::createScene()));
+        Director::getInstance()->replaceScene(TransitionFade::create(2.0f, Welcome::createScene()));
+    }
+    if(Monster::mstrNum == 0)
+    {
+        Director::getInstance()->replaceScene(TransitionFade::create(2.0f, Welcome::createScene()));
     }
 }
 
