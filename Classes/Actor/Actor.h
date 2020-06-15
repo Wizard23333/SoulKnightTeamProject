@@ -3,7 +3,7 @@
 #define Actor_h
 
 #include "cocos2d.h"
-#include "constValues.h"
+//#include "constValues.h"
 class Actor
 {
 public:
