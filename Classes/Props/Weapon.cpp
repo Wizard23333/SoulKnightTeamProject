@@ -31,7 +31,7 @@ bool Weapon::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event) {
 		auto shootAmount = offset * 1000;
 		// 将此向量添加到飞镖的位置上去，这样你就有了一个目标位置。
 		auto realDest = shootAmount + this->_sprite->getPosition();
-		// 将飞镖在2秒内移动到目标位置，然后将它从场景中移除。
+		// 将飞镖在1秒内移动到目标位置，然后将它从场景中移除。
 		auto actionMove = MoveTo::create(1.0f, realDest);
 		auto actionRemove = RemoveSelf::create();
 
@@ -42,9 +42,10 @@ bool Weapon::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event) {
 		(this->_sprite->getParent())->addChild(bullet1._sprite);
 		bullet1._sprite->runAction(Sequence::create(actionMove, actionRemove, nullptr));
 	}
-	else if(this->tagofbullet == 11)//剑的挥砍
+	else if(this->tagofbullet == 11)//剑的前砍
 	{
-		auto rotateBy = RotateBy::create(0.1f, 60.0f);
+		auto realDest = Vec2(40,0) + this->_sprite->getPosition();
+		auto actionMove = MoveTo::create(0.1f, realDest);
 		auto actionRemove = RemoveSelf::create();
 		this->_sprite ->setOpacity(0);
 		int temptag = this->tagofbullet;
@@ -52,11 +53,11 @@ bool Weapon::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event) {
 		bullet1._sprite->setScale(0.10);
 		bullet1._sprite->setPosition(this->_sprite->getPosition());
 		(this->_sprite->getParent())->addChild(bullet1._sprite);
-		bullet1._sprite->runAction(Sequence::create(rotateBy, actionRemove, nullptr));
+		bullet1._sprite->runAction(Sequence::create(actionMove, actionRemove, nullptr));
 	}
 	else if (this->tagofbullet == 10)//镰刀环绕
 	{
-		auto rotateBy = RotateBy::create(0.5f, 360.0f);
+		auto rotateBy = RotateBy::create(0.4f, 720.0f);
 		auto actionRemove = RemoveSelf::create();
 		this->_sprite->setOpacity(0);
 		int temptag = this->tagofbullet;
