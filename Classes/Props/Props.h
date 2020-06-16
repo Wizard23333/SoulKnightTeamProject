@@ -29,13 +29,20 @@ public:
 	int getparameter4() const{ return parameter4; };
 };
 
-
-const Propsvalue parameter[20] = {
+const std::vector<Propsvalue> parameter = {
+	Propsvalue("Blood.png",2,0,0,0),Propsvalue("Energy.png",0,20,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),
+	Propsvalue("Sickle.png",1,1,1,1),Propsvalue("Sword.png",1,1,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("Gun.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
+	Propsvalue("Sickle.png",4,1,1,1),Propsvalue("Sword.png",3,0,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("Bullet.png",2,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
+	Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
+};
+/*const Propsvalue parameter[20] = {
     Propsvalue("Blood.png",2,0,0,0),Propsvalue("Energy.png",0,20,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),Propsvalue("HelloWorld.png",1,1,0,0),
     Propsvalue("Sickle.png",1,1,1,1),Propsvalue("Sword.png",1,1,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("Gun.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
     Propsvalue("Sickle.png",4,1,1,1),Propsvalue("Sword.png",3,0,1,1),Propsvalue("Darts.png",1,1,1,1),Propsvalue("Bullet.png",2,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
     Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),Propsvalue("HelloWorld.png",1,1,1,1),
-};
+};*/
+
+
 /*
 //道具基类
 class Props {
