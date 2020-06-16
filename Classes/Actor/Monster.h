@@ -11,10 +11,13 @@ public:
     void autoMove(Vec2 destination = Vec2(0, 0));
     void autoShoot(Vec2 destination = Vec2(0, 0));
     void setCloseMstr();
+    void setRemoteMstr();
     int getATK() { return ATK; }
     void oncontactBegin(PhysicsContact & contact);
     void getShot(int value = 1);
     void setDead();
+    void setMonsterNum(int num) { mstrNum = num; }
+    static int mstrNum;
 private:
     int blood;
     int ATK;
