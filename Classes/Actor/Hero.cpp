@@ -1,10 +1,7 @@
-
-#include "Hero.h"
-#include <iostream>
 Hero::Hero(const std::string pngName, int blood, int energy, int sheild)
 :_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("projectile.png"))
 {
-    changeWeapon = false;
+    //changeWeapon = false;
     _sprite->setTag(999);
 }
 
@@ -14,15 +11,22 @@ Hero * Hero::HeroCreate(const std::string pngName, int blood, int energy, int sh
     _heroValue.setEnergy(energy);
     _heroValue.setShield(sheild);
     _sprite->setTag(999);
-    changeWeapon = false;
+    //changeWeapon = false;
     actorCreate(pngName);
     return this;
 }
 
+void Hero::setWeapon(int tag)
+{
+    _weapon = Weapon(parameter[tag].getpngname(), tag);
+}
 bool Hero::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
 {
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_D)
     {
+        this->_sprite->setFlippedX(false);
+        this->_weapon._sprite->setFlippedY(true);
+        this->_weapon._sprite->setRotation(0);
         auto moveRight = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(40, 0));
         auto repeatRight = cocos2d::RepeatForever::create(moveRight);
         repeatRight->setTag(101);
@@ -44,6 +48,9 @@ bool Hero::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_A)
     {
+        this->_sprite->setFlippedX(true);
+        this->_weapon._sprite->setFlippedY(true);
+        this->_weapon._sprite->setRotation(180);
         auto moveLeft = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(-40, 0));
         auto repeatLeft = cocos2d::RepeatForever::create(moveLeft);
         repeatLeft->setTag(104);
@@ -51,7 +58,7 @@ bool Hero::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_G)
     {
-        changeWeapon = true;
+        changeWeapon();
     }
     return true;
 }
@@ -76,7 +83,7 @@ bool Hero::onKeyRelesed(cocos2d::EventKeyboard::KeyCode keycode)
     }
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_G)
     {
-        changeWeapon = false;
+        //changeWeapon();
     }
     return true;
 }
@@ -87,11 +94,15 @@ bool Hero::onTouchBegin(cocos2d::Touch* touch)
     if(_heroValue.energy >= _weapon.GetBulletenergycost())
     {
         this->attack(touch);
-        
+        return true;
     
     }
+    else
+    {
+        return false;
+    }
     
-    return true;
+    
 }
 /*
 武器拾起:
@@ -100,8 +111,7 @@ bool Hero::onTouchBegin(cocos2d::Touch* touch)
 */
 bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
 {
-    auto nodeA = contact.getShapeA()->getBody()->getNode();
-    auto nodeB = contact.getShapeB()->getBody()->getNode();
+   
     /*
     if(如果是放在地上的武器和人的接触,并且changeWeapon == true (即按下了G键))//假设A是放在地上的武器的node
     {
@@ -157,6 +167,7 @@ bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
         }
     }
     return true;
+    //return false;
 }
 
 bool Hero::onContactSeparate(cocos2d::PhysicsContact & contact)
@@ -166,10 +177,31 @@ bool Hero::onContactSeparate(cocos2d::PhysicsContact & contact)
     return true;
 }
 
+void Hero::changeWeapon()
+{
+    auto weaponTag = _weapon._sprite->getTag();
+    if(weaponTag <= 7)
+        weaponTag++;
+    else if(weaponTag == 8)
+        weaponTag = 5;
+    else
+        log("error   !!!!");
+    this->_weapon._sprite->setTag(weaponTag);
+    this->_weapon.tagofbullet = _weapon._sprite->getTag() + 5;
+    auto temp = Sprite::create(parameter[weaponTag].getpngname());
+    auto temp_texture = temp->getTexture();
+    auto scaleX = 0.1 * temp->getContentSize().width / _weapon._sprite->getContentSize().width;
+    auto scaleY = 0.1 * temp->getContentSize().height / _weapon._sprite->getContentSize().height;
+    _weapon._sprite->setTexture(temp_texture);
+    _weapon._sprite->setScale(scaleX, scaleY);
+    
+}
 void Hero::attack(cocos2d::Touch * touch)
 {
     //this->_weapon.shoot(touch);//传入点击位置射击//子弹射出点出点在武器自己的位置上
+    //log("$$$$$");
     this->_heroValue.setEnergy(_heroValue.energy - _weapon.GetBulletenergycost());//消耗能量
+   
     //....
 }
 
