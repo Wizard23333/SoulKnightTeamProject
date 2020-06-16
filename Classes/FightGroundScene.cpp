@@ -96,7 +96,7 @@ bool FightGround::init()
     myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
     myHero._sprite->setScale(0.08);
     
-    myHero.setWeapon(5);//武器类型
+    myHero.setWeapon(6);//武器类型
     myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
     myHero._weapon._sprite->setScale(0.10);
     this->addChild(myHero._sprite, 1);
@@ -108,20 +108,22 @@ bool FightGround::init()
     //添加药水
     potion1 = Potion("Blood.png");
     potion1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 + 200));
-    potion1._sprite->setScale(0.20);
+    potion1._sprite->setScale(0.10);
     potion1._sprite->setTag(1);//药水的属性值
+    potion1.hideSelf();
     this->addChild(potion1._sprite, 1);
 
     potion2 = Potion("Energy.png");
     potion2._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 - 200));
     potion2._sprite->setScale(0.10);
     potion2._sprite->setTag(2);
-    
+    potion2.hideSelf();
     this->addChild(potion2._sprite, 1);
     
     box1 = Box(1, 1);//加入宝箱
     box1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 - 100));
     box1._sprite->setScale(0.5);
+    box1.hideSelf();
     this->addChild(box1._sprite, 1);
     
     this->monsterinit();//初始化怪物设置
@@ -287,11 +289,15 @@ void FightGround::updateBlood(float dt)
     
     if(myHero._heroValue.blood == 0)
     {
+        //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, HelloWorld::createScene()));
+
         Director::getInstance()->replaceScene(TransitionFade::create(2.0f, Welcome::createScene()));
     }
     if(Monster::mstrNum == 0)
     {
-        Director::getInstance()->replaceScene(TransitionFade::create(2.0f, Welcome::createScene()));
+        //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, Welcome::createScene()));
+        //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, HelloWorld::createScene()));
+        this->appearSprite();
     }
 }
 
@@ -318,4 +324,20 @@ void FightGround::controlSprite(Sprite *sprite)
         auto moveBack = cocos2d::MoveBy::create(0.1f, moveDirect * 20);
         sprite->runAction(moveBack);
     }
+}
+
+void FightGround::appearSprite()
+{
+    static int appeartimes = 0;
+    if(appeartimes == 0)
+    {
+        potion1.appearSelf();
+        potion2.appearSelf();
+        box1.appearSelf();
+        appeartimes++;
+    }
+    else
+        return;
+    
+    
 }

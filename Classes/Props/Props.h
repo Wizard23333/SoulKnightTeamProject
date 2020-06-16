@@ -52,7 +52,9 @@ class Props
 public:
     cocos2d::Sprite * _sprite;
     Props(const std::string name = "HelloWorld.png");
-	//Props* propsCreate(const std::string name = "HelloWorld.png");
+    void hideSelf();
+    void appearSelf();
+    //Props* propsCreate(const std::string name = "HelloWorld.png");
  
 };
 #endif
