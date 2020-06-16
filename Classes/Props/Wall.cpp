@@ -9,8 +9,8 @@ Wall::Wall(const std::string pngName) :Props(pngName) {
 	this->_sprite->setTag(15);
 	auto physicsBody = PhysicsBody::createBox(this->_sprite->getContentSize(), PhysicsMaterial(0.0f, 0.0f, 0.0f));
 	physicsBody->setDynamic(false);
-	physicsBody->setCategoryBitmask(15);
-	physicsBody->setContactTestBitmask(15);
+	physicsBody->setCategoryBitmask(63);
+	physicsBody->setContactTestBitmask(63);
 	this->_sprite->setPhysicsBody(physicsBody);
 }
 
