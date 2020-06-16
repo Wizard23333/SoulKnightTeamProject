@@ -10,7 +10,7 @@ public:
 	//墙体构造函数
 	Wall(const std::string pngName = "HelloWorld.png");
 	//构建矩形围墙
-	//void createWall(double width,double height);
+	void createWall(double width,double height);
 };
 
 #endif

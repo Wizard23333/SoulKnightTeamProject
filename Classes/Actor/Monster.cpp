@@ -1,9 +1,11 @@
 #include "Monster.h"
+int Monster::mstrNum = 0;
 Monster::Monster(const std::string pngName, int Blood, int atk)
 :blood(Blood), Actor(pngName), ATK(atk)
 {
     _sprite->setTag(800 + atk);
     _bulletSprite->create("Bullet2.png");
+    
 }
 
 Monster * Monster::monsterCreate(const std::string pngName, int Blood, int atk)
@@ -13,6 +15,7 @@ Monster * Monster::monsterCreate(const std::string pngName, int Blood, int atk)
     ATK = atk;
     _bulletSprite->create("Bullet2.png");
     _sprite->setTag(800 + atk);
+    
     return this;
 }
 
@@ -88,7 +91,7 @@ void Monster::autoShoot(Vec2 destination)
         auto direction = Vec2(20 * (destination.x - originPlace.x), 20 * (destination.y - originPlace.y));
         direction.normalize();
         
-        auto bullet = Sprite::create("Bullet.png");
+        auto bullet = Sprite::create("Bullet2.png");
         bullet->setTag(this->getATK() + 700);
         bullet->setPosition(originPlace);
         
@@ -110,16 +113,23 @@ void Monster::setCloseMstr()//将怪物设置为近程怪物
 {
     auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicbody->setDynamic(false);
-    physicbody->setCategoryBitmask(8);
-    physicbody->setContactTestBitmask(2);
+    physicbody->setCategoryBitmask(24);
+    physicbody->setContactTestBitmask(34);
     this->_sprite->setPhysicsBody(physicbody);
 }
 
+void Monster::setRemoteMstr()
+{
+    auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 1.0f, 0.0f));
+    physicbody->setDynamic(false);
+    physicbody->setCategoryBitmask(19);
+    physicbody->setContactTestBitmask(44);
+    _sprite->setPhysicsBody(physicbody);
+}
 void Monster::oncontactBegin(PhysicsContact &contact)
 {
     auto nodeA = contact.getShapeA()->getBody()->getNode();
     auto nodeB = contact.getShapeB()->getBody()->getNode();
-    
     if(nodeA && nodeB)
     {
         auto posA = nodeA->getPosition();
@@ -141,15 +151,13 @@ void Monster::oncontactBegin(PhysicsContact &contact)
 
 void Monster::getShot(int value)//怪物的掉血
 {
-    if(this->blood == 0)
-    {
-        this->setDead();
-        return;
-    }
+    
     int bloodReduce = parameter[value].getparameter1();
+  //  int bloodReduce = value;
     this->blood = blood - bloodReduce > 0 ? blood - bloodReduce : 0;
     auto fadeIn = FadeIn::create(0.2f);
     auto fadeOut = FadeOut::create(0.2f);
+    
     this->_sprite->runAction(Sequence::create(fadeOut, fadeIn, nullptr));
     char temp[5];
     sprintf(temp, "%d", bloodReduce);
@@ -161,11 +169,18 @@ void Monster::getShot(int value)//怪物的掉血
     auto removeSelf = RemoveSelf::create();
     label->runAction(Sequence::create(moveDown, fadeOut->clone(), removeSelf, nullptr));
     
+    if(this->blood == 0)
+    {
+        this->setDead();
+        return;
+    }
 }
 
 void Monster::setDead()//怪物死亡
 {
+    this->_sprite->setOpacity(255);
     this->_sprite->stopAllActions();
+    
     auto rotateBy = RotateBy::create(1.0f, 90.0f);
     auto fadeOut = FadeOut::create(2.0f);
     this->_sprite->runAction(Sequence::create(Spawn::create(rotateBy, fadeOut, nullptr), nullptr));
@@ -174,5 +189,6 @@ void Monster::setDead()//怪物死亡
     physicbody->setCategoryBitmask(0);
     physicbody->setContactTestBitmask(0);
     this->_sprite->setPhysicsBody(physicbody);
+    mstrNum--;
     
 }
