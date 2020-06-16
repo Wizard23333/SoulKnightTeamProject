@@ -2,9 +2,9 @@
 
 USING_NS_CC;
 //道具生成
-Props::Props(const std::string pngName)
+Props::Props(const std::string name)
 {
-    _sprite = Sprite::create(pngName);
+    _sprite = Sprite::create(name);
     auto physicsBody = PhysicsBody::createBox(_sprite->getContentSize(), PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicsBody->setDynamic(false);
     physicsBody->setCategoryBitmask(4);
