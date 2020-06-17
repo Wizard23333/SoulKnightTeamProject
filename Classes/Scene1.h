@@ -1,18 +1,22 @@
-#ifndef FightGroundScene_h
-#define FightGroundScene_h
+
+#ifndef Scene1_h
+#define Scene1_h
+
 #include "HelloWorldScene.h"
 #include "PauseScene.h"
 #include "WelcomeScene.h"
+#include "FightGroundScene.h"
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"
-#include "Potion.h"
+#include "Potion.hpp"
 #include "Box.h"
+#include "Wall.h"
 USING_NS_CC;
-class FightGround : public cocos2d::Scene
+class Scene1 : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene * createScene();
+    static cocos2d::Scene * createScene(int blood = 100, int energy = 50, int shield = 2);
     virtual bool init();
     void menucloseCallBack(cocos2d::Ref * pSender);
     void menucloseMusic(cocos2d::Ref * pSender);
@@ -22,7 +26,7 @@ public:
     bool onContactBegan(cocos2d::PhysicsContact &);
     bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
     bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
-    CREATE_FUNC(FightGround);
+    CREATE_FUNC(Scene1);
 private:
     void monsterinit();//*****
     void addmonster(float dt);//*****
@@ -40,9 +44,9 @@ private:
     Label * blood;
     Label * energy;
     Label * sheild;
-    static int fgs_blood;
-    static int fgs_energy;
-    static int fgs_shield;
+    static int s1_blood;
+    static int s1_energy;
+    static int s1_shield;
     Hero myHero;
     Potion potion1;
     Potion potion2;
@@ -57,6 +61,4 @@ private:
     Monster monster7;
 };
 
-
-
-#endif /* FightGroundScene_h */
+#endif /* Scene1_h */

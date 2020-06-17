@@ -5,14 +5,23 @@
 USING_NS_CC;
 
 //´´½¨ÎäÆ÷
+/*
 Weapon::Weapon(const std::string pngName) :Props(pngName)
 {
-	_sprite->setTag(5);
-	_sprite->setAnchorPoint(Vec2(0,0));
-	tagofbullet = _sprite->getTag()+5;
+    _sprite->setTag(5);
+    _sprite->setAnchorPoint(Vec2(0,0));
+    tagofbullet = _sprite->getTag()+5;
 };
-
-bool Weapon::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* unused_event)
+*/
+Weapon::Weapon(const std::string pngName, int tag)
+:Props(pngName)
+{
+    _sprite->setTag(tag);
+    _sprite->setAnchorPoint(Vec2(0,0));
+    tagofbullet = _sprite->getTag() + 5;
+    
+    
+}bool Weapon::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* unused_event)
 {
 	this->_sprite->setOpacity(255);
 	return true;

@@ -11,7 +11,8 @@ public:
 	//子弹类型
 	int tagofbullet;
 	//武器构造函数
-	Weapon(const std::string pngName="HelloWorld.png");
+	//Weapon(const std::string pngName="HelloWorld.png");
+    Weapon(const std::string pngName = "HelloWorld.png", int tag = 5);
 	//发射子弹
 	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event);
 	//获取子弹消耗的能量

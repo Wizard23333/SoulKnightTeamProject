@@ -1,7 +1,7 @@
 #include<Hero.h>
 
 Hero::Hero(const std::string pngName, int blood, int energy, int sheild)
-:_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("Darts.png"))
+:_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("projectile.png"))
 {
     //changeWeapon = false;
     _sprite->setTag(999);
@@ -20,15 +20,14 @@ Hero * Hero::HeroCreate(const std::string pngName, int blood, int energy, int sh
 
 void Hero::setWeapon(int tag)
 {
-    _weapon = Weapon(parameter[tag].getpngname());
-	_weapon._sprite->setTag(tag);
+    _weapon = Weapon(parameter[tag].getpngname(), tag);
 }
 bool Hero::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
 {
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_D)
     {
         this->_sprite->setFlippedX(false);
-        this->_weapon._sprite->setFlippedY(true);
+        //this->_weapon._sprite->setFlippedY(false);
         this->_weapon._sprite->setRotation(0);
         auto moveRight = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(40, 0));
         auto repeatRight = cocos2d::RepeatForever::create(moveRight);
@@ -52,7 +51,8 @@ bool Hero::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
     if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_A)
     {
         this->_sprite->setFlippedX(true);
-        this->_weapon._sprite->setFlippedY(true);
+        
+        //this->_weapon._sprite->setFlippedY(true);
         this->_weapon._sprite->setRotation(180);
         auto moveLeft = cocos2d::MoveBy::create(0.2f, cocos2d::Vec2(-40, 0));
         auto repeatLeft = cocos2d::RepeatForever::create(moveLeft);
@@ -133,21 +133,19 @@ bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
     {
         auto posA = nodeA->getPosition();
         auto posB = nodeB->getPosition();
+        log("%d",nodeA->getTag());
+        log("%d",nodeB->getTag());
         if(posA == this->_sprite->getPosition() || posB == this->_sprite->getPosition())
         {
             if(nodeA->getTag() == 999 && nodeB ->getTag() > 700 && nodeB->getTag() < 800)//子弹和英雄
             {
-                //cocos2d::log("afdd");
                 this->getShot(nodeB->getTag() - 700);
                 nodeB->removeFromParentAndCleanup(true);
-                //return true;
             }
             if(nodeB->getTag() == 999 && nodeA ->getTag() > 700 && nodeA->getTag() < 800)
             {
-                //cocos2d::log("abdsdf");
                 this->getShot(nodeA->getTag() - 700);
                 nodeA->removeFromParentAndCleanup(true);
-                //return true;
             }
             if(nodeA->getTag() == 999 && nodeB->getTag() > 800 && nodeB->getTag() < 900)//近战怪物
             {
@@ -189,14 +187,22 @@ void Hero::changeWeapon()
         weaponTag = 5;
     else
         log("error   !!!!");
+    
     this->_weapon._sprite->setTag(weaponTag);
     this->_weapon.tagofbullet = _weapon._sprite->getTag() + 5;
     auto temp = Sprite::create(parameter[weaponTag].getpngname());
     auto temp_texture = temp->getTexture();
-    auto scaleX = 0.1 * temp->getContentSize().width / _weapon._sprite->getContentSize().width;
-    auto scaleY = 0.1 * temp->getContentSize().height / _weapon._sprite->getContentSize().height;
+    auto scaleX = 0.1 * temp_texture->getContentSize().width / _weapon._sprite->getContentSize().width;
+    auto scaleY = 0.1 * temp_texture->getContentSize().height / _weapon._sprite->getContentSize().height;
     _weapon._sprite->setTexture(temp_texture);
     _weapon._sprite->setScale(scaleX, scaleY);
+    
+   //if(this->_weapon._sprite->getRotation() == 180)
+    {
+        
+      //  this->_weapon._sprite->setRotation(0);
+        //this->_weapon._sprite->setFlippedY(true);
+    }
     
 }
 void Hero::attack(cocos2d::Touch * touch)
@@ -259,6 +265,7 @@ void Hero::getCue(int value)
     bloodLabel->runAction(Sequence::create(moveUp, fadeOut, removeSelf, nullptr));
     energyLabel->runAction(Sequence::create(moveUp->clone(), fadeOut->clone(), removeSelf->clone(), nullptr));
 }
+
 void Hero::colletWeapon(cocos2d::Node * weaponNode)
 {
     /*
@@ -272,11 +279,13 @@ void Hero::moveAll(cocos2d::Action * move)
     move1->setTag(move->getTag());
     this->_sprite->runAction(move1);
     this->_weapon._sprite->runAction(move);
+    this->_weapon._sprite->setPosition(this->_sprite->getPosition());
     
 }
 
 void Hero::stopMoveByTag(int tag)
 {
     this->_sprite->stopActionByTag(tag);
-   this->_weapon._sprite->stopActionByTag(tag);
+    this->_weapon._sprite->stopActionByTag(tag);
+    this->_weapon._sprite->setPosition(this->_sprite->getPosition());
 }
