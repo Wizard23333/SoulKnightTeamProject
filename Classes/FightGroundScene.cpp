@@ -123,19 +123,25 @@ bool FightGround::init()
     //myHero._heroValue.setBlood(5);//加血演示
     //myHero._heroValue.setEnergy(10);
     //添加药水
-    potion1 = Potion("Blood.png");
-    potion1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 + 100));
-    potion1._sprite->setScale(0.10);
-    potion1._sprite->setTag(1);//药水的属性值
-    potion1.hideSelf();
-    this->addChild(potion1._sprite, 1);
-
     potion2 = Potion("Energy.png");
     potion2._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 - 50));
     potion2._sprite->setScale(0.10);
     potion2._sprite->setTag(2);
     potion2.hideSelf();
     this->addChild(potion2._sprite, 1);
+    
+    potion1 = Potion("Blood.png");
+    potion1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 + 100));
+    potion1._sprite->setScale(0.10);
+    potion1._sprite->setTag(1);//药水的属性值
+    potion1.hideSelf();
+    this->addChild(potion1._sprite, 1);
+    
+    
+    
+    
+
+    
     
     box1 = Box(1, 1);//加入宝箱
     box1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 - 100));
@@ -149,6 +155,7 @@ bool FightGround::init()
     gate._sprite->setTag(1001);
     gate.hideSelf();
     this->addChild(gate._sprite, 1);
+    appearTime = 0;//使精灵只出现一次
     
     this->monsterinit();//初始化怪物设置
     
@@ -268,13 +275,13 @@ void FightGround::monsterinit()//怪物初始化
 void FightGround::addmonster(float dt)//创建并添加怪物
 {
     
-    monster1.monsterCreate(std::string("monster copy.png"), 20, 5);
-    monster2.monsterCreate(std::string("monster copy.png"), 20, 4);
-    monster3.monsterCreate(std::string("monster copy.png"), 20, 5);
-    monster4.monsterCreate(std::string("monster copy.png"), 30, 8);
-    monster5.monsterCreate(std::string("monster copy.png"), 30, 8);
-    monster6.monsterCreate(std::string("monster copy.png"), 30, 9);
-    monster7.monsterCreate(std::string("monster copy.png"), 30, 9);
+    monster1 = Monster(std::string("monster1.png"), std::string("bullet1.png"), 20, 5);
+    monster2 = Monster(std::string("monster1.png"), std::string("bullet1.png"), 20, 4);
+    monster3 = Monster(std::string("monster1.png"), std::string("bullet1.png"), 20, 5);
+    monster4.monsterCreate(std::string("monster2.png"), 30, 8);
+    monster5.monsterCreate(std::string("monster2.png"), 30, 8);
+    monster6.monsterCreate(std::string("monster2.png"), 30, 9);
+    monster7.monsterCreate(std::string("monster2.png"), 30, 9);
     monster1._sprite->setPosition(visibleSize.width * 0.33, visibleSize.height / 2);
     monster2._sprite->setPosition(visibleSize.width * 0.66, visibleSize.height / 2);
     monster3._sprite->setPosition(visibleSize.width * 0.77, visibleSize.height / 2);
@@ -437,17 +444,20 @@ void FightGround::controlMovingActor(PhysicsContact &contact)
     }
     myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
     log("###%d###", Monster::mstrNum);
+    log("appeartimes: %d", appearTime);
 }
 void FightGround::appearSprite()
 {
-    static int appeartimes = 0;
-    if(appeartimes == 0)
+    if(appearTime == 0)
     {
+        potion1._sprite->setPosition(Vec2(myHero._sprite->getPosition().x - 50, myHero._sprite->getPosition().y));
+        potion2._sprite->setPosition(Vec2(myHero._sprite->getPosition().x, myHero._sprite->getPosition().y + 50));
+        box1._sprite->setPosition(Vec2(myHero._sprite->getPosition().x + 50, myHero._sprite->getPosition().y));
         potion1.appearSelf();
         potion2.appearSelf();
         box1.appearSelf();
         gate.appearSelf();
-        appeartimes++;
+        appearTime++;
     }
     else
         return;

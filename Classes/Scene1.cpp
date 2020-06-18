@@ -1,5 +1,6 @@
 #include "FightGroundScene.h"
 #include "SimpleAudioEngine.h"
+#include "Scene1.h"
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
 USING_NS_CC;
@@ -107,7 +108,7 @@ bool Scene1::init()
         }
     }
     
-    for(double i = 1; i <= 6;i=i+0.5)
+    for(double i = 1; i <= 4;i=i+0.5)
     {
         double k1 = 0.1 * i;
         Wall wall = Wall("Wall.png");
@@ -161,6 +162,7 @@ bool Scene1::init()
     gate._sprite->setTag(1001);
     gate.hideSelf();
     this->addChild(gate._sprite, 1);
+    appearTime = 0;
     
     this->monsterinit();//初始化怪物设置
     
@@ -282,21 +284,21 @@ void Scene1::monsterinit()//怪物初始化
 void Scene1::addmonster(float dt)//创建并添加怪物
 {
     
-    monster1.monsterCreate(std::string("monster copy.png"), 5, 2);
-    monster2.monsterCreate(std::string("monster copy.png"), 5, 2);
-    monster3.monsterCreate(std::string("monster copy.png"), 5, 2);
-    monster4.monsterCreate(std::string("monster copy.png"), 5, 2);
-    monster5.monsterCreate(std::string("monster copy.png"), 5, 2);
-    monster6.monsterCreate(std::string("monster copy.png"), 10, 8);
-    monster7.monsterCreate(std::string("monster copy.png"), 5, 7);
+    monster1 = Monster(std::string("monster1.png"), std::string("bullet1.png"), 20, 1);
+    monster2 = Monster(std::string("monster1.png"), std::string("bullet1.png"), 30, 2);
+    monster3 = Monster(std::string("monster1.png"), std::string("bullet1.png"), 30, 2);
+    monster4 = Monster(std::string("monster1.png"), std::string("bullet1.png"), 30, 2);
+    monster5 = Monster(std::string("monster1.png"), std::string("bullet1.png"), 30, 2);
+    monster6.monsterCreate(std::string("monster2.png"), 10, 8);
+    monster7.monsterCreate(std::string("monster2.png"), 5, 7);
     
     monster1._sprite->setPosition(visibleSize.width / 2 - 100, visibleSize.height / 2 - 30);
     monster2._sprite->setPosition(visibleSize.width / 2 - 30, visibleSize.height / 2 - 50);
     monster3._sprite->setPosition(visibleSize.width / 2 + 40, visibleSize.height / 2 + 40);
     monster4._sprite->setPosition(visibleSize.width / 2 + 70, visibleSize.height / 2 - 50);
     monster5._sprite->setPosition(visibleSize.width / 2 - 45, visibleSize.height / 2 + 60);
-    monster6._sprite->setPosition(visibleSize.width / 2 + 100, visibleSize.height / 2 - 100);
-    monster7._sprite->setPosition(visibleSize.width / 2 + 100, visibleSize.height / 2 + 100);
+    monster6._sprite->setPosition(visibleSize.width / 2 + 100, visibleSize.height / 2 - 200);
+    monster7._sprite->setPosition(visibleSize.width / 2 + 200, visibleSize.height / 2 + 100);
     
     monster1.setRemoteMstr();
     monster2.setRemoteMstr();
@@ -461,14 +463,16 @@ void Scene1::controlMovingActor(PhysicsContact &contact)
 }
 void Scene1::appearSprite()
 {
-    static int appeartimes = 0;
-    if(appeartimes == 0)
+    if(appearTime == 0)
     {
+        potion1._sprite->setPosition(Vec2(myHero._sprite->getPosition().x - 50, myHero._sprite->getPosition().y));
+        potion2._sprite->setPosition(Vec2(myHero._sprite->getPosition().x, myHero._sprite->getPosition().y + 50));
+        box1._sprite->setPosition(Vec2(myHero._sprite->getPosition().x + 50, myHero._sprite->getPosition().y));
         potion1.appearSelf();
         potion2.appearSelf();
         box1.appearSelf();
         gate.appearSelf();
-        appeartimes++;
+        appearTime++;
     }
     else
         return;

@@ -149,12 +149,19 @@ bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
             }
             if(nodeA->getTag() == 999 && nodeB->getTag() > 800 && nodeB->getTag() < 900)//近战怪物
             {
-                
                 this->getShot(nodeB->getTag() - 800);
+                nodeB->setOpacity(255);
+                nodeB->stopAllActions();
+                auto pause = DelayTime::create(1.0f);
+                nodeB->runAction(pause);
             }
             if(nodeB->getTag() == 999 && nodeA->getTag() > 800 && nodeA->getTag() < 900)
             {
                 this->getShot(nodeA->getTag() - 800);
+                nodeA->setOpacity(255);
+                nodeA->stopAllActions();
+                auto pause = DelayTime::create(1.0f);
+                nodeA->runAction(pause);
             }
             if(nodeA->getTag() == 999 && (nodeB->getTag() >= 100 && nodeB->getTag() <= 150))//药水
             {
