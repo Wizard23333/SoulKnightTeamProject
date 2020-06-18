@@ -1,11 +1,19 @@
 #include "Monster.h"
 int Monster::mstrNum = 0;
+/*
 Monster::Monster(const std::string pngName, int Blood, int atk)
 :blood(Blood), Actor(pngName), ATK(atk)
 {
     _sprite->setTag(800 + atk);
-    _bulletSprite->create("Bullet2.png");
+    _bulletName = "Bullet2.png";
     
+}
+*/
+Monster::Monster(const std::string pngName, const std::string bulletName, int Blood, int atk)
+:blood(Blood), Actor(pngName), ATK(atk)
+{
+    _sprite->setTag(800 + atk);
+    _bulletName = bulletName;
 }
 
 Monster * Monster::monsterCreate(const std::string pngName, int Blood, int atk)
@@ -13,7 +21,7 @@ Monster * Monster::monsterCreate(const std::string pngName, int Blood, int atk)
     actorCreate(pngName);
     blood = Blood;
     ATK = atk;
-    _bulletSprite->create("Bullet2.png");
+    _bulletName = "Bullet2.png";
     _sprite->setTag(800 + atk);
     
     return this;
@@ -58,21 +66,33 @@ void Monster::autoMove(Vec2 destination)//怪物的随机运动
         {
             switch (direction)
             {
-                case 1 : this->_sprite->runAction(moveRight);
+                case 1 :
+                    this->_sprite->runAction(moveRight);
+                    this->_sprite->setFlippedX(true);
                     break;
-                case 2 : this->_sprite->runAction(moveLeft);
+                case 2 :
+                    this->_sprite->runAction(moveLeft);
+                    this->_sprite->setFlippedX(false);
                     break;
                 case 3 : this->_sprite->runAction(moveUp);
                     break;
                 case 4 : this->_sprite->runAction(moveDown);
                     break;
-                case 5 : this->_sprite->runAction(spawnAction1);
+                case 5 :
+                    this->_sprite->runAction(spawnAction1);
+                    this->_sprite->setFlippedX(false);
                     break;
-                case 6 : this->_sprite->runAction(spawnAction2);
+                case 6 :
+                    this->_sprite->runAction(spawnAction2);
+                    this->_sprite->setFlippedX(true);
                     break;
-                case 7 : this->_sprite->runAction(spawnAction3);
+                case 7 :
+                    this->_sprite->runAction(spawnAction3);
+                    this->_sprite->setFlippedX(false);
                     break;
-                case 8 : this->_sprite->runAction(spawnAction4);
+                case 8 :
+                    this->_sprite->runAction(spawnAction4);
+                    this->_sprite->setFlippedX(true);
                     break;
                 default:
                     break;
@@ -87,11 +107,16 @@ void Monster::autoShoot(Vec2 destination)
         return;
     else
     {
+        
+        this->_sprite->stopAllActions();
+        this->_sprite->setOpacity(255);
+        //float delayRate = rand() % 3 + 1;
+        //float delayTime = DelayTime::create();
         auto originPlace = this->_sprite->getPosition();
         auto direction = Vec2(20 * (destination.x - originPlace.x), 20 * (destination.y - originPlace.y));
         direction.normalize();
         
-        auto bullet = Sprite::create("Bullet2.png");
+        auto bullet = Sprite::create(_bulletName);
         bullet->setTag(this->getATK() + 700);
         bullet->setPosition(originPlace);
         
@@ -190,6 +215,7 @@ void Monster::setDead()//怪物死亡
     physicbody->setCategoryBitmask(0);
     physicbody->setContactTestBitmask(0);
     this->_sprite->setPhysicsBody(physicbody);
+    //this->_sprite->setPosition(Vec2(480, 320));
     mstrNum--;
     
 }
