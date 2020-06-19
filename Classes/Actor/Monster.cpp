@@ -115,9 +115,12 @@ void Monster::autoShoot(Vec2 destination)
         auto originPlace = this->_sprite->getPosition();
         auto direction = Vec2(20 * (destination.x - originPlace.x), 20 * (destination.y - originPlace.y));
         direction.normalize();
-        
+        auto rotateAngle = atan(direction.y / direction.x) / 3.14 * 180;
+        rotateAngle = direction.x > 0 ? rotateAngle : rotateAngle + 180;
+        //log("%lf", rotateAngle);
         auto bullet = Sprite::create(_bulletName);
         bullet->setTag(this->getATK() + 700);
+        bullet->setRotation(-rotateAngle);
         bullet->setPosition(originPlace);
         
         auto physicbody = cocos2d::PhysicsBody::createBox(bullet->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
@@ -138,8 +141,8 @@ void Monster::setCloseMstr()//将怪物设置为近程怪物
 {
     auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicbody->setDynamic(false);
-    physicbody->setCategoryBitmask(24);
-    physicbody->setContactTestBitmask(34);
+    physicbody->setCategoryBitmask(88);
+    physicbody->setContactTestBitmask(98);
     this->_sprite->setPhysicsBody(physicbody);
 }
 
@@ -147,8 +150,8 @@ void Monster::setRemoteMstr()
 {
     auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 1.0f, 0.0f));
     physicbody->setDynamic(false);
-    physicbody->setCategoryBitmask(19);
-    physicbody->setContactTestBitmask(44);
+    physicbody->setCategoryBitmask(83);
+    physicbody->setContactTestBitmask(108);
     _sprite->setPhysicsBody(physicbody);
 }
 void Monster::oncontactBegin(PhysicsContact &contact)
@@ -170,7 +173,17 @@ void Monster::oncontactBegin(PhysicsContact &contact)
             {
                 getShot(nodeA->getTag());
             }
-        
+            if(nodeB->getTag() > 800 && nodeB->getTag() < 900 && nodeA->getTag() > 800 && nodeA->getTag() < 900)
+            {
+                auto direct1 = nodeB->getPosition()-nodeA->getPosition();
+                direct1.normalize();
+                auto direct2 = nodeA->getPosition()-nodeB->getPosition();
+                direct2.normalize();
+                auto moveBy1 = MoveBy::create(0.5f, direct1 * 10);
+                auto moveBy2 = MoveBy::create(0.5f, direct2 * 10);
+                nodeA->runAction(moveBy2);
+                nodeB->runAction(moveBy1);
+            }
         }
     }
 }
@@ -183,6 +196,7 @@ void Monster::getShot(int value)//怪物的掉血
     this->blood = blood - bloodReduce > 0 ? blood - bloodReduce : 0;
     auto fadeIn = FadeIn::create(0.2f);
     auto fadeOut = FadeOut::create(0.2f);
+    auto fadeTo = FadeTo::create(0.2f, 1);
     this->_sprite->setOpacity(255);
     this->_sprite->runAction(Sequence::create(fadeOut, fadeIn, nullptr));
     char temp[5];
@@ -204,17 +218,20 @@ void Monster::getShot(int value)//怪物的掉血
 
 void Monster::setDead()//怪物死亡
 {
-    this->_sprite->setOpacity(255);
-    this->_sprite->stopAllActions();
-    
-    auto rotateBy = RotateBy::create(1.0f, 90.0f);
-    auto fadeOut = FadeOut::create(2.0f);
-    this->_sprite->runAction(Sequence::create(Spawn::create(rotateBy, fadeOut, nullptr), nullptr));
     auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicbody->setDynamic(false);
     physicbody->setCategoryBitmask(0);
     physicbody->setContactTestBitmask(0);
     this->_sprite->setPhysicsBody(physicbody);
+    auto position = this->_sprite->getPosition();
+    this->_sprite->setOpacity(255);
+    this->_sprite->stopAllActions();
+    
+    auto rotateBy = RotateBy::create(1.0f, 90.0f);
+    auto fadeOut = FadeOut::create(2.0f);
+    this->_sprite->setPosition(position);
+    this->_sprite->runAction(Sequence::create(Spawn::create(rotateBy, fadeOut, nullptr), nullptr));
+    
     //this->_sprite->setPosition(Vec2(480, 320));
     mstrNum--;
     

@@ -97,6 +97,13 @@ bool Hero::onTouchBegin(cocos2d::Touch* touch)
     if(_heroValue.energy >= _weapon.GetBulletenergycost())
     {
         this->attack(touch);
+        auto dest = touch->getLocation();
+        
+        auto direction = Vec2(dest.x - _sprite->getPosition().x, dest.y - _sprite->getPosition().y);
+        direction.normalize();
+        auto rotateAngle = atan(direction.y / direction.x) / 3.14 * 180;
+        rotateAngle = direction.x > 0 ? rotateAngle : rotateAngle + 180;
+        _weapon._sprite->setRotation(-rotateAngle);
         return true;
     
     }
