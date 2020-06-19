@@ -29,13 +29,13 @@ Weapon::Weapon(const std::string pngName, int tag)
 
 
 bool Weapon::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event) {
-	if (this->tagofbullet == 11)//发射三枚飞镖
+	if (this->tagofbullet == 12)//发射三枚飞镖
 	{
 		//获取触摸点的坐标，并计算这个点相对于_player的偏移量。
 		Vec2 touchLocation = touch->getLocation();
 		Vec2 offset1 = touchLocation - this->_sprite->getPosition();
-		Vec2 offset2 = Vec2(0.5 * offset1.x - 0.866 * offset1.y, 0.5 * offset1.y + 0.866 * offset1.x);
-		Vec2 offset3 = Vec2(0.5 * offset1.x + 0.866 * offset1.y, 0.5 * offset1.y - 0.866 * offset1.x);
+		        Vec2 offset2 = Vec2(0.5 * offset1.x - 0.2 * offset1.y, 0.5 * offset1.y + 0.2 * offset1.x);
+        Vec2 offset3 = Vec2(0.5 * offset1.x + 0.2 * offset1.y, 0.5 * offset1.y - 0.2 * offset1.x);
 		// 将偏移量转化为单位向量，即长度为1的向量。
 		offset1.normalize();
 		offset2.normalize();
@@ -71,13 +71,21 @@ bool Weapon::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event) {
         bullet1._sprite->setTag(temptag);
 		bullet2._sprite->setTag(temptag);
 		bullet3._sprite->setTag(temptag);
-        auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 1.0f, 0.0f));
-        physicbody->setDynamic(false);
-        physicbody->setCategoryBitmask(32);
-        physicbody->setContactTestBitmask(16);
-        bullet1._sprite->setPhysicsBody(physicbody);
-		bullet2._sprite->setPhysicsBody(physicbody);
-		bullet3._sprite->setPhysicsBody(physicbody);
+        auto physicbody1 = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 1.0f, 0.0f));
+        physicbody1->setDynamic(false);
+        physicbody1->setCategoryBitmask(32);
+        physicbody1->setContactTestBitmask(16);
+        bullet1._sprite->setPhysicsBody(physicbody1);
+        auto physicbody2 = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 1.0f, 0.0f));
+        physicbody2->setDynamic(false);
+        physicbody2->setCategoryBitmask(32);
+        physicbody2->setContactTestBitmask(16);
+        bullet2._sprite->setPhysicsBody(physicbody2);
+        auto physicbody3 = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 1.0f, 0.0f));
+        physicbody3->setDynamic(false);
+        physicbody3->setCategoryBitmask(32);
+        physicbody3->setContactTestBitmask(16);
+        bullet3._sprite->setPhysicsBody(physicbody3);
         
 		(this->_sprite->getParent())->addChild(bullet1._sprite);
 		(this->_sprite->getParent())->addChild(bullet2._sprite);
@@ -87,7 +95,7 @@ bool Weapon::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event) {
 		bullet3._sprite->runAction(Sequence::create(actionMove3, actionRemove, nullptr));
 		
 	}
-	else if (this->tagofbullet == 12)//枪发射子弹
+	else if (this->tagofbullet == 13)//枪发射子弹
 	{
 		//获取触摸点的坐标，并计算这个点相对于_player的偏移量。
 		Vec2 touchLocation = touch->getLocation();
@@ -119,8 +127,10 @@ bool Weapon::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event) {
 	}
 	else if(this->tagofbullet == 11)//剑的前戳
 	{
-		auto realDest = Vec2(40,0) + this->_sprite->getPosition();
-		auto actionMove = MoveTo::create(0.1f, realDest);
+		//auto realDest = Vec2(40,0) + this->_sprite->getPosition();
+        //auto actionMove = MoveTo::create(0.1f, realDest);
+        auto realDest = Vec2(60 * cos(this->_sprite->getRotation() / 180 * 3.14), - 60 * sin(this->_sprite->getRotation() / 180 * 3.14));
+        auto actionMove = MoveBy::create(0.1f, realDest);
 		auto actionRemove = RemoveSelf::create();
 		this->_sprite ->setOpacity(0);
 		int temptag = this->tagofbullet;
