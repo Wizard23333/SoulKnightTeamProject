@@ -3,7 +3,7 @@
 #include <iostream>
 int Hero::weaponTag = 5;
 Hero::Hero(const std::string pngName, int blood, int energy, int sheild)
-:_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("projectile.png"))
+:_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("Darts.png"))
 {
     //changeWeapon = false;
     _sprite->setTag(999);
@@ -145,27 +145,28 @@ bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
         auto posB = nodeB->getPosition();
         log("%d",nodeA->getTag());
         log("%d",nodeB->getTag());
+		int tagA = nodeA->getTag(), tagB = nodeB->getTag();
         if(posA == this->_sprite->getPosition() || posB == this->_sprite->getPosition())
         {
-            if(nodeA->getTag() == 999 && nodeB ->getTag() > 700 && nodeB->getTag() < 800)//子弹和英雄
+            if(tagA == 999 && tagB > 700 && tagB < 800)//子弹和英雄
             {
                 this->getShot(nodeB->getTag() - 700);
                 nodeB->removeFromParentAndCleanup(true);
             }
-            if(nodeB->getTag() == 999 && nodeA ->getTag() > 700 && nodeA->getTag() < 800)
+            if(tagB == 999 && tagA > 700 && tagA < 800)
             {
                 this->getShot(nodeA->getTag() - 700);
                 nodeA->removeFromParentAndCleanup(true);
             }
-            if(nodeA->getTag() == 999 && nodeB->getTag() > 800 && nodeB->getTag() < 900)//近战怪物
+            if(tagA == 999 && tagB > 800 && tagB < 900)//近战怪物
             {
                 this->getShot(nodeB->getTag() - 800);
                 nodeB->setOpacity(255);
                 nodeB->stopAllActions();
-                auto pause = DelayTime::create(1.0f);
+				auto pause = DelayTime::create(1.0f);
                 nodeB->runAction(pause);
             }
-            if(nodeB->getTag() == 999 && nodeA->getTag() > 800 && nodeA->getTag() < 900)
+            if(tagB == 999 && tagA > 800 && tagA < 900)
             {
                 this->getShot(nodeA->getTag() - 800);
                 nodeA->setOpacity(255);
@@ -173,11 +174,11 @@ bool Hero::onContactBegin(cocos2d::PhysicsContact & contact)
                 auto pause = DelayTime::create(1.0f);
                 nodeA->runAction(pause);
             }
-            if(nodeA->getTag() == 999 && (nodeB->getTag() >= 100 && nodeB->getTag() <= 150))//药水
+            if(tagA == 999 && (tagB >= 100 && tagB <= 150))//药水
             {
                 getCue(nodeB->getTag() - 101);
             }
-            if(nodeB->getTag() == 999 && (nodeA->getTag() >= 100 && nodeA->getTag() <= 150))
+            if(tagB == 999 && (tagA >= 100 && tagA <= 150))
             {
                 getCue(nodeA->getTag() - 101);
                 

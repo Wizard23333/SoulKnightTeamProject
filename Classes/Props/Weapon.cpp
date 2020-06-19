@@ -156,7 +156,7 @@ bool Weapon::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event) {
 		this->_sprite->setOpacity(0);
 		int temptag = this->tagofbullet;
 		Bullet bullet1 = Bullet(parameter[temptag].getpngname());
-		bullet1._sprite->setScale(0.20);
+		bullet1._sprite->setScale(0.10);
         //add
         bullet1._sprite->setTag(temptag);
         auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 1.0f, 0.0f));

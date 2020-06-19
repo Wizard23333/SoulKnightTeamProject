@@ -56,14 +56,15 @@ void Box::openBox()//打开箱子的操作
     auto parent = this->_sprite->getParent();
     if(kindOfBox)//添加药水
     {
-        log("%f %f", position.x, position.y);
+        log("position.x=%f position.y=%f", position.x, position.y);
         float x = position.x;
         float y = position.y;
         _potion = Potion(parameter[value - 1].getpngname());
+		_potion._sprite->setPosition(position);
+        log("pppposition.x=%f pppposition.y=%f", _potion._sprite->getPosition().x, _potion._sprite->getPosition().y);
         log("%s",parameter[value].getpngname().c_str());
         _potion._sprite->setScale(0.10);
         _potion._sprite->setTag(value);
-        _potion._sprite->setPosition(position);
         parent->addChild(_potion._sprite, 1);
     }
     else if(kindOfBox == 2)
@@ -72,7 +73,8 @@ void Box::openBox()//打开箱子的操作
         _weapon._sprite->setPosition(position);
         //parent->addChild(_weapon._sprite, 1);
     }
-    this->_sprite->runAction(Sequence::create(fadeOut, removeSelf, nullptr));
+    //this->_sprite->runAction(Sequence::create(fadeOut, removeSelf, nullptr));
+
 }
 
 

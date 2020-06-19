@@ -227,7 +227,11 @@ bool FightGround::onContactBegan(cocos2d::PhysicsContact & contact)//碰撞的�
     potion2.onContactpresolve(contact);
     box1.onContactBegin(contact);
     if(box1.isOpen == true)
+	{ 
+		log("hbiposition.x=%f bhauposition.y=%f", box1._potion._sprite->getPosition().x, box1._potion._sprite->getPosition().y);
+		box1._potion._sprite->setPosition(box1._potion._sprite->getPosition().x, box1._potion._sprite->getPosition().y);
         box1._potion.onContactpresolve(contact);
+	}
     monster1.oncontactBegin(contact);
     monster2.oncontactBegin(contact);
     monster3.oncontactBegin(contact);
