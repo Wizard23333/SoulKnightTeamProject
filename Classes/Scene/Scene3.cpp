@@ -135,7 +135,7 @@ bool Scene3::init()
     myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
     myHero._sprite->setScale(0.08);
     
-    myHero.setWeapon(5);//武器类型
+    myHero.setWeapon(Hero::weaponTag);//武器类型
     myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
     myHero._weapon._sprite->setScale(0.10);
     this->addChild(myHero._sprite, 1);

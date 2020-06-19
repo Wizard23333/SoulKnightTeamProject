@@ -58,6 +58,7 @@ public:
     Hero(const std::string pngName = "HelloWorld.png", int blood = 100, int energy = 50, int sheild = 30);
     Hero * HeroCreate(const std::string pngName = "HelloWorld.png", int blood = 100, int energy = 50, int sheild = 30);
     void setWeapon(int tag = 5);
+    static int weaponTag;
     bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode);
     bool onKeyRelesed(cocos2d::EventKeyboard::KeyCode keycode);
     bool onTouchBegin(cocos2d::Touch * touch);

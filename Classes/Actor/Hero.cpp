@@ -1,5 +1,7 @@
-#include<Hero.h>
 
+#include "Hero.h"
+#include <iostream>
+int Hero::weaponTag = 5;
 Hero::Hero(const std::string pngName, int blood, int energy, int sheild)
 :_heroValue(blood, energy, sheild), Actor(pngName), _weapon(std::string("projectile.png"))
 {
@@ -21,6 +23,7 @@ Hero * Hero::HeroCreate(const std::string pngName, int blood, int energy, int sh
 void Hero::setWeapon(int tag)
 {
     _weapon = Weapon(parameter[tag].getpngname(), tag);
+    weaponTag = tag;
 }
 bool Hero::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
 {
@@ -201,7 +204,7 @@ void Hero::changeWeapon()
         weaponTag = 5;
     else
         log("error   !!!!");
-    
+    this->weaponTag = weaponTag;
     this->_weapon._sprite->setTag(weaponTag);
     this->_weapon.tagofbullet = _weapon._sprite->getTag() + 5;
     auto temp = Sprite::create(parameter[weaponTag].getpngname());

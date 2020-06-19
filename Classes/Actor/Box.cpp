@@ -52,12 +52,15 @@ void Box::openBox()//打开箱子的操作
     isOpen = true;
     auto fadeOut = FadeOut::create(1.0f);
     auto removeSelf = RemoveSelf::create();
-    auto position = this->_sprite->getPosition();
+    auto position = _sprite->getPosition();
     auto parent = this->_sprite->getParent();
-    if(kindOfBox == 1)//添加药水
+    if(kindOfBox)//添加药水
     {
-        log("1");
-        _potion = Potion(parameter[value].getpngname());
+        log("%f %f", position.x, position.y);
+        float x = position.x;
+        float y = position.y;
+        _potion = Potion(parameter[value - 1].getpngname());
+        log("%s",parameter[value].getpngname().c_str());
         _potion._sprite->setScale(0.10);
         _potion._sprite->setTag(value);
         _potion._sprite->setPosition(position);
