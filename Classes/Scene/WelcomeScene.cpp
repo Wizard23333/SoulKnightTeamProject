@@ -29,7 +29,7 @@ bool Welcome::init()
 	/* ÉèÖÃ±³¾°ÒôÀÖ */
 	auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
 	if (!audio->isBackgroundMusicPlaying()) {
-		//audio->playBackgroundMusic("SoulKnightBgm.mp3", true);
+		audio->playBackgroundMusic("SoulKnightBgm.mp3", true);
 	}
 
 
