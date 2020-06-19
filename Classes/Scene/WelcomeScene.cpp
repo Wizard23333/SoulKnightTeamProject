@@ -1,8 +1,10 @@
 
 #include "WelcomeScene.h"
-#include "SaveMapScene.h"
+//#include "SaveMapScene.h"
+#include "FightGroundScene.h"
 #include "cocos2d.h"
-#include"..\cocos\editor-support\cocostudio\SimpleAudioEngine.h"
+#include "SimpleAudioEngine.h"
+//#include"..\cocos\editor-support\cocostudio\SimpleAudioEngine.h"
 USING_NS_CC;
 
 Scene* Welcome::createScene()
@@ -27,7 +29,7 @@ bool Welcome::init()
 	/* ÉèÖÃ±³¾°ÒôÀÖ */
 	auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
 	if (!audio->isBackgroundMusicPlaying()) {
-		audio->playBackgroundMusic("SoulKnightBgm.mp3", true);
+		//audio->playBackgroundMusic("SoulKnightBgm.mp3", true);
 	}
 
 
@@ -83,7 +85,9 @@ void Welcome::menuCloseCallback(Ref* pSender)
 
 void Welcome::menuStartCallBack(Ref* pSender)
 {
-	auto nextScene = SaveMap::createScene();
+	//auto nextScene = SaveMap::createScene();
+    auto nextScene = FightGround::createScene();
+    
 	Director::getInstance()->replaceScene(nextScene);
 }
 

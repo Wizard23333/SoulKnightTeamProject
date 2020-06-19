@@ -6,7 +6,7 @@
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"
-#include "Potion.h"
+#include "Potion.hpp"
 #include "Box.h"
 USING_NS_CC;
 class FightGround : public cocos2d::Scene
@@ -43,6 +43,7 @@ private:
     static int fgs_blood;
     static int fgs_energy;
     static int fgs_shield;
+    int appearTime;
     Hero myHero;
     Potion potion1;
     Potion potion2;
@@ -56,6 +57,7 @@ private:
     Monster monster6;
     Monster monster7;
 };
+
 
 
 
