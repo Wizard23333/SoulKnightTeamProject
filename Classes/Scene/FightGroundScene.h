@@ -3,11 +3,14 @@
 #include "HelloWorldScene.h"
 #include "PauseScene.h"
 #include "WelcomeScene.h"
+#include "Scene1.h"
+#include "Scene2.h"
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"
 #include "Potion.h"
 #include "Box.h"
+#include "Wall.h"
 USING_NS_CC;
 class FightGround : public cocos2d::Scene
 {
@@ -57,8 +60,6 @@ private:
     Monster monster6;
     Monster monster7;
 };
-
-
 
 
 #endif /* FightGroundScene_h */

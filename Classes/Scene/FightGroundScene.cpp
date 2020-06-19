@@ -149,7 +149,7 @@ bool FightGround::init()
     box1.hideSelf();
     this->addChild(box1._sprite, 1);
     
-    gate = Props("blackRectangle.png");
+    gate = Props("deliverGate.png");
     gate._sprite->setPosition(visibleSize.width - 100, visibleSize.height / 2);
     gate._sprite->setScale(0.8);
     gate._sprite->setTag(1001);
@@ -285,10 +285,10 @@ void FightGround::addmonster(float dt)//创建并添加怪物
     monster1._sprite->setPosition(visibleSize.width * 0.33, visibleSize.height / 2);
     monster2._sprite->setPosition(visibleSize.width * 0.66, visibleSize.height / 2);
     monster3._sprite->setPosition(visibleSize.width * 0.77, visibleSize.height / 2);
-    monster4._sprite->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-    monster5._sprite->setPosition(visibleSize.width / 2, visibleSize.height / 2 + 50);
+    monster4._sprite->setPosition(visibleSize.width / 2 - 50, visibleSize.height / 2 -90);
+    monster5._sprite->setPosition(visibleSize.width / 2 -200, visibleSize.height / 2 + 50);
     monster6._sprite->setPosition(visibleSize.width / 2, visibleSize.height / 2 + 100);
-    monster7._sprite->setPosition(visibleSize.width / 2, visibleSize.height / 2 - 50);
+    monster7._sprite->setPosition(visibleSize.width / 2+80 , visibleSize.height / 2 - 50);
     
     monster1.setRemoteMstr();
     monster2.setRemoteMstr();

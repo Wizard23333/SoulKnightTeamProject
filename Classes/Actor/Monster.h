@@ -16,7 +16,7 @@ public:
     int getATK() { return ATK; }
     void oncontactBegin(PhysicsContact & contact);
     void getShot(int value = 1);
-    void setDead();
+    void setDead(float dt = 1);
     void setMonsterNum(int num) { mstrNum = num; }
     static int mstrNum;
 private:

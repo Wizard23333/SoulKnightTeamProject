@@ -240,3 +240,4 @@ void Monster::setDead(float dt)//怪物死亡
     mstrNum--;
     
 }
+
