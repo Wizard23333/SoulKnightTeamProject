@@ -8,6 +8,7 @@ USING_NS_CC;
 Potion::Potion(const std::string pngName):Props(pngName) {
 	//ÉèÖÃ±ê¼Ç
 	_sprite->setTag(10);
+    isItUsed = false;
 }
 
 /*Potion* Potion::PotionCreate(const std::string pngName)

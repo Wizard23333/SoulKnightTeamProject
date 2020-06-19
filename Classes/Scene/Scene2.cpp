@@ -1,26 +1,26 @@
-/*
-  战斗场景基本组件
- */
 #include "FightGroundScene.h"
 #include "SimpleAudioEngine.h"
+#include "Scene2.h"
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
 USING_NS_CC;
-Scene * FightGround::createScene()
+Scene * Scene2::createScene(int blood, int energy, int shield)
 {
-    return FightGround::create();
+    s2_blood = blood;
+    s2_energy = energy;
+    s2_shield = shield;
+    return Scene2::create();
 }
-
-int FightGround::fgs_shield = 0;
-int FightGround::fgs_blood = 0;
-int FightGround::fgs_energy = 0;
+int Scene2::s2_blood = 0;
+int Scene2::s2_energy = 0;
+int Scene2::s2_shield = 0;
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-bool FightGround::init()
+bool Scene2::init()
 {
     if(!Scene::init())//场景初始化检测
     {
@@ -48,11 +48,11 @@ bool FightGround::init()
     onMusic->setScale(0.15);
     
     MenuItemToggle *musicItem = MenuItemToggle::createWithCallback(
-        CC_CALLBACK_1(FightGround::menucloseMusic, this),
+        CC_CALLBACK_1(Scene2::menucloseMusic, this),
         onMusic, offMusic, NULL
     );
     
-    auto closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png",CC_CALLBACK_1(FightGround::menucloseCallBack, this));//退出按钮
+    auto closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png",CC_CALLBACK_1(Scene2::menucloseCallBack, this));//退出按钮
     float x = originPoint.x + visibleSize.width - closeItem->getContentSize().width/2;
     float y = originPoint.y + visibleSize.height - closeItem->getContentSize().height/2 ;
     closeItem->setPosition(Vec2(x,y));
@@ -82,7 +82,7 @@ bool FightGround::init()
     sheild->setPosition(Vec2(sheild->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height));
     this->addChild(sheild, 1);
     
-    this->schedule(schedule_selector(FightGround::updateBlood), 0.1f);//血量更新
+    this->schedule(schedule_selector(Scene2::updateBlood), 0.1f);//血量更新
     
                    
     /*
@@ -107,8 +107,27 @@ bool FightGround::init()
             this->addChild(wall._sprite);
         }
     }
+    
+    for (double i = 4; i <= 5;i=i+0.5)
+    {
+        for (double j = 4; j <= 5;j=j+0.5 )
+        {
+            
+            double k1 = 0.1 * i, k2 = 0.1 * j;
+            Wall wall = Wall("Wall.png");
+            wall._sprite->setPosition(Vec2(visibleSize.width * k1, visibleSize.height * k2));
+            wall._sprite->setScale(0.10);
+            this->addChild(wall._sprite);
+        }
+    }
+    
+    
            // myHero.HeroCreate("Ninja.png");//创建英雄
     myHero = Hero("Knight.png");
+    myHero._heroValue.setBlood(s2_blood);
+    myHero._heroValue.setEnergy(s2_energy);
+    myHero._heroValue.setShield(s2_shield);
+    
     myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
     myHero._sprite->setScale(0.08);
     
@@ -117,21 +136,21 @@ bool FightGround::init()
     myHero._weapon._sprite->setScale(0.10);
     this->addChild(myHero._sprite, 1);
     this->addChild(myHero._weapon._sprite, 1);
-    this->schedule(schedule_selector(FightGround::valueAdd), 1.0f);
+    this->schedule(schedule_selector(Scene2::valueAdd), 1.0f);
     //myHero._sprite->setTag(999);//添加Tag值
     
     //myHero._heroValue.setBlood(5);//加血演示
     //myHero._heroValue.setEnergy(10);
     //添加药水
     potion1 = Potion("Blood.png");
-    potion1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 + 100));
+    potion1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 + 200));
     potion1._sprite->setScale(0.10);
     potion1._sprite->setTag(1);//药水的属性值
     potion1.hideSelf();
     this->addChild(potion1._sprite, 1);
 
     potion2 = Potion("Energy.png");
-    potion2._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 - 50));
+    potion2._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 - 200));
     potion2._sprite->setScale(0.10);
     potion2._sprite->setTag(2);
     potion2.hideSelf();
@@ -143,30 +162,31 @@ bool FightGround::init()
     box1.hideSelf();
     this->addChild(box1._sprite, 1);
     
-    gate = Props("blackRectangle.png");
+    gate = Props("deliverGate.png");
     gate._sprite->setPosition(visibleSize.width - 100, visibleSize.height / 2);
     gate._sprite->setScale(0.8);
     gate._sprite->setTag(1001);
     gate.hideSelf();
     this->addChild(gate._sprite, 1);
+    appearTime = 0;
     
     this->monsterinit();//初始化怪物设置
     
-    this->schedule(schedule_selector(FightGround::controlMoveArea), 0.1f);//控制外围边界
+    this->schedule(schedule_selector(Scene2::controlMoveArea), 0.1f);//控制外围边界
     
     
     auto eventListener = EventListenerTouchOneByOne::create();//触摸事件监听
-    eventListener->onTouchBegan = CC_CALLBACK_2(FightGround::onTouchBegan, this);
-    eventListener->onTouchEnded = CC_CALLBACK_2(FightGround::onTouchEnded, this);
+    eventListener->onTouchBegan = CC_CALLBACK_2(Scene2::onTouchBegan, this);
+    eventListener->onTouchEnded = CC_CALLBACK_2(Scene2::onTouchEnded, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventListener, this);
     
     auto contactListener = EventListenerPhysicsContact::create();//碰撞事件监听
-    contactListener->onContactBegin = CC_CALLBACK_1(FightGround::onContactBegan, this);
+    contactListener->onContactBegin = CC_CALLBACK_1(Scene2::onContactBegan, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
     //键盘控制
     auto keyListener = EventListenerKeyboard::create();//键盘事件监听
-    keyListener->onKeyPressed = CC_CALLBACK_2(FightGround::onKeyPressed, this);
-    keyListener->onKeyReleased = CC_CALLBACK_2(FightGround::onKeyReleased, this);
+    keyListener->onKeyPressed = CC_CALLBACK_2(Scene2::onKeyPressed, this);
+    keyListener->onKeyReleased = CC_CALLBACK_2(Scene2::onKeyReleased, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyListener, this);
     
     return true;
@@ -175,12 +195,12 @@ bool FightGround::init()
     
 }
 
-void FightGround::menucloseCallBack(Ref* pSender)//关闭按钮的回调
+void Scene2::menucloseCallBack(Ref* pSender)//关闭按钮的回调
 {
     Director::getInstance()->pushScene(PauseScene::createScene());
 }
 
-void FightGround::menucloseMusic(cocos2d::Ref *pSender)
+void Scene2::menucloseMusic(cocos2d::Ref *pSender)
 {
     auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
     if (isMusicPlaying == true) {
@@ -192,27 +212,27 @@ void FightGround::menucloseMusic(cocos2d::Ref *pSender)
         isMusicPlaying = true;
     }
 }
-void FightGround::nextScene()
+void Scene2::nextScene()
 {
-    fgs_blood = myHero._heroValue.blood;
-    fgs_energy = myHero._heroValue.energy;
-    fgs_shield = myHero._heroValue.shield;
-    Director::getInstance()->replaceScene(Scene1::createScene(fgs_blood, fgs_energy, fgs_shield));
+    s2_blood = myHero._heroValue.blood;
+    s2_energy = myHero._heroValue.energy;
+    s2_shield = myHero._heroValue.shield;
+    Director::getInstance()->replaceScene(Welcome::createScene());
 }
-bool FightGround::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
+bool Scene2::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
     
     if(myHero.onTouchBegin(touch)== true)
         myHero._weapon.onTouchBegan(touch, unused_event);
     return true;
 }
-bool FightGround::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* unused_event)
+bool Scene2::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* unused_event)
 {
     
     myHero._weapon.onTouchEnded(touch, unused_event);
     return true;
 }
-bool FightGround::onContactBegan(cocos2d::PhysicsContact & contact)//碰撞的回调
+bool Scene2::onContactBegan(cocos2d::PhysicsContact & contact)//碰撞的回调
 {
     
     myHero.onContactBegin(contact);//成员函数处理碰撞信息//==false意味着没有节点被清除
@@ -228,11 +248,13 @@ bool FightGround::onContactBegan(cocos2d::PhysicsContact & contact)//碰撞的�
     monster5.oncontactBegin(contact);
     monster6.oncontactBegin(contact);
     monster7.oncontactBegin(contact);
+    
+    
     controlMovingActor(contact);
     return true;
 }
 
-bool  FightGround::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)//按键按下的回调
+bool  Scene2::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)//按键按下的回调
 {
     myHero.onKeyPressed(keycode);//成员函数处理键盘信息//下同
     potion1.onKeyPressed(keycode);
@@ -243,7 +265,7 @@ bool  FightGround::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d
     return true;
 }
 
-bool FightGround::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)
+bool Scene2::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)
 {
     myHero.onKeyRelesed(keycode);
     potion1.onKeyReleased(keycode);
@@ -254,42 +276,44 @@ bool FightGround::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d
     return true;
 }
 
-void FightGround::monsterinit()//怪物初始化
+void Scene2::monsterinit()//怪物初始化
 {
     
-    //this->scheduleOnce(schedule_selector(FightGround::addmonster), 0.1f);//在0.1s后添加怪物
+    //this->scheduleOnce(schedule_selector(Scene2::addmonster), 0.1f);//在0.1s后添加怪物
     this->addmonster(1);
     srand((unsigned int)time(nullptr));
-    this->schedule(schedule_selector(FightGround::automoveM), 1.0f);//每隔一秒怪物运动
-    this->schedule(schedule_selector(FightGround::autoshootM), 3.0f);//每隔一秒怪物射击
+    this->schedule(schedule_selector(Scene2::automoveM), 1.0f);//每隔一秒怪物运动d
+    this->schedule(schedule_selector(Scene2::autoshootM), 1.5f);//每隔一秒怪物射击
     
 }
 
-void FightGround::addmonster(float dt)//创建并添加怪物
+void Scene2::addmonster(float dt)//创建并添加怪物
 {
     
-    monster1.monsterCreate(std::string("monster copy.png"), 20, 5);
-    monster2.monsterCreate(std::string("monster copy.png"), 20, 4);
-    monster3.monsterCreate(std::string("monster copy.png"), 20, 5);
-    monster4.monsterCreate(std::string("monster copy.png"), 30, 8);
-    monster5.monsterCreate(std::string("monster copy.png"), 30, 8);
-    monster6.monsterCreate(std::string("monster copy.png"), 30, 9);
-    monster7.monsterCreate(std::string("monster copy.png"), 30, 9);
-    monster1._sprite->setPosition(visibleSize.width * 0.33, visibleSize.height / 2);
-    monster2._sprite->setPosition(visibleSize.width * 0.66, visibleSize.height / 2);
-    monster3._sprite->setPosition(visibleSize.width * 0.77, visibleSize.height / 2);
-    monster4._sprite->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-    monster5._sprite->setPosition(visibleSize.width / 2, visibleSize.height / 2 + 50);
-    monster6._sprite->setPosition(visibleSize.width / 2, visibleSize.height / 2 + 100);
-    monster7._sprite->setPosition(visibleSize.width / 2, visibleSize.height / 2 - 50);
+    monster1 = Monster(std::string("monster3.png"), std::string("bullet3.png"), 20, 1);
+    monster2 = Monster(std::string("monster3.png"), std::string("bullet3.png"), 30, 2);
+    monster3 = Monster(std::string("monster3.png"), std::string("bullet3.png"), 30, 2);
+    monster4 = Monster(std::string("monster3.png"), std::string("bullet3.png"), 30, 2);
+    monster5 = Monster(std::string("monster3.png"), std::string("bullet3.png"), 30, 2);
+    monster6.monsterCreate(std::string("monster2.png"), 10, 8);
+    monster7.monsterCreate(std::string("monster2.png"), 5, 7);
+    
+    monster1._sprite->setPosition(visibleSize.width / 2 - 100, visibleSize.height / 2 - 70);
+    monster2._sprite->setPosition(visibleSize.width / 2 - 80, visibleSize.height / 2 - 50);
+    monster3._sprite->setPosition(visibleSize.width / 2 + 80, visibleSize.height / 2 + 90);
+    monster4._sprite->setPosition(visibleSize.width / 2 + 70, visibleSize.height / 2 - 50);
+    monster5._sprite->setPosition(visibleSize.width / 2 - 105, visibleSize.height / 2 + 60);
+    monster6._sprite->setPosition(visibleSize.width / 2 + 100, visibleSize.height / 2 - 200);
+    monster7._sprite->setPosition(visibleSize.width / 2 + 200, visibleSize.height / 2 + 100);
     
     monster1.setRemoteMstr();
     monster2.setRemoteMstr();
     monster3.setRemoteMstr();
-    monster4.setCloseMstr();//设置近程怪物
-    monster5.setCloseMstr();
+    monster4.setRemoteMstr();
+    monster5.setRemoteMstr();
     monster6.setCloseMstr();
     monster7.setCloseMstr();
+    
     this->addChild(monster1._sprite, 1);
     this->addChild(monster2._sprite, 1);
     this->addChild(monster3._sprite, 1);
@@ -302,30 +326,33 @@ void FightGround::addmonster(float dt)//创建并添加怪物
 
 }
 
-void FightGround::automoveM(float dt)
+void Scene2::automoveM(float dt)
 {
     monster1.autoMove();//用类的成员函数控制怪物的运动
     monster2.autoMove();
     monster3.autoMove();
-    monster4.autoMove(myHero._sprite->getPosition());
-    monster5.autoMove(myHero._sprite->getPosition());
+    monster4.autoMove();
+    monster5.autoMove();
     monster6.autoMove(myHero._sprite->getPosition());
     monster7.autoMove(myHero._sprite->getPosition());
     
+    
+    
 }
 
-void FightGround::autoshootM(float dt)//自动攻击
+void Scene2::autoshootM(float dt)//自动攻击
 {
     auto destination = myHero._sprite->getPosition();//获取需要的坐标
     monster1.autoShoot(destination);
     monster2.autoShoot(destination);
     monster3.autoShoot(destination);
-    
+    monster4.autoShoot(destination);
+    monster5.autoShoot(destination);
+    //monster6.autoShoot(destination);
 }
 
-void FightGround::updateBlood(float dt)
+void Scene2::updateBlood(float dt)
 {
-    
     char temp1[20];
     sprintf(temp1, "Blood:%d/%d", myHero._heroValue.blood, myHero._heroValue.fullBlood);
     blood->setString(temp1);
@@ -354,12 +381,12 @@ void FightGround::updateBlood(float dt)
         this->appearSprite();
     }
 }
-void FightGround::valueAdd(float dt)
+
+void Scene2::valueAdd(float dt)
 {
     myHero._heroValue.setShield(myHero._heroValue.shield + 1);
 }
-
-void FightGround::controlMoveArea(float dt)
+void Scene2::controlMoveArea(float dt)
 {
     controlSprite(monster1._sprite);
     controlSprite(monster2._sprite);
@@ -368,11 +395,13 @@ void FightGround::controlMoveArea(float dt)
     controlSprite(monster5._sprite);
     controlSprite(monster6._sprite);
     controlSprite(monster7._sprite);
+    
+    
     controlSprite(myHero._sprite);
     controlSprite(myHero._weapon._sprite);
 }
 
-void FightGround::controlSprite(Sprite *sprite)
+void Scene2::controlSprite(Sprite *sprite)
 {
     auto position = sprite->getPosition();
     if(position.x < originPoint.x + 130 || position.x > originPoint.x + visibleSize.width - 130
@@ -387,7 +416,7 @@ void FightGround::controlSprite(Sprite *sprite)
     }
 }
 
-void FightGround::controlMovingActor(PhysicsContact &contact)
+void Scene2::controlMovingActor(PhysicsContact &contact)
 {
     auto nodeA = contact.getShapeA()->getBody()->getNode();
     auto nodeB = contact.getShapeB()->getBody()->getNode();
@@ -438,16 +467,18 @@ void FightGround::controlMovingActor(PhysicsContact &contact)
     myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
     log("###%d###", Monster::mstrNum);
 }
-void FightGround::appearSprite()
+void Scene2::appearSprite()
 {
-    static int appeartimes = 0;
-    if(appeartimes == 0)
+    if(appearTime == 0)
     {
+        potion1._sprite->setPosition(Vec2(myHero._sprite->getPosition().x - 50, myHero._sprite->getPosition().y));
+        potion2._sprite->setPosition(Vec2(myHero._sprite->getPosition().x, myHero._sprite->getPosition().y + 50));
+        box1._sprite->setPosition(Vec2(myHero._sprite->getPosition().x + 50, myHero._sprite->getPosition().y));
         potion1.appearSelf();
         potion2.appearSelf();
         box1.appearSelf();
         gate.appearSelf();
-        appeartimes++;
+        appearTime++;
     }
     else
         return;

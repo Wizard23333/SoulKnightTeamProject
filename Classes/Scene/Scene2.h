@@ -1,6 +1,12 @@
+//
+//  Scene2.h
+//  HelloWorld
+//
+//  Created by 吴昊天 on 2020/6/16.
+//
 
-#ifndef Scene1_h
-#define Scene1_h
+#ifndef Scene2_h
+#define Scene2_h
 
 #include "HelloWorldScene.h"
 #include "PauseScene.h"
@@ -13,10 +19,10 @@
 #include "Box.h"
 #include "Wall.h"
 USING_NS_CC;
-class Scene1 : public cocos2d::Scene
+class Scene2 : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene * createScene(int blood = 100, int energy = 50, int shield = 2);
+    static cocos2d::Scene * createScene(int blood = 100, int energy = 50, int shield = 30);
     virtual bool init();
     void menucloseCallBack(cocos2d::Ref * pSender);
     void menucloseMusic(cocos2d::Ref * pSender);
@@ -26,7 +32,7 @@ public:
     bool onContactBegan(cocos2d::PhysicsContact &);
     bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
     bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
-    CREATE_FUNC(Scene1);
+    CREATE_FUNC(Scene2);
 private:
     void monsterinit();//*****
     void addmonster(float dt);//*****
@@ -44,9 +50,10 @@ private:
     Label * blood;
     Label * energy;
     Label * sheild;
-    static int s1_blood;
-    static int s1_energy;
-    static int s1_shield;
+    static int s2_blood;
+    static int s2_energy;
+    static int s2_shield;
+    int appearTime;
     Hero myHero;
     Potion potion1;
     Potion potion2;
@@ -60,5 +67,4 @@ private:
     Monster monster6;
     Monster monster7;
 };
-
-#endif /* Scene1_h */
+#endif /* Scene2_h */
