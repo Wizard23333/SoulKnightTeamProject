@@ -1,18 +1,11 @@
-//
-//  Scene2.h
-//  HelloWorld
-//
-//  Created by 吴昊天 on 2020/6/16.
-//
 
-#ifndef Scene2_h
-#define Scene2_h
-
+#ifndef Scene3_h
+#define Scene3_h
 #include "HelloWorldScene.h"
 #include "PauseScene.h"
 #include "WelcomeScene.h"
 #include "FightGroundScene.h"
-#include "Scene3.h"
+#include "Scene2.h"
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"
@@ -20,7 +13,7 @@
 #include "Box.h"
 #include "Wall.h"
 USING_NS_CC;
-class Scene2 : public cocos2d::Scene
+class Scene3 : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene * createScene(int blood = 100, int energy = 50, int shield = 30);
@@ -33,7 +26,7 @@ public:
     bool onContactBegan(cocos2d::PhysicsContact &);
     bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
     bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
-    CREATE_FUNC(Scene2);
+    CREATE_FUNC(Scene3);
 private:
     void monsterinit();//*****
     void addmonster(float dt);//*****
@@ -51,9 +44,9 @@ private:
     Label * blood;
     Label * energy;
     Label * sheild;
-    static int s2_blood;
-    static int s2_energy;
-    static int s2_shield;
+    static int s3_blood;
+    static int s3_energy;
+    static int s3_shield;
     int appearTime;
     Hero myHero;
     Potion potion1;
@@ -68,4 +61,5 @@ private:
     Monster monster6;
     Monster monster7;
 };
-#endif /* Scene2_h */
+
+#endif /* Scene3_h */
