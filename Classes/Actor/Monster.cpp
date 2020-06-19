@@ -190,12 +190,13 @@ void Monster::oncontactBegin(PhysicsContact &contact)
 
 void Monster::getShot(int value)//怪物的掉血
 {
-    
+    if(blood == 0)
+        return;
     int bloodReduce = parameter[value].getparameter1();
   //  int bloodReduce = value;
     this->blood = blood - bloodReduce > 0 ? blood - bloodReduce : 0;
-    auto fadeIn = FadeIn::create(0.2f);
-    auto fadeOut = FadeOut::create(0.2f);
+    auto fadeIn = FadeIn::create(0.1f);
+    auto fadeOut = FadeOut::create(0.1f);
     auto fadeTo = FadeTo::create(0.2f, 1);
     this->_sprite->setOpacity(255);
     this->_sprite->runAction(Sequence::create(fadeOut, fadeIn, nullptr));
@@ -208,28 +209,31 @@ void Monster::getShot(int value)//怪物的掉血
     auto moveDown = MoveBy::create(0.2f, Vec2(0, -20));
     auto removeSelf = RemoveSelf::create();
     label->runAction(Sequence::create(moveDown, fadeOut->clone(), removeSelf, nullptr));
-    
     if(this->blood == 0)
     {
         this->setDead();
+        //mstrNum--;
         return;
     }
 }
 
-void Monster::setDead()//怪物死亡
+void Monster::setDead(float dt)//怪物死亡
 {
+    
+    auto position = this->_sprite->getPosition();
+    this->_sprite->setPosition(position);
+
     auto physicbody = cocos2d::PhysicsBody::createBox(this->_sprite->getContentSize(), cocos2d::PhysicsMaterial(0.0f, 0.0f, 0.0f));
     physicbody->setDynamic(false);
     physicbody->setCategoryBitmask(0);
     physicbody->setContactTestBitmask(0);
-    this->_sprite->setPhysicsBody(physicbody);
-    auto position = this->_sprite->getPosition();
+    //this->_sprite->setPhysicsBody(physicbody);
+    this->_sprite->setTag(2000);
     this->_sprite->setOpacity(255);
     this->_sprite->stopAllActions();
     
     auto rotateBy = RotateBy::create(1.0f, 90.0f);
     auto fadeOut = FadeOut::create(2.0f);
-    this->_sprite->setPosition(position);
     this->_sprite->runAction(Sequence::create(Spawn::create(rotateBy, fadeOut, nullptr), nullptr));
     
     //this->_sprite->setPosition(Vec2(480, 320));
