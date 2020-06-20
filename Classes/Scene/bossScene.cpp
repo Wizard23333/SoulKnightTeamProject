@@ -1,7 +1,8 @@
 #include "FightGroundScene.h"
-//#include "SimpleAudioEngine.h"
+#include "SaveMapScene.h"
+#include "SimpleAudioEngine.h"
 
-#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
+//#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 #include "bossScene.h"
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
@@ -243,7 +244,7 @@ void bossScene::nextScene()
     s3_shield = myHero._heroValue.shield;
 	s3_money = myHero._heroValue.money;
     //Director::getInstance()->replaceScene(Scene2::createScene(s1_blood, s1_energy, s1_shield));
-    Director::getInstance()->replaceScene(Welcome::create());
+    Director::getInstance()->replaceScene(SaveMap::create());
 }
 bool bossScene::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
