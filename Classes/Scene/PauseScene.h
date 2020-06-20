@@ -2,6 +2,7 @@
 #define PauseScene_h
 
 #include "cocos2d.h"
+
 USING_NS_CC;
 class PauseScene:public Scene
 {
