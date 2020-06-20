@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="68" height="21" tilewidth="57" tileheight="57">
+ <tileset firstgid="1" name="entrance2" tilewidth="57" tileheight="57">
+  <image source="entrance2.png" width="1595" height="1196"/>
+ </tileset>
+ <tileset firstgid="541" name="basement" tilewidth="57" tileheight="57">
+  <tileoffset x="10" y="0"/>
+  <properties>
+   <property name="X" value=""/>
+  </properties>
+  <image source="basement.png" width="3093" height="1740"/>
+ </tileset>
+ <tileset firstgid="2161" name="roommaterial" tilewidth="57" tileheight="57">
+  <image source="roommaterial.png" width="1119" height="788"/>
+ </tileset>
+ <layer name="ground" width="68" height="21">
+  <data encoding="base64" compression="zlib">
+   eJztyccNwgAQRNFFsgugBHJJNsbUQj4aHGohGEoid8CXuNAA8mHnS+8wGrNmare+frdSSimlfLQJzGaYY4ElVlgHPr8L9jjgiBNqnJ1+b1xxwx0PPPFy+o1Csw666KGPAYahz2+KCDHGSDBB6vSrkGGLHXIUKJ1+SimllPp/H4F24ak=
+  </data>
+ </layer>
+ <layer name="ground2" width="68" height="21">
+  <data encoding="base64" compression="zlib">
+   eJzt0MENglAURNGXz0+QAtBqwAKEatAqrERtBtS90AmT34KL9xb3JHc/GTMfczJb1Ft91Dc5DQmkrswOqlF37zEBdPqhV2f+KCb9cFW3yntJDA/98FQv/ih++mFVG38UbTY7qlP2XhLDRT8MauQPAAAAAMCfdrRUDXI=
+  </data>
+ </layer>
+ <layer name="wall" width="68" height="21">
+  <data encoding="base64" compression="zlib">
+   eJzt11mU1mMcB/C3ed8ZLUJxQdpUlpKtmplW7TstRMmufZZKF0VCOxGiuJClmVAXUZYiRWHscaI0E+VC0UJkSamUT+a96T3vOePfvE6nc/6/cz4Xv9/znOd8n+fq/y9Ki0SKUqhahf/mSCXOUpnjRJIejUQyopGjqrK+SvT4ZzseWrl364T3aKdvTwc60onOdKEr3ehOD3pyBVfSi970oW9ck2OUKdvD0VKPMItHo8FmgxnCUIYxnBHkkEse+YxkFKO5nTEJ7zFWP447uJPx3MUE7uYe7mUik5jMFKYyjencx/3M4AEeZCYPJcn+GLOZw+M8Ed9TFPc+H/BhwNmTzOUpnuYZnmUeBRQyn+d4nhdYwMKE91ikf5GXWMwSXuYVXuU1lrKM13mD5bzJClbyFm+zitW8w7u8lyT7R3zMJ3zKmvie/XEHOMjfAWdr+YIvWcd6vmIDxZSwka/5hk1s5tuE9/hOv4WtfM8PbGM7O9jJj/zELn7mF3bzK7/xO3+whz/Zyz7+SpL9EIePZIhFIhVIi5XuuTRW6jKa0DQWbJbBSVSkEpWpwslU5RRO5TSqUZ3TOSN29HucqT+LGpxNTWpRmzrU5RzqUZ8GnMt5nM8FNKQRF9KYi7iYS5Jkb0YmWWTTPL5naNwwhjMi4Kw1bbictrSjPR3oSCc604WudKM7PRLeo5e+N33oy1VcTT+u4Vr6M4DrGMj13MCN3MTN3MKt3MYgBjMkSfYccskjn5Hx9bDCCiussML6P+rzdN9nrOGz9LCPZfg+I41oRti3JJvmtAj7f/9xs8imWYpklrGWFfCsoPnKc6dc8sgnJ0Vyy1jLC3hW0HzluVMBhcxnXooUlLFWGPCsoPnKc6diStjIhhQpLmOtJOBZQfOV507/AK4oARA=
+  </data>
+ </layer>
+ <objectgroup name="knight" opacity="0.9">
+  <object name="knightBirthPoint" x="1929" y="490.667" width="153.333" height="177.333"/>
+  <object name="enterAdventure" x="1770" y="216" width="196" height="111"/>
+ </objectgroup>
+ <layer name="collision" width="68" height="21" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt1bEJACAQxVBL95/EFW4zWwtbuQ++QBZIk5pjVIMr1I4Wetx7nHR3SOuR0kQPPVJN7AEAAN7T/XuSJH9wA8FOqqs=
+  </data>
+ </layer>
+</map>
