@@ -14,6 +14,7 @@ public:
     void setCloseMstr();
     void setRemoteMstr();
     int getATK() { return ATK; }
+    int getBlood() {return blood;}
     void oncontactBegin(PhysicsContact & contact);
     void getShot(int value = 1);
     void setDead();
