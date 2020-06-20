@@ -15,12 +15,7 @@
  </tileset>
  <layer name="ground" width="68" height="21">
   <data encoding="base64" compression="zlib">
-   eJztyccNwgAQRNFFsgugBHJJNsbUQj4aHGohGEoid8CXuNAA8mHnS+8wGrNmare+frdSSimlfLQJzGaYY4ElVlgHPr8L9jjgiBNqnJ1+b1xxwx0PPPFy+o1Csw666KGPAYahz2+KCDHGSDBB6vSrkGGLHXIUKJ1+SimllPp/H4F24ak=
-  </data>
- </layer>
- <layer name="ground2" width="68" height="21">
-  <data encoding="base64" compression="zlib">
-   eJzt0MENglAURNGXz0+QAtBqwAKEatAqrERtBtS90AmT34KL9xb3JHc/GTMfczJb1Ft91Dc5DQmkrswOqlF37zEBdPqhV2f+KCb9cFW3yntJDA/98FQv/ih++mFVG38UbTY7qlP2XhLDRT8MauQPAAAAAMCfdrRUDXI=
+   eJzt0jlSAlEURuFbdFPgApBYQFgFsAAgZpJNqJgyhzIZIUOOxirDYoRYmXbAafYATdW7f9UX3eTVqSdy+Q08Iu8YYoQxJh4XHnJFc3r4LBE/bizt4fSI0yGBpPaQRxo84RllvFhuv8jdOf9jSoMPfOr/OPX4pcMKa+1x6hGwRW4RtLWH0yNFhzQyV9SjxVsqqKKGOhpo2mbelvjCN34wwxwLQ28H/OEfG2yxw97QW8wrcocQwojgHlGvmbcSssghjwKKeDD09oZXtNFBFz30Db3pdDqdTqc7/47s+/Wx
   </data>
  </layer>
  <layer name="wall" width="68" height="21">
@@ -28,13 +23,22 @@
    eJzt11mU1mMcB/C3ed8ZLUJxQdpUlpKtmplW7TstRMmufZZKF0VCOxGiuJClmVAXUZYiRWHscaI0E+VC0UJkSamUT+a96T3vOePfvE6nc/6/cz4Xv9/znOd8n+fq/y9Ki0SKUqhahf/mSCXOUpnjRJIejUQyopGjqrK+SvT4ZzseWrl364T3aKdvTwc60onOdKEr3ehOD3pyBVfSi970oW9ck2OUKdvD0VKPMItHo8FmgxnCUIYxnBHkkEse+YxkFKO5nTEJ7zFWP447uJPx3MUE7uYe7mUik5jMFKYyjencx/3M4AEeZCYPJcn+GLOZw+M8Ed9TFPc+H/BhwNmTzOUpnuYZnmUeBRQyn+d4nhdYwMKE91ikf5GXWMwSXuYVXuU1lrKM13mD5bzJClbyFm+zitW8w7u8lyT7R3zMJ3zKmvie/XEHOMjfAWdr+YIvWcd6vmIDxZSwka/5hk1s5tuE9/hOv4WtfM8PbGM7O9jJj/zELn7mF3bzK7/xO3+whz/Zyz7+SpL9EIePZIhFIhVIi5XuuTRW6jKa0DQWbJbBSVSkEpWpwslU5RRO5TSqUZ3TOSN29HucqT+LGpxNTWpRmzrU5RzqUZ8GnMt5nM8FNKQRF9KYi7iYS5Jkb0YmWWTTPL5naNwwhjMi4Kw1bbictrSjPR3oSCc604WudKM7PRLeo5e+N33oy1VcTT+u4Vr6M4DrGMj13MCN3MTN3MKt3MYgBjMkSfYccskjn5Hx9bDCCiussML6P+rzdN9nrOGz9LCPZfg+I41oRti3JJvmtAj7f/9xs8imWYpklrGWFfCsoPnKc6dc8sgnJ0Vyy1jLC3hW0HzluVMBhcxnXooUlLFWGPCsoPnKc6diStjIhhQpLmOtJOBZQfOV507/AK4oARA=
   </data>
  </layer>
- <objectgroup name="knight" opacity="0.9">
-  <object name="knightBirthPoint" x="1929" y="490.667" width="153.333" height="177.333"/>
-  <object name="enterAdventure" x="1770" y="216" width="196" height="111"/>
- </objectgroup>
  <layer name="collision" width="68" height="21" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt1bEJACAQxVBL95/EFW4zWwtbuQ++QBZIk5pjVIMr1I4Wetx7nHR3SOuR0kQPPVJN7AEAAN7T/XuSJH9wA8FOqqs=
   </data>
  </layer>
+ <objectgroup name="knight" opacity="0.9">
+  <object name="knightBirthPoint" x="1929" y="490.667" width="153.333" height="177.333"/>
+  <object name="enterAdventure" x="1769" y="185" width="197" height="204"/>
+  <object name="monster1" x="2662" y="240" width="111" height="110"/>
+  <object name="monster2" x="2900" y="236" width="108" height="111"/>
+  <object name="monster3" x="3150" y="233" width="111" height="115"/>
+  <object name="monster4" x="3403" y="237" width="111" height="113"/>
+  <object name="monster5" x="3654" y="239" width="112" height="108"/>
+  <object name="weapon4" x="155" y="235" width="112" height="112"/>
+  <object name="weapon3" x="440" y="236" width="108" height="110"/>
+  <object name="weapon2" x="726" y="236" width="109" height="112"/>
+  <object name="weapon1" x="975" y="237" width="108" height="112"/>
+ </objectgroup>
 </map>
