@@ -54,7 +54,7 @@ bool FightGround::init()
         onMusic, offMusic, NULL
     );
     
-    auto closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png",CC_CALLBACK_1(FightGround::menucloseCallBack, this));//退出按钮
+    auto closeItem = MenuItemImage::create("pauce.png","pauce.png",CC_CALLBACK_1(FightGround::menucloseCallBack, this));//退出按钮
     float x = originPoint.x + visibleSize.width - closeItem->getContentSize().width/2;
     float y = originPoint.y + visibleSize.height - closeItem->getContentSize().height/2 ;
     closeItem->setPosition(Vec2(x,y));
@@ -215,7 +215,7 @@ void FightGround::nextScene()
     fgs_blood = myHero._heroValue.blood;
     fgs_energy = myHero._heroValue.energy;
     fgs_shield = myHero._heroValue.shield;
-    Director::getInstance()->replaceScene(Scene1::createScene(fgs_blood, fgs_energy, fgs_shield));
+    Director::getInstance()->replaceScene(bossScene::createScene(fgs_blood, fgs_energy, fgs_shield));
 }
 bool FightGround::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
