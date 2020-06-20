@@ -6,16 +6,18 @@
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
 USING_NS_CC;
-Scene * Scene2::createScene(int blood, int energy, int shield)
+Scene * Scene2::createScene(int blood, int energy, int shield, int money)
 {
     s2_blood = blood;
     s2_energy = energy;
     s2_shield = shield;
+	s2_money = money;
     return Scene2::create();
 }
 int Scene2::s2_blood = 0;
 int Scene2::s2_energy = 0;
 int Scene2::s2_shield = 0;
+int Scene2::s2_money = 0;
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
@@ -84,6 +86,13 @@ bool Scene2::init()
     sheild->setPosition(Vec2(sheild->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height));
     this->addChild(sheild, 1);
     
+	char temp4[20];
+	sprintf(temp4, "Money:%d", myHero._heroValue.money);
+	money = cocos2d::Label::createWithTTF(temp4, "fonts/Marker Felt.ttf", 30);
+	money->setColor(Color3B::YELLOW);
+	money->setPosition(Vec2(money->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height - money->getContentSize().height));
+	this->addChild(money, 1);
+
     this->schedule(schedule_selector(Scene2::updateBlood), 0.1f);//血量更新
     
                    
@@ -129,6 +138,7 @@ bool Scene2::init()
     myHero._heroValue.setBlood(s2_blood);
     myHero._heroValue.setEnergy(s2_energy);
     myHero._heroValue.setShield(s2_shield);
+	myHero._heroValue.setMoney(s2_money);
     
     myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
     myHero._sprite->setScale(0.08);
@@ -216,10 +226,12 @@ void Scene2::menucloseMusic(cocos2d::Ref *pSender)
 }
 void Scene2::nextScene()
 {
+	myHero._heroValue.setMoney(myHero._heroValue.money + 14);
     s2_blood = myHero._heroValue.blood;
     s2_energy = myHero._heroValue.energy;
     s2_shield = myHero._heroValue.shield;
-    Director::getInstance()->replaceScene(Scene3::createScene(s2_blood, s2_energy, s2_shield));
+	s2_money = myHero._heroValue.money;
+    Director::getInstance()->replaceScene(Scene3::createScene(s2_blood, s2_energy, s2_shield, s2_money));
 }
 bool Scene2::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
@@ -370,6 +382,11 @@ void Scene2::updateBlood(float dt)
     sheild->setString(temp3);
     sheild->setVisible(true);
     
+	char temp4[20];
+	sprintf(temp4, "Money:%d", myHero._heroValue.money + 2*(7 - Monster::mstrNum));
+	money->setString(temp4);
+	money->setVisible(true);
+
     if(myHero._heroValue.blood == 0)
     {
         //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, HelloWorld::createScene()));
