@@ -14,11 +14,13 @@ public:
     int energy;
     int fullShield;
     int shield;
+	int money;
     heroValue(int a = 10, int b = 20, int c = 2)
     {
         fullBlood = blood = a;
         fullEnergy = energy = b;
         fullShield = shield = c;
+		money = 0;
     }
     void setBlood(int blood)
     {
@@ -49,6 +51,11 @@ public:
             this->shield = fullShield;
         
     }
+	void setMoney(int money)
+	{
+		this->money = money;
+
+	}
 };
 
 class Hero : public Actor

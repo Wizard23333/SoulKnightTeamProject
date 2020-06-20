@@ -1,12 +1,11 @@
 
-#ifndef Scene1_h
-#define Scene1_h
-
+#ifndef bossScene_h
+#define bossScene_h
 #include "HelloWorldScene.h"
 #include "PauseScene.h"
 #include "WelcomeScene.h"
 #include "FightGroundScene.h"
-#include "Scene2.h"
+#include "Scene3.h"
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"
@@ -14,7 +13,7 @@
 #include "Box.h"
 #include "Wall.h"
 USING_NS_CC;
-class Scene1 : public cocos2d::Scene
+class bossScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene * createScene(int blood = 100, int energy = 50, int shield = 30, int money=0);
@@ -27,7 +26,7 @@ public:
     bool onContactBegan(cocos2d::PhysicsContact &);
     bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
     bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
-    CREATE_FUNC(Scene1);
+    CREATE_FUNC(bossScene);
 private:
     void monsterinit();//*****
     void addmonster(float dt);//*****
@@ -46,23 +45,20 @@ private:
     Label * energy;
     Label * sheild;
 	Label * money;
-    static int s1_blood;
-    static int s1_energy;
-    static int s1_shield;
-	static int s1_money;
+    static int s3_blood;
+    static int s3_energy;
+    static int s3_shield;
+	static int s3_money;
     int appearTime;
     Hero myHero;
     Potion potion1;
     Potion potion2;
     Props gate;
     Box box1;
-    Monster monster1;
-    Monster monster2;
-    Monster monster3;
-    Monster monster4;
-    Monster monster5;
-    Monster monster6;
-    Monster monster7;
+    Monster boss;
+    int shootAngle;
+    
+    
 };
 
-#endif /* Scene1_h */
+#endif /* bossScene_h */

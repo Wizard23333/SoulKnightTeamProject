@@ -5,6 +5,7 @@
 #include "WelcomeScene.h"
 #include "Scene1.h"
 #include "Scene2.h"
+#include "bossScene.h"
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"
@@ -43,11 +44,13 @@ private:
     Label * blood;
     Label * energy;
     Label * sheild;
+	Label * money;
     static int fgs_blood;
     static int fgs_energy;
     static int fgs_shield;
+	static int fgs_money;
     int appearTime;
-    Hero myHero;
+	Hero myHero;
     Potion potion1;
     Potion potion2;
     Props gate;
