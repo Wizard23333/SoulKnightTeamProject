@@ -6,16 +6,18 @@
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
 USING_NS_CC;
-Scene * bossScene::createScene(int blood, int energy, int shield)
+Scene * bossScene::createScene(int blood, int energy, int shield, int money)
 {
     s3_blood = blood;
     s3_energy = energy;
     s3_shield = shield;
+	s3_money = money;
     return bossScene::create();
 }
 int bossScene::s3_blood = 0;
 int bossScene::s3_energy = 0;
 int bossScene::s3_shield = 0;
+int bossScene::s3_money = 0;
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
@@ -83,6 +85,13 @@ bool bossScene::init()
     sheild->setColor(Color3B::BLACK);
     sheild->setPosition(Vec2(sheild->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height));
     this->addChild(sheild, 1);
+
+	char temp4[20];
+	sprintf(temp4, "Money:%d", myHero._heroValue.money);
+	money = cocos2d::Label::createWithTTF(temp4, "fonts/Marker Felt.ttf", 30);
+	money->setColor(Color3B::YELLOW);
+	money->setPosition(Vec2(money->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height - money->getContentSize().height));
+	this->addChild(money, 1);
     
     this->schedule(schedule_selector(bossScene::updateBlood), 0.1f);//血量更新
     
@@ -140,6 +149,7 @@ bool bossScene::init()
     myHero._heroValue.setBlood(s3_blood);
     myHero._heroValue.setEnergy(s3_energy);
     myHero._heroValue.setShield(s3_shield);
+	myHero._heroValue.setMoney(s3_money);
     
     myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
     myHero._sprite->setScale(0.08);
@@ -227,9 +237,11 @@ void bossScene::menucloseMusic(cocos2d::Ref *pSender)
 }
 void bossScene::nextScene()
 {
+	myHero._heroValue.setMoney(myHero._heroValue.money + 100);
     s3_blood = myHero._heroValue.blood;
     s3_energy = myHero._heroValue.energy;
     s3_shield = myHero._heroValue.shield;
+	s3_money = myHero._heroValue.money;
     //Director::getInstance()->replaceScene(Scene2::createScene(s1_blood, s1_energy, s1_shield));
     Director::getInstance()->replaceScene(Welcome::create());
 }
@@ -435,6 +447,11 @@ void bossScene::updateBlood(float dt)
     sheild->setString(temp3);
     sheild->setVisible(true);
     
+	char temp4[20];
+	sprintf(temp4, "Money:%d", myHero._heroValue.money + 100*(1 - Monster::mstrNum));
+	money->setString(temp4);
+	money->setVisible(true);
+
     if(myHero._heroValue.blood == 0)
     {
         //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, HelloWorld::createScene()));
