@@ -162,18 +162,19 @@ void Monster::oncontactBegin(PhysicsContact &contact)
     {
         auto posA = nodeA->getPosition();
         auto posB = nodeB->getPosition();
-        
+        auto tagA = nodeA->getTag();
+        auto tagB = nodeB->getTag();
         if(posA == this->_sprite->getPosition() || posB == this->_sprite->getPosition())
         {
-            if(nodeA->getTag() > 800 && nodeA->getTag() < 900 && nodeB->getTag() >= 10 && nodeB->getTag() <= 13)
+            if(tagA > 800 && tagA < 900 && tagB >= 10 && tagB <= 13)
             {
                 getShot(nodeB->getTag());
             }
-            if(nodeB->getTag() > 800 && nodeB->getTag() < 900 && nodeA->getTag() >= 10 && nodeA->getTag() <= 13)
+            if(tagB > 800 && tagB < 900 && tagA >= 10 && tagA <= 13)
             {
                 getShot(nodeA->getTag());
             }
-            if(nodeB->getTag() > 800 && nodeB->getTag() < 900 && nodeA->getTag() > 800 && nodeA->getTag() < 900)
+            if(tagB > 800 && tagB < 900 && tagA > 800 && tagA < 900)
             {
                 auto direct1 = nodeB->getPosition()-nodeA->getPosition();
                 direct1.normalize();
@@ -217,7 +218,7 @@ void Monster::getShot(int value)//怪物的掉血
     }
 }
 
-void Monster::setDead(float dt)//怪物死亡
+void Monster::setDead()//怪物死亡
 {
     
     auto position = this->_sprite->getPosition();
