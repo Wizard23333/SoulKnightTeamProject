@@ -66,6 +66,12 @@ bool Hero::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode)
     {
         changeWeapon();
     }
+    if(keycode == cocos2d::EventKeyboard::KeyCode::KEY_R)
+    {
+        this->_heroValue.setShield(this->_heroValue.fullShield);
+        this->_heroValue.setBlood(this->_heroValue.fullBlood);
+        this->_heroValue.setEnergy(this->_heroValue.fullEnergy);
+    }
     return true;
 }
 
