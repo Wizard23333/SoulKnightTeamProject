@@ -3,8 +3,8 @@
 //#include "SaveMapScene.h"
 #include "FightGroundScene.h"
 #include "cocos2d.h"
-//#include "SimpleAudioEngine.h"
-#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
+#include "SimpleAudioEngine.h"
+//#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 //#include"..\cocos\editor-support\cocostudio\SimpleAudioEngine.h"
 USING_NS_CC;
 
