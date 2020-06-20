@@ -5,6 +5,7 @@
 #include "WelcomeScene.h"
 #include "Scene1.h"
 #include "Scene2.h"
+#include "bossScene.h"
 #include "cocos2d.h"
 #include "Hero.h"
 #include "Monster.h"

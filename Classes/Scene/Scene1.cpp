@@ -53,7 +53,7 @@ bool Scene1::init()
         onMusic, offMusic, NULL
     );
     
-    auto closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png",CC_CALLBACK_1(Scene1::menucloseCallBack, this));//退出按钮
+    auto closeItem = MenuItemImage::create("pauce.png","pauce.png",CC_CALLBACK_1(Scene1::menucloseCallBack, this));//退出按钮
     float x = originPoint.x + visibleSize.width - closeItem->getContentSize().width/2;
     float y = originPoint.y + visibleSize.height - closeItem->getContentSize().height/2 ;
     closeItem->setPosition(Vec2(x,y));
