@@ -16,6 +16,7 @@ Scene * FightGround::createScene()
 int FightGround::fgs_shield = 0;
 int FightGround::fgs_blood = 0;
 int FightGround::fgs_energy = 0;
+int FightGround::fgs_money = 0;
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
@@ -83,6 +84,13 @@ bool FightGround::init()
     sheild->setColor(Color3B::BLACK);
     sheild->setPosition(Vec2(sheild->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height));
     this->addChild(sheild, 1);
+
+	char temp4[20];
+	sprintf(temp4, "Money:%d", myHero._heroValue.money);
+	money = cocos2d::Label::createWithTTF(temp4, "fonts/Marker Felt.ttf", 30);
+	money->setColor(Color3B::YELLOW);
+	money->setPosition(Vec2(money->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height-money->getContentSize().height));
+	this->addChild(money, 1);
     
     this->schedule(schedule_selector(FightGround::updateBlood), 0.1f);//血量更新
     
@@ -212,10 +220,13 @@ void FightGround::menucloseMusic(cocos2d::Ref *pSender)
 }
 void FightGround::nextScene()
 {
+	myHero._heroValue.setMoney(myHero._heroValue.money + 7);
+
     fgs_blood = myHero._heroValue.blood;
     fgs_energy = myHero._heroValue.energy;
     fgs_shield = myHero._heroValue.shield;
-    Director::getInstance()->replaceScene(Scene1::createScene(fgs_blood, fgs_energy, fgs_shield));
+	fgs_money = myHero._heroValue.money;
+    Director::getInstance()->replaceScene(Scene1::createScene(fgs_blood, fgs_energy, fgs_shield, fgs_money));
 }
 bool FightGround::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
@@ -362,6 +373,11 @@ void FightGround::updateBlood(float dt)
     sprintf(temp3, "Sheild:%d/%d", myHero._heroValue.shield, myHero._heroValue.fullShield);
     sheild->setString(temp3);
     sheild->setVisible(true);
+
+	char temp4[20];
+	sprintf(temp4, "Money:%d", myHero._heroValue.money+(7-Monster::mstrNum));
+	money->setString(temp4);
+	money->setVisible(true);
     
     if(myHero._heroValue.blood == 0)
     {
