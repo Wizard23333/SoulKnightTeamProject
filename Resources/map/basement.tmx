@@ -41,7 +41,7 @@
   <object name="weapon2" x="726" y="236" width="109" height="112"/>
   <object name="weapon1" x="975" y="237" width="108" height="112"/>
  </objectgroup>
- <layer name="collision" width="68" height="21" opacity="0.8">
+ <layer name="collision" width="68" height="21" opacity="0">
   <data encoding="base64" compression="zlib">
    eJzt1aENACAQBEEk9dK/QBDE0cBDmE3Gf8786K0NuNSu+o4bnFXfU80e9nhxD63skdkjs0dmj8weWfVfAwD+NAH4juNM
   </data>
