@@ -25,10 +25,12 @@ private:
 	Hero myHero;
 	void setMapPosForView(Point playerPos);
     void update(float delta);
+	void updateHeroAction();
 	void updateMap();
 	TMXTiledMap *tileMap;
 	Point cocoscoord2tilemapcoord(Point pos);
 	void isCollide();
+	
 
 };
 

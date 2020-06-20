@@ -1,6 +1,7 @@
 
 #include "SaveMapScene.h"
-
+#include <map>
+#include "Hero.h"
 
 USING_NS_CC;
 #define GET_TILE_WIDTH tileMap->getTileSize().width
@@ -59,8 +60,7 @@ bool SaveMap::init()
 	myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
 	myHero._weapon._sprite->setScale(0.10);
 	tileMap->addChild(myHero._sprite, 1);
-	tileMap->addChild(myHero._weapon._sprite, 1);
-
+	tileMap->addChild(myHero._weapon._sprite, 2);
 
 
 	auto enterInfo = objectGroup->getObject("enterAdventure");
@@ -127,7 +127,7 @@ bool SaveMap::init()
 	auto weapon2 = Sprite::create("Sword.png");
 	weapon2->setPosition(weapon2X, weapon2Y);
 	weapon2->setScale(0.2);
-	tileMap->addChild(weapon2, 2);
+	tileMap->addChild(weapon2, 1);
 	
 	auto weapon3Info = objectGroup->getObject("weapon3");
 	int weapon3X = weapon3Info.at("x").asFloat() + 40;
@@ -135,7 +135,7 @@ bool SaveMap::init()
 	auto weapon3 = Sprite::create("Darts.png");
 	weapon3->setPosition(weapon3X, weapon3Y);
 	weapon3->setScale(0.3);
-	tileMap->addChild(weapon3, 3);
+	tileMap->addChild(weapon3,1);
 
 	auto weapon4Info = objectGroup->getObject("weapon4");
 	int weapon4X = weapon4Info.at("x").asFloat() + 40;
@@ -143,31 +143,25 @@ bool SaveMap::init()
 	auto weapon4 = Sprite::create("Gun.png");
 	weapon4->setPosition(weapon4X, weapon4Y);
 	weapon4->setScale(0.15);
-	tileMap->addChild(weapon4, 4);
+	tileMap->addChild(weapon4, 1);
 	
 	
 	this->scheduleUpdate();
 	
 	/*
-	Point heroPos = cocoscoord2tilemapcoord(myHero._sprite->getPosition());
-	auto collision = tileMap->getLayer("collision");
-	int oneTileId = collision->getTileGIDAt(heroPos);
-	if (oneTileId == 0)//²»»áÅö×²
-	{
-		
-	}
+	
 
-	auto propertiesOnOneTile=tileMap->getPropertiesForGID(oneTileId);
-	const string *collide = propertiesOnOneTile.asValueMap("collide");
-		if (collide && collide->compare("true")==0)//Åö×²
-		{
-			
-		}
-		else
-		{
-			
-		}
-		*/
+//	auto propertiesOnOneTile=tileMap->getPropertiesForGID(oneTileId);
+//	const string *collide = propertiesOnOneTile.asValueMap("collide");
+//		if (collide && collide->compare("true")==0)//Åö×²
+//		{
+//			
+//		}
+//		else
+//		{
+//			
+//		}
+//		*/
 	auto keyListener = EventListenerKeyboard::create();//¼üÅÌÊÂ¼þ¼àÌý
 	keyListener->onKeyPressed = CC_CALLBACK_2(SaveMap::onKeyPressed, this);
 	keyListener->onKeyReleased = CC_CALLBACK_2(SaveMap::onKeyReleased, this);
@@ -184,6 +178,7 @@ void SaveMap::menuCloseCallback(Ref* pSender)
 void SaveMap::update(float delta)
 {
 	updateMap();
+	updateHeroAction();
 }
 
 void SaveMap::updateMap()
@@ -199,12 +194,24 @@ void SaveMap::updateMap()
 	tileMap->setPosition(Vec2(0, 0) + distance);
 }
 
+void SaveMap::updateHeroAction()
+{
+	Point heroPos = cocoscoord2tilemapcoord(myHero._sprite->getPosition());
+	auto collision = tileMap->getLayer("collision");
+	int oneTileId = collision->getTileGIDAt(heroPos);
+	if (oneTileId)//Åö×²
+	{
+		myHero._sprite->stopAllActions();
+	}
+}
 
 Point SaveMap::cocoscoord2tilemapcoord(Point pos)
 {
 	Point coord;
 	coord.x = pos.x / GET_TILE_WIDTH;
-	coord.y = MAP_WIDTH - pos.y / GET_TILE_HEIGHT;
+	coord.y = (MAP_HEIGHT* GET_TILE_HEIGHT - pos.y) / GET_TILE_HEIGHT;
+//	coord.y = (MAP_HEIGHT - pos.y) / GET_TILE_HEIGHT;
+//	coord.y = (MAP_WIDTH - pos.y) / GET_TILE_HEIGHT;
 	return coord;
 }
 
