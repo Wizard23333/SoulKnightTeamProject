@@ -26,7 +26,9 @@
 //#include "FirstGameScene.hpp"
 #include "FightGroundScene.h"
 #include "WelcomeScene.h"
-#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
+#include "SimpleAudioEngine.h"
+#include "SaveMapScene.h"
+//#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -151,5 +153,5 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 }
 void HelloWorld::startGameCallback(cocos2d::Ref* pSender)
 {
-    Director::getInstance()->replaceScene(TransitionSlideInT::create(2.0f, Welcome::createScene()));
+    Director::getInstance()->replaceScene(TransitionSlideInT::create(2.0f, SaveMap::createScene()));
 }

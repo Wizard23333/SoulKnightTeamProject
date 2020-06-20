@@ -1,5 +1,6 @@
 #include "FightGroundScene.h"
-#include "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
+#include "SimpleAudioEngine.h"
+//#include "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 #include "Scene1.h"
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
@@ -33,11 +34,11 @@ bool Scene1::init()
     }
     visibleSize = Director::getInstance()->getVisibleSize();//可见范围大小
     originPoint = Director::getInstance()->getVisibleOrigin();//原点
-    
+    /*
     auto background = DrawNode::create();//背景
     background->drawSolidRect(originPoint, visibleSize, cocos2d::Color4F::GRAY);
     this->addChild(background, 0);
-    
+    */
     auto audioBgm = CocosDenshion::SimpleAudioEngine::getInstance();
     isMusicPlaying = audioBgm->isBackgroundMusicPlaying() ? true : false;
     
@@ -101,7 +102,7 @@ bool Scene1::init()
                 continue;
             }
             double k1 = 0.1 * i, k2 = 0.1 * j;
-            Wall wall = Wall("Wall.png");
+            Wall wall = Wall("wall1.png");
             wall._sprite->setPosition(Vec2(visibleSize.width * k1, visibleSize.height * k2));
             wall._sprite->setScale(0.10);
             this->addChild(wall._sprite);
@@ -111,12 +112,24 @@ bool Scene1::init()
     for(double i = 1; i <= 4;i=i+0.5)
     {
         double k1 = 0.1 * i;
-        Wall wall = Wall("Wall.png");
+        Wall wall = Wall("wall1.png");
         wall._sprite->setPosition(Vec2(visibleSize.width / 2 - 50, visibleSize.height * k1));
         wall._sprite->setScale(0.10);
         this->addChild(wall._sprite);
     }
            // myHero.HeroCreate("Ninja.png");//创建英雄
+    
+    auto background = Sprite::create("backGround1.png");
+    auto scaleX = visibleSize.width / background->getContentSize().width;
+    auto scaleY = visibleSize.height / background->getContentSize().height;
+    auto realScale = scaleX > scaleY ? scaleX : scaleY;
+    background->setScale(realScale);
+    background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+    this->addChild(background, -1);
+    
+    
+    
+    
     myHero = Hero("Knight.png");
     myHero._heroValue.setBlood(s1_blood);
     myHero._heroValue.setEnergy(s1_energy);
