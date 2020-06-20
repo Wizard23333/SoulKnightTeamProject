@@ -1,7 +1,7 @@
 #include "FightGroundScene.h"
-#include "SimpleAudioEngine.h"
+//#include "SimpleAudioEngine.h"
 
-//#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
+#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 #include "bossScene.h"
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
@@ -310,7 +310,7 @@ void bossScene::monsterinit()//怪物初始化
 void bossScene::addmonster(float dt)//创建并添加怪物
 {
     
-    boss = Monster(std::string("boss.png"), std::string("bullet1.png"), 1000, 10);
+    boss = Monster(std::string("boss.png"), std::string("bullet1.png"), 500, 10);
     boss._sprite->setScale(0.4);
     boss._sprite->setPosition(visibleSize.width / 2, visibleSize.height / 2);
     shootAngle = 0;
@@ -334,7 +334,7 @@ void bossScene::automoveM(float dt)
     monster6.autoMove(myHero._sprite->getPosition());
     monster7.autoMove(myHero._sprite->getPosition());
     */
-    if(boss.getBlood() < 500)
+    if(boss.getBlood() < 200)
     {
         if(shootAngle % 30 == 0)
         {
