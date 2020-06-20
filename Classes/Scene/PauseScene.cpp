@@ -48,6 +48,7 @@ bool PauseScene::init()
 
     // create menu, it's an autorelease object
     
+    closeItem->setScale(2);
     auto menu = Menu::create(closeItem, NULL);
     /*
     auto startNormalLabel = Label::createWithTTF("BACK", "fonts/Marker Felt.ttf", 40);
@@ -58,7 +59,8 @@ bool PauseScene::init()
     //
      */
     auto resumeItem = MenuItemImage::create("continue.png","continue.png",CC_CALLBACK_1(PauseScene::backGameCallback, this));
-    resumeItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 4 + 100));
+    resumeItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 4 + 200));
+    resumeItem->setScale(2);
     menu->addChild(resumeItem, 2);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
