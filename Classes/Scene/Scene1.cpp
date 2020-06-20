@@ -128,7 +128,7 @@ bool Scene1::init()
     }
            // myHero.HeroCreate("Ninja.png");//创建英雄
     
-    auto background = Sprite::create("HelloWorld.png");
+    auto background = Sprite::create("backGround1.png");
     auto scaleX = visibleSize.width / background->getContentSize().width;
     auto scaleY = visibleSize.height / background->getContentSize().height;
     auto realScale = scaleX > scaleY ? scaleX : scaleY;
