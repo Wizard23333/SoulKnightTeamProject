@@ -12,6 +12,11 @@
  </tileset>
  <tileset firstgid="2161" name="roommaterial" tilewidth="57" tileheight="57">
   <image source="roommaterial.png" width="1119" height="788"/>
+  <tile id="1">
+   <properties>
+    <property name="collide" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="ground" width="68" height="21">
   <data encoding="base64" compression="zlib">
@@ -23,12 +28,7 @@
    eJzt11mU1mMcB/C3ed8ZLUJxQdpUlpKtmplW7TstRMmufZZKF0VCOxGiuJClmVAXUZYiRWHscaI0E+VC0UJkSamUT+a96T3vOePfvE6nc/6/cz4Xv9/znOd8n+fq/y9Ki0SKUqhahf/mSCXOUpnjRJIejUQyopGjqrK+SvT4ZzseWrl364T3aKdvTwc60onOdKEr3ehOD3pyBVfSi970oW9ck2OUKdvD0VKPMItHo8FmgxnCUIYxnBHkkEse+YxkFKO5nTEJ7zFWP447uJPx3MUE7uYe7mUik5jMFKYyjencx/3M4AEeZCYPJcn+GLOZw+M8Ed9TFPc+H/BhwNmTzOUpnuYZnmUeBRQyn+d4nhdYwMKE91ikf5GXWMwSXuYVXuU1lrKM13mD5bzJClbyFm+zitW8w7u8lyT7R3zMJ3zKmvie/XEHOMjfAWdr+YIvWcd6vmIDxZSwka/5hk1s5tuE9/hOv4WtfM8PbGM7O9jJj/zELn7mF3bzK7/xO3+whz/Zyz7+SpL9EIePZIhFIhVIi5XuuTRW6jKa0DQWbJbBSVSkEpWpwslU5RRO5TSqUZ3TOSN29HucqT+LGpxNTWpRmzrU5RzqUZ8GnMt5nM8FNKQRF9KYi7iYS5Jkb0YmWWTTPL5naNwwhjMi4Kw1bbictrSjPR3oSCc604WudKM7PRLeo5e+N33oy1VcTT+u4Vr6M4DrGMj13MCN3MTN3MKt3MYgBjMkSfYccskjn5Hx9bDCCiussML6P+rzdN9nrOGz9LCPZfg+I41oRti3JJvmtAj7f/9xs8imWYpklrGWFfCsoPnKc6dc8sgnJ0Vyy1jLC3hW0HzluVMBhcxnXooUlLFWGPCsoPnKc6diStjIhhQpLmOtJOBZQfOV507/AK4oARA=
   </data>
  </layer>
- <layer name="collision" width="68" height="21" visible="0">
-  <data encoding="base64" compression="zlib">
-   eJzt1bEJACAQxVBL95/EFW4zWwtbuQ++QBZIk5pjVIMr1I4Wetx7nHR3SOuR0kQPPVJN7AEAAN7T/XuSJH9wA8FOqqs=
-  </data>
- </layer>
- <objectgroup name="knight" opacity="0.9">
+ <objectgroup name="knight">
   <object name="knightBirthPoint" x="1929" y="490.667" width="153.333" height="177.333"/>
   <object name="enterAdventure" x="1769" y="185" width="197" height="204"/>
   <object name="monster1" x="2662" y="240" width="111" height="110"/>
@@ -41,4 +41,9 @@
   <object name="weapon2" x="726" y="236" width="109" height="112"/>
   <object name="weapon1" x="975" y="237" width="108" height="112"/>
  </objectgroup>
+ <layer name="collision" width="68" height="21" opacity="0">
+  <data encoding="base64" compression="zlib">
+   eJzt1bEJACAUA1FL53X/wkokLvAV38H14ZqM3togL3VRveMGT6r3VKuHHi/2wEaPRI9Ej0SPRI9Ej6T660mS/MEJh7TAgg==
+  </data>
+ </layer>
 </map>
