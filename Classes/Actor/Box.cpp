@@ -73,7 +73,7 @@ void Box::openBox()//打开箱子的操作
         _weapon._sprite->setPosition(position);
         //parent->addChild(_weapon._sprite, 1);
     }
-    //this->_sprite->runAction(Sequence::create(fadeOut, removeSelf, nullptr));
+    this->_sprite->runAction(Sequence::create(fadeOut, removeSelf, nullptr));
 
 }
 

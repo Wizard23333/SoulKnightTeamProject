@@ -2,7 +2,9 @@
   战斗场景基本组件
  */
 #include "FightGroundScene.h"
-#include "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
+#include "SimpleAudioEngine.h"
+
+//#include "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
 USING_NS_CC;
@@ -33,11 +35,11 @@ bool FightGround::init()
     }
     visibleSize = Director::getInstance()->getVisibleSize();//可见范围大小
     originPoint = Director::getInstance()->getVisibleOrigin();//原点
-    
+    /*
     auto background = DrawNode::create();//背景
     background->drawSolidRect(originPoint, visibleSize, cocos2d::Color4F::GRAY);
     this->addChild(background, 0);
-    
+    */
     auto audioBgm = CocosDenshion::SimpleAudioEngine::getInstance();
     isMusicPlaying = audioBgm->isBackgroundMusicPlaying() ? true : false;
     
@@ -101,12 +103,21 @@ bool FightGround::init()
                 continue;
             }
             double k1 = 0.1 * i, k2 = 0.1 * j;
-            Wall wall = Wall("Wall.png");
+            Wall wall = Wall("wall1.png");
             wall._sprite->setPosition(Vec2(visibleSize.width * k1, visibleSize.height * k2));
             wall._sprite->setScale(0.10);
             this->addChild(wall._sprite);
         }
     }
+    
+    auto background = Sprite::create("backGround1.png");
+    auto scaleX = visibleSize.width / background->getContentSize().width;
+    auto scaleY = visibleSize.height / background->getContentSize().height;
+    auto realScale = scaleX > scaleY ? scaleX : scaleY;
+    background->setScale(realScale);
+    background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+    this->addChild(background, -1);
+    
            // myHero.HeroCreate("Ninja.png");//创建英雄
     myHero = Hero("Knight.png");
     myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
@@ -228,8 +239,8 @@ bool FightGround::onContactBegan(cocos2d::PhysicsContact & contact)//碰撞的�
     box1.onContactBegin(contact);
     if(box1.isOpen == true)
 	{ 
-		log("hbiposition.x=%f bhauposition.y=%f", box1._potion._sprite->getPosition().x, box1._potion._sprite->getPosition().y);
-		box1._potion._sprite->setPosition(box1._potion._sprite->getPosition().x, box1._potion._sprite->getPosition().y);
+		//log("hbiposition.x=%f bhauposition.y=%f", box1._potion._sprite->getPosition().x, box1._potion._sprite->getPosition().y);
+		//box1._potion._sprite->setPosition(box1._potion._sprite->getPosition().x, box1._potion._sprite->getPosition().y);
         box1._potion.onContactpresolve(contact);
 	}
     monster1.oncontactBegin(contact);
