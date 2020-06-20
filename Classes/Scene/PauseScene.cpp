@@ -29,8 +29,8 @@ bool PauseScene::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
+                                           "return.png",
+                                           "return.png",
                                            CC_CALLBACK_1(PauseScene::menuCloseCallback, this));
 
     if (closeItem == nullptr ||
@@ -41,23 +41,29 @@ bool PauseScene::init()
     }
     else
     {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + visibleSize.height - closeItem->getContentSize().height/2;
+        float x = origin.x + visibleSize.width / 2;
+        float y = origin.y + visibleSize.height / 2 - 100;
         closeItem->setPosition(Vec2(x,y));
     }
 
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
     
+    closeItem->setScale(2);
+    auto menu = Menu::create(closeItem, NULL);
+    /*
     auto startNormalLabel = Label::createWithTTF("BACK", "fonts/Marker Felt.ttf", 40);
     auto startItem = MenuItemLabel::create(startNormalLabel);
     startItem->setCallback(CC_CALLBACK_1(PauseScene::backGameCallback, this));
     startItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 4));
     menu->addChild(startItem, 2);
-    
-    this->addChild(menu, 1);
+    //
+     */
+    auto resumeItem = MenuItemImage::create("continue.png","continue.png",CC_CALLBACK_1(PauseScene::backGameCallback, this));
+    resumeItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 4 + 200));
+    resumeItem->setScale(2);
+    menu->addChild(resumeItem, 2);
     menu->setPosition(Vec2::ZERO);
-    
+    this->addChild(menu, 1);
     return true;
 }
 

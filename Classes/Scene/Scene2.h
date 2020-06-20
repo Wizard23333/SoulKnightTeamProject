@@ -23,7 +23,7 @@ USING_NS_CC;
 class Scene2 : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene * createScene(int blood = 100, int energy = 50, int shield = 30);
+    static cocos2d::Scene * createScene(int blood = 100, int energy = 50, int shield = 30, int money=0);
     virtual bool init();
     void menucloseCallBack(cocos2d::Ref * pSender);
     void menucloseMusic(cocos2d::Ref * pSender);
@@ -51,9 +51,11 @@ private:
     Label * blood;
     Label * energy;
     Label * sheild;
+	Label * money;
     static int s2_blood;
     static int s2_energy;
     static int s2_shield;
+	static int s2_money;
     int appearTime;
     Hero myHero;
     Potion potion1;

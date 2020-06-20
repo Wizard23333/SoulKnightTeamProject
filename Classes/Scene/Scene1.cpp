@@ -1,19 +1,22 @@
 #include "FightGroundScene.h"
-#include "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
+#include "SimpleAudioEngine.h"
+//#include "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 #include "Scene1.h"
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
 USING_NS_CC;
-Scene * Scene1::createScene(int blood, int energy, int shield)
+Scene * Scene1::createScene(int blood, int energy, int shield, int money)
 {
     s1_blood = blood;
     s1_energy = energy;
     s1_shield = shield;
+	s1_money = money;
     return Scene1::create();
 }
 int Scene1::s1_blood = 0;
 int Scene1::s1_energy = 0;
 int Scene1::s1_shield = 0;
+int Scene1::s1_money = 0;
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
@@ -33,11 +36,11 @@ bool Scene1::init()
     }
     visibleSize = Director::getInstance()->getVisibleSize();//可见范围大小
     originPoint = Director::getInstance()->getVisibleOrigin();//原点
-    
+    /*
     auto background = DrawNode::create();//背景
     background->drawSolidRect(originPoint, visibleSize, cocos2d::Color4F::GRAY);
     this->addChild(background, 0);
-    
+    */
     auto audioBgm = CocosDenshion::SimpleAudioEngine::getInstance();
     isMusicPlaying = audioBgm->isBackgroundMusicPlaying() ? true : false;
     
@@ -52,7 +55,7 @@ bool Scene1::init()
         onMusic, offMusic, NULL
     );
     
-    auto closeItem = MenuItemImage::create("CloseNormal.png","CloseSelected.png",CC_CALLBACK_1(Scene1::menucloseCallBack, this));//退出按钮
+    auto closeItem = MenuItemImage::create("pauce.png","pauce.png",CC_CALLBACK_1(Scene1::menucloseCallBack, this));//退出按钮
     float x = originPoint.x + visibleSize.width - closeItem->getContentSize().width/2;
     float y = originPoint.y + visibleSize.height - closeItem->getContentSize().height/2 ;
     closeItem->setPosition(Vec2(x,y));
@@ -81,6 +84,13 @@ bool Scene1::init()
     sheild->setColor(Color3B::BLACK);
     sheild->setPosition(Vec2(sheild->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height));
     this->addChild(sheild, 1);
+
+	char temp4[20];
+	sprintf(temp4, "Money:%d", myHero._heroValue.money);
+	money = cocos2d::Label::createWithTTF(temp4, "fonts/Marker Felt.ttf", 30);
+	money->setColor(Color3B::YELLOW);
+	money->setPosition(Vec2(money->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height - money->getContentSize().height));
+	this->addChild(money, 1);
     
     this->schedule(schedule_selector(Scene1::updateBlood), 0.1f);//血量更新
     
@@ -101,7 +111,7 @@ bool Scene1::init()
                 continue;
             }
             double k1 = 0.1 * i, k2 = 0.1 * j;
-            Wall wall = Wall("Wall.png");
+            Wall wall = Wall("wall1.png");
             wall._sprite->setPosition(Vec2(visibleSize.width * k1, visibleSize.height * k2));
             wall._sprite->setScale(0.10);
             this->addChild(wall._sprite);
@@ -111,16 +121,29 @@ bool Scene1::init()
     for(double i = 1; i <= 4;i=i+0.5)
     {
         double k1 = 0.1 * i;
-        Wall wall = Wall("Wall.png");
+        Wall wall = Wall("wall1.png");
         wall._sprite->setPosition(Vec2(visibleSize.width / 2 - 50, visibleSize.height * k1));
         wall._sprite->setScale(0.10);
         this->addChild(wall._sprite);
     }
            // myHero.HeroCreate("Ninja.png");//创建英雄
+    
+    auto background = Sprite::create("HelloWorld.png");
+    auto scaleX = visibleSize.width / background->getContentSize().width;
+    auto scaleY = visibleSize.height / background->getContentSize().height;
+    auto realScale = scaleX > scaleY ? scaleX : scaleY;
+    background->setScale(realScale);
+    background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+    this->addChild(background, -1);
+    
+    
+    
+    
     myHero = Hero("Knight.png");
     myHero._heroValue.setBlood(s1_blood);
     myHero._heroValue.setEnergy(s1_energy);
     myHero._heroValue.setShield(s1_shield);
+	myHero._heroValue.setMoney(s1_money);
     
     myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
     myHero._sprite->setScale(0.08);
@@ -208,10 +231,13 @@ void Scene1::menucloseMusic(cocos2d::Ref *pSender)
 }
 void Scene1::nextScene()
 {
+	myHero._heroValue.setMoney(myHero._heroValue.money + 7);
+
     s1_blood = myHero._heroValue.blood;
     s1_energy = myHero._heroValue.energy;
     s1_shield = myHero._heroValue.shield;
-    Director::getInstance()->replaceScene(Scene2::createScene(s1_blood, s1_energy, s1_shield));
+	s1_money = myHero._heroValue.money;
+    Director::getInstance()->replaceScene(Scene2::createScene(s1_blood, s1_energy, s1_shield, s1_money));
 }
 bool Scene1::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
@@ -361,7 +387,12 @@ void Scene1::updateBlood(float dt)
     sprintf(temp3, "Sheild:%d/%d", myHero._heroValue.shield, myHero._heroValue.fullShield);
     sheild->setString(temp3);
     sheild->setVisible(true);
-    
+
+	char temp4[20];
+	sprintf(temp4, "Money:%d", myHero._heroValue.money + (7 - Monster::mstrNum));
+	money->setString(temp4);
+	money->setVisible(true);
+
     if(myHero._heroValue.blood == 0)
     {
         //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, HelloWorld::createScene()));
