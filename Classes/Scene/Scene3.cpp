@@ -232,8 +232,8 @@ void Scene3::nextScene()
     s3_blood = myHero._heroValue.blood;
     s3_energy = myHero._heroValue.energy;
     s3_shield = myHero._heroValue.shield;
-    //Director::getInstance()->replaceScene(Scene2::createScene(s1_blood, s1_energy, s1_shield));
-    Director::getInstance()->replaceScene(Welcome::create());
+    Director::getInstance()->replaceScene(bossScene::createScene(s3_blood, s3_energy, s3_shield));
+    //Director::getInstance()->replaceScene(Welcome::create());
 }
 bool Scene3::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
 {
