@@ -383,7 +383,7 @@ void FightGround::updateBlood(float dt)
     {
         //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, HelloWorld::createScene()));
 
-        Director::getInstance()->replaceScene(TransitionFade::create(2.0f, Welcome::createScene()));
+        Director::getInstance()->replaceScene(TransitionFade::create(2.0f, SaveMap::createScene()));
     }
     if(Monster::mstrNum == 0)
     {
