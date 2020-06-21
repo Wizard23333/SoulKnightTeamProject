@@ -1,7 +1,7 @@
 #include "FightGroundScene.h"
-//#include "SimpleAudioEngine.h"
+#include "SimpleAudioEngine.h"
 
-#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
+//#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 #include "bossScene.h"
 //#include "../cocos/audio/mac/CocosDenshion.h"
 
@@ -48,8 +48,6 @@ bool bossScene::init()
     auto offMusic = MenuItemImage::create("MusicSelected.png", "MusicSelected.png");
     auto onMusic = MenuItemImage::create("MusicNormal.png", "MusicNormal.png");
     //add
-    offMusic->setScale(0.15);
-    onMusic->setScale(0.15);
     
     MenuItemToggle *musicItem = MenuItemToggle::createWithCallback(
         CC_CALLBACK_1(bossScene::menucloseMusic, this),

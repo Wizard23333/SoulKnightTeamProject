@@ -46,8 +46,7 @@ bool Scene1::init()
     
     auto offMusic = MenuItemImage::create("MusicSelected.png", "MusicSelected.png");
     auto onMusic = MenuItemImage::create("MusicNormal.png", "MusicNormal.png");
-    offMusic->setScale(0.15);
-    onMusic->setScale(0.15);
+    
     
     MenuItemToggle *musicItem = MenuItemToggle::createWithCallback(
         CC_CALLBACK_1(Scene1::menucloseMusic, this),
