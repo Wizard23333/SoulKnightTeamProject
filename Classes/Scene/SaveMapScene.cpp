@@ -6,7 +6,6 @@
 USING_NS_CC;
 #define GET_TILE_WIDTH tileMap->getTileSize().width
 #define GET_TILE_HEIGHT tileMap->getTileSize().height
-//#define WIN_WIDTH (Director::getInstance()->getVisibleSize().width)
 #define WIN_WIDTH (Director::getInstance()->getWinSize().width)
 #define WIN_HEIGHT (Director::getInstance()->getWinSize().height)
 #define MAP_WIDTH (tileMap->getTileSize().width * tileMap->getMapSize().width)
@@ -20,67 +19,69 @@ Scene* SaveMap::createScene()
     return scene;
 }
 
-// Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
-// on "init" you need to initialize your instance
 bool SaveMap::init()
 {
     if (!Scene::init())
     {
         return false;
     }
-    if (!Scene::initWithPhysics())//Å’Ã”Â¿ÃŒâ€œËÂ«ÃŠâ‰¥Ä±Â ÂºÂªÃ˜ÂºÃâ‰¤â€š
+    //ÎïÀíÒýÇæ³õÊ¼»¯¼ì²â 
+    if (!Scene::initWithPhysics())
     {
         return false;
     }
+    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
+    
+    //¼ÓÈë°²È«µØÍ¼ 
     tileMap = TMXTiledMap::create("basement.tmx");
     tileMap->setScale(0.5);
     this->addChild(tileMap);
     
+    
     Point anchorPos = tileMap->getAnchorPoint();
     Point mapPos = tileMap->getPosition();
     
+    
+    //»ñÈ¡¶ÔÏó²ã 
     TMXObjectGroup* objectGroup = tileMap->getObjectGroup("knight");
 
 
+	//½øÈëÃ°ÏÕµØÍ¼ 
     auto enterInfo = objectGroup->getObject("enterAdventure");
     int enterX = enterInfo.at("x").asFloat()+80;
     int enterY = enterInfo.at("y").asFloat()+90;
+    
     auto enter = Sprite::create("EnterGame.png");
     enter->setPosition(enterX, enterY);
     enter->setScale(0.65);
     enter->setTag(1001);
-    auto physicsBody = PhysicsBody::createBox(enter->getContentSize(), PhysicsMaterial(0.0f, 0.0f, 0.0f));
-    physicsBody->setDynamic(false);
-    physicsBody->setCategoryBitmask(4);
-    physicsBody->setContactTestBitmask(2);
-    enter->setPhysicsBody(physicsBody);
-    
     tileMap->addChild(enter, 1);
     
+    
+    //·ÅÖÃÓ¢ÐÛ 
     auto knightInfo = objectGroup->getObject("knightBirthPoint");
     int knightX = knightInfo.at("x").asFloat();
     int knightY = knightInfo.at("y").asFloat();
     myHero = Hero("Knight.png");
-    myHero._sprite->setPosition(knightX, knightY);//â€¦Ã‹Ã·âˆšÅ’ÂªÃ·âˆš
+    myHero._sprite->setPosition(knightX, knightY);
     myHero._sprite->setScale(0.2);
-    myHero.setWeapon(5);//Å’â€°âˆ†ËœÂ¿â€¡â€“Ã•
+    myHero.setWeapon(5);
     myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
     myHero._weapon._sprite->setScale(0.10);
     tileMap->addChild(myHero._sprite, 1);
     tileMap->addChild(myHero._weapon._sprite, 2);
 
 
-    
-
+	//·ÅÖÃ¹ÖÎï 
     auto monster1Info = objectGroup->getObject("monster1");
     int monster1X = monster1Info.at("x").asFloat()+50;
     int monster1Y = monster1Info.at("y").asFloat()+50;
@@ -121,8 +122,8 @@ bool SaveMap::init()
     monster5->setScale(1.8);
     tileMap->addChild(monster5, 1);
 
-    //this->addChild(tileMap, 0);
     
+    //·ÅÖÃÎäÆ÷ 
     auto weapon1Info = objectGroup->getObject("weapon1");
     int weapon1X = weapon1Info.at("x").asFloat() + 40;
     int weapon1Y = weapon1Info.at("y").asFloat() + 50;
@@ -158,27 +159,8 @@ bool SaveMap::init()
     
     this->scheduleUpdate();
     
-    /*
-    
-
-//    auto propertiesOnOneTile=tileMap->getPropertiesForGID(oneTileId);
-//    const string *collide = propertiesOnOneTile.asValueMap("collide");
-//        if (collide && collide->compare("true")==0)//â‰ˆË†â—Šâ‰¤
-//        {
-//
-//        }
-//        else
-//        {
-//
-//        }
-//        */
-    //this->schedule(schedule_selector(SaveMap::nextScene), 0.1f);//æ¯éš”ä¸€ç§’æ€ªç‰©è¿åŠ¨d
-/*
-    auto contactListener = EventListenerPhysicsContact::create();//ç¢°æ’žäº‹ä»¶ç›‘å¬
-    contactListener->onContactBegin = CC_CALLBACK_1(SaveMap::onContactBegan, this);
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
-    */
-    auto keyListener = EventListenerKeyboard::create();//ÂºÂ¸â‰ˆÃƒÂ Â¬ÂºË›Âºâ€¡ÃƒË
+    //¼üÅÌÊÂ¼þ¼àÌý 
+    auto keyListener = EventListenerKeyboard::create();
     keyListener->onKeyPressed = CC_CALLBACK_2(SaveMap::onKeyPressed, this);
     keyListener->onKeyReleased = CC_CALLBACK_2(SaveMap::onKeyReleased, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyListener, this);
@@ -191,29 +173,33 @@ void SaveMap::menuCloseCallback(Ref* pSender)
     Director::getInstance()->end();
 }
 
+
 void SaveMap::update(float delta)
 {
     updateMap();
     updateHeroAction();
 }
 
+//µØÍ¼ËæÈËÎïÒÆ¶¯£¬»ù±¾±£³ÖÈËÎï´¦ÓÚ´°¿ÚÖÐÐÄ 
 void SaveMap::updateMap()
 {
+	//heroÎ»ÖÃ 
     Point orig = myHero._sprite->getPosition();
+    //´°¿ÚÖÐÐÄÎ»ÖÃ 
     Point dest = Vec2(WIN_WIDTH / 2 + 450, WIN_HEIGHT);
-    Point distance = dest - orig;
+    //Ïà¶ÔÎ»ÖÃ²î 
+    Point distance = dest - orig; 
     Point mapPos = Vec2(0, 0) + distance * 0.5;
+    //·ÀÖ¹´°¿ÚÏÔÊ¾³¬³öµØÍ¼·¶Î§ 
     mapPos.x = (mapPos.x > 0 ? 0 : mapPos.x);
     mapPos.y = (mapPos.y > 0 ? 0 : mapPos.y);
-    log("before%f %f", mapPos.x, mapPos.y);
-    log("---||%f", WIN_WIDTH - MAP_WIDTH);
     mapPos.x = (mapPos.x < WIN_WIDTH - MAP_WIDTH / 2  ? WIN_WIDTH - MAP_WIDTH / 2 : mapPos.x);
     mapPos.y = (mapPos.y < WIN_HEIGHT - MAP_HEIGHT ? WIN_WIDTH - MAP_WIDTH : mapPos.y);
     tileMap->setPosition(mapPos);
-    log("after%f %f", mapPos.x, mapPos.y);
 
 }
 
+//Åö×²¿ØÖÆ 
 void SaveMap::updateHeroAction()
 {
     auto pos = myHero._sprite->getPosition();
@@ -228,17 +214,10 @@ void SaveMap::updateHeroAction()
     
         }
     }
+    //»ñÈ¡µØÍ¼ÖÐÅö×²²ã 
     auto collision = tileMap->getLayer("collision");
-    //auto oneTileId = collision->getTileGIDAt(heroPos);
-    if (collision->getTileGIDAt(heroPos))//â‰ˆË†â—Šâ‰¤
-    {/*
-        auto currentPos = collision->getPosition();
-        auto direction = Vec2(currentPos.x - pos.x, currentPos.y - pos.y);
-        log("dajlk%f %f", direction.x, direction.y);
-        auto moveBy = MoveBy::create(0.1f, direction * 10);
-        myHero._sprite->runAction(moveBy);*/
-        //log("dajlk%f %f", collision->getPosition().x, collision->getPosition().y);
-        //log("hero%f %f", heroPos.x, heroPos.y);
+    if (collision->getTileGIDAt(heroPos))
+    {
         if(heroPos.x > 66)
         {
         myHero._sprite->stopAllActions();
@@ -263,20 +242,20 @@ void SaveMap::updateHeroAction()
     }
 }
 
-Point SaveMap::cocoscoord2tilemapcoord(Point pos)
+//½«cocos×ø±ê×ª»»Îªmap×ø±ê 
+Point SaveMap::tileCoordForPosition(Point pos)
 {
     Point coord;
     coord.x = pos.x / GET_TILE_WIDTH;
-    //coord.y = (MAP_HEIGHT* GET_TILE_HEIGHT - pos.y) / GET_TILE_HEIGHT;
     coord.y = (MAP_HEIGHT - pos.y) / GET_TILE_HEIGHT;
-    //coord.y = (MAP_WIDTH - pos.y) / GET_TILE_HEIGHT;
     return coord;
 }
 
-
-bool  SaveMap::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)//âˆžÂ¥ÂºÂ¸âˆžÂ¥Å“Â¬ÂµÆ’ÂªÃ¿ÂµËœ
+//°´¼ü°´ÏÂµÄ»Øµ÷ 
+bool  SaveMap::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)
 {
-    myHero.onKeyPressed(keycode);//â‰¥â€¦â€˜Â±âˆ«Ã˜Â ËÂ¥Â¶Â¿ÃŒÂºÂ¸â‰ˆÃƒâ€“â‰ˆÅ“Â¢//Å“Â¬Ã•Â¨
+	//³ÉÔ±º¯Êý´¦Àí¼üÅÌÐÅÏ¢
+    myHero.onKeyPressed(keycode);
     return true;
 }
 
@@ -286,27 +265,7 @@ bool SaveMap::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Ev
     return true;
 }
 
-/*
-bool SaveMap::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)
-{
-    auto nodeA = contact.getShapeA()->getBody()->getNode();
-    auto nodeB = contact.getShapeB()->getBody()->getNode();
-    if(nodeA && nodeB)
-    {
-        auto posA = nodeA->getPosition();
-        auto posB = nodeB->getPosition();
-        auto tagA = nodeA->getTag();
-        auto tagB = nodeB->getTag();
-        log("%d %d", tagA, tagB)
-        if(tagB + tagA == 2000)
-        {
-            Director::getInstance()->replaceScene(FightGround::createScene());
 
-        }
-    }
-    
-}
-*/
 void SaveMap::nextScene(float dt)
 {
     auto pos = myHero._sprite->getPosition();
