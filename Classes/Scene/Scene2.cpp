@@ -1,5 +1,4 @@
 #include "FightGroundScene.h"
-
 #include "SimpleAudioEngine.h"
 //#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 #include "Scene2.h"
@@ -45,8 +44,7 @@ bool Scene2::init()
     
     auto offMusic = MenuItemImage::create("MusicSelected.png", "MusicSelected.png");
     auto onMusic = MenuItemImage::create("MusicNormal.png", "MusicNormal.png");
-    offMusic->setScale(0.15);
-    onMusic->setScale(0.15);
+    
     
     MenuItemToggle *musicItem = MenuItemToggle::createWithCallback(
         CC_CALLBACK_1(Scene2::menucloseMusic, this),
@@ -343,7 +341,6 @@ void Scene2::autoshootM(float dt)
     monster3.autoShoot(destination);
     monster4.autoShoot(destination);
     monster5.autoShoot(destination);
-    //monster6.autoShoot(destination);
 }
 
 void Scene2::updateBlood(float dt)
@@ -370,14 +367,10 @@ void Scene2::updateBlood(float dt)
 
     if(myHero._heroValue.blood == 0)
     {
-        //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, HelloWorld::createScene()));
-
         Director::getInstance()->replaceScene(TransitionFade::create(2.0f, Welcome::createScene()));
     }
     if(Monster::mstrNum == 0)
     {
-        //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, Welcome::createScene()));
-        //Director::getInstance()->replaceScene(TransitionFade::create(2.0f, HelloWorld::createScene()));
         this->appearSprite();
     }
 }
@@ -386,6 +379,7 @@ void Scene2::valueAdd(float dt)
 {
     myHero._heroValue.setShield(myHero._heroValue.shield + 1);
 }
+
 void Scene2::controlMoveArea(float dt)
 {
     controlSprite(monster1._sprite);
@@ -395,8 +389,6 @@ void Scene2::controlMoveArea(float dt)
     controlSprite(monster5._sprite);
     controlSprite(monster6._sprite);
     controlSprite(monster7._sprite);
-    
-    
     controlSprite(myHero._sprite);
     controlSprite(myHero._weapon._sprite);
 }
@@ -428,7 +420,7 @@ void Scene2::controlMovingActor(PhysicsContact &contact)
         auto tagB = nodeB->getTag();
         if(tagA == 15 && tagB != 15)
         {
-            if(tagB == 999 || (tagB > 800 && tagB < 900) || (tagB >= 5 && tagB <= 8))//英雄和怪物和武器a
+            if(tagB == 999 || (tagB > 800 && tagB < 900) || (tagB >= 5 && tagB <= 8))
             {
                 nodeB->setOpacity(255);
                 nodeB->stopAllActions();
@@ -445,7 +437,7 @@ void Scene2::controlMovingActor(PhysicsContact &contact)
         }
         if(tagB == 15 && tagA != 15)
         {
-            if(tagA == 999 || (tagA > 800 && tagA < 900) || (tagB >= 5 && tagB <= 8))//英雄和怪物武器
+            if(tagA == 999 || (tagA > 800 && tagA < 900) || (tagB >= 5 && tagB <= 8))
             {
                 nodeA->setOpacity(255);
                 nodeA->stopAllActions();
@@ -465,7 +457,7 @@ void Scene2::controlMovingActor(PhysicsContact &contact)
         }
     }
     myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
-    log("###%d###", Monster::mstrNum);
+    //log("###%d###", Monster::mstrNum);
 }
 void Scene2::appearSprite()
 {

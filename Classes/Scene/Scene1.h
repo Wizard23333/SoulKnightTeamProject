@@ -5,6 +5,7 @@
 #include "PauseScene.h"
 #include "WelcomeScene.h"
 #include "FightGroundScene.h"
+#include "SaveMapScene.h"
 #include "Scene2.h"
 #include "cocos2d.h"
 #include "Hero.h"
