@@ -1,17 +1,10 @@
-//
-//  Scene2.h
-//  HelloWorld
-//
-//  Created by 吴昊天 on 2020/6/16.
-//
-
 #ifndef Scene2_h
 #define Scene2_h
-
 #include "HelloWorldScene.h"
 #include "PauseScene.h"
 #include "WelcomeScene.h"
 #include "FightGroundScene.h"
+#include "SaveMapScene.h"
 #include "Scene3.h"
 #include "cocos2d.h"
 #include "Hero.h"

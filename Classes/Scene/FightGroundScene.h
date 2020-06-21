@@ -3,6 +3,7 @@
 #include "HelloWorldScene.h"
 #include "PauseScene.h"
 #include "WelcomeScene.h"
+#include "SaveMapScene.h"
 #include "Scene1.h"
 #include "Scene2.h"
 #include "bossScene.h"

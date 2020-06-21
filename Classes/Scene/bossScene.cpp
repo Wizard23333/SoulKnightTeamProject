@@ -303,7 +303,7 @@ void bossScene::monsterinit()//怪物初始化
     //this->scheduleOnce(schedule_selector(bossScene::addmonster), 0.1f);//在0.1s后添加怪物
     this->addmonster(1);
     srand((unsigned int)time(nullptr));
-    this->schedule(schedule_selector(bossScene::automoveM), 1.0f);//每隔一秒怪物运动d
+    this->schedule(schedule_selector(bossScene::automoveM), 0.6f);//每隔一秒怪物运动d
     this->schedule(schedule_selector(bossScene::autoshootM), 0.5f);//每隔一秒怪物射击
     
 }
@@ -335,7 +335,7 @@ void bossScene::automoveM(float dt)
     monster6.autoMove(myHero._sprite->getPosition());
     monster7.autoMove(myHero._sprite->getPosition());
     */
-    if(boss.getBlood() < 200)
+    if(boss.getBlood() < 300)
     {
         if(shootAngle % 30 == 0)
         {
@@ -425,7 +425,7 @@ void bossScene::autoshootM(float dt)//自动攻击
         shootAngle = 0;
     else if(shootAngle >= 360 && shootAngle <= 720)
         shootAngle += 15;
-    if(boss.getBlood() <= 200 && boss.getBlood() >= 100)
+    if(boss.getBlood() <= 200 && boss.getBlood() >= 150)
         shootAngle = 1080;
     
     
