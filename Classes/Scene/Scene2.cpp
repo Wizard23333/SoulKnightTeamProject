@@ -1,11 +1,16 @@
 #include "FightGroundScene.h"
-//#include "SimpleAudioEngine.h"
 
-#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
+#include "SimpleAudioEngine.h"
+//#include  "C:\Users\Dell\Desktop\cocos2d-x-3.17.2\cocos2d-x-3.17.2\cocos\audio\include\SimpleAudioEngine.h"
 #include "Scene2.h"
 //#include "../cocos/audio/mac/CocosDenshion.h"
-
 USING_NS_CC;
+
+int Scene2::s2_blood = 0;
+int Scene2::s2_energy = 0;
+int Scene2::s2_shield = 0;
+int Scene2::s2_money = 0;
+
 Scene * Scene2::createScene(int blood, int energy, int shield, int money)
 {
     s2_blood = blood;
@@ -14,10 +19,7 @@ Scene * Scene2::createScene(int blood, int energy, int shield, int money)
 	s2_money = money;
     return Scene2::create();
 }
-int Scene2::s2_blood = 0;
-int Scene2::s2_energy = 0;
-int Scene2::s2_shield = 0;
-int Scene2::s2_money = 0;
+
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
@@ -26,28 +28,23 @@ static void problemLoading(const char* filename)
 
 bool Scene2::init()
 {
-    if(!Scene::init())//场景初始化检测
+    if(!Scene::init())
     {
         return false;
     }
     
-    if(!Scene::initWithPhysics())//物理引擎初始化检测
+    if(!Scene::initWithPhysics())
     {
         return false;
     }
-    visibleSize = Director::getInstance()->getVisibleSize();//可见范围大小
-    originPoint = Director::getInstance()->getVisibleOrigin();//原点
-    /*
-    auto background = DrawNode::create();//背景
-    background->drawSolidRect(originPoint, visibleSize, cocos2d::Color4F::GRAY);
-    this->addChild(background, 0);
-    */
+    visibleSize = Director::getInstance()->getVisibleSize();
+    originPoint = Director::getInstance()->getVisibleOrigin();
+    
     auto audioBgm = CocosDenshion::SimpleAudioEngine::getInstance();
     isMusicPlaying = audioBgm->isBackgroundMusicPlaying() ? true : false;
     
     auto offMusic = MenuItemImage::create("MusicSelected.png", "MusicSelected.png");
     auto onMusic = MenuItemImage::create("MusicNormal.png", "MusicNormal.png");
-    //add
     offMusic->setScale(0.15);
     onMusic->setScale(0.15);
     
@@ -56,15 +53,15 @@ bool Scene2::init()
         onMusic, offMusic, NULL
     );
     
-    auto closeItem = MenuItemImage::create("pauce.png","pauce.png",CC_CALLBACK_1(Scene2::menucloseCallBack, this));//退出按钮
+    auto closeItem = MenuItemImage::create("pauce.png","pauce.png",CC_CALLBACK_1(Scene2::menucloseCallBack, this));
     float x = originPoint.x + visibleSize.width - closeItem->getContentSize().width/2;
     float y = originPoint.y + visibleSize.height - closeItem->getContentSize().height/2 ;
     closeItem->setPosition(Vec2(x,y));
     musicItem->setPosition(Vec2(x, y - closeItem->getContentSize().height));
-    auto menu = Menu::create(closeItem, musicItem, nullptr);//主菜单
+    auto menu = Menu::create(closeItem, musicItem, nullptr);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
-    //血条
+    
     char temp1[20];
     sprintf(temp1, "Blood:%d/%d", myHero._heroValue.blood, myHero._heroValue.fullBlood);
     blood = cocos2d::Label::createWithTTF(temp1, "fonts/Marker Felt.ttf", 30);
@@ -93,15 +90,7 @@ bool Scene2::init()
 	money->setPosition(Vec2(money->getContentSize().width / 2, visibleSize.height - sheild->getContentSize().height - blood->getContentSize().height - energy->getContentSize().height - money->getContentSize().height));
 	this->addChild(money, 1);
 
-    this->schedule(schedule_selector(Scene2::updateBlood), 0.1f);//血量更新
-    
-                   
-    /*
-    auto wall = Node::create();
-    wall->addComponent(PhysicsBody::createEdgeBox(visibleSize, PhysicsMaterial(0.1f, 1, 0.0f)));
-    wall->setPosition(originPoint.x + visibleSize.width / 2, originPoint.y + visibleSize.height / 2);
-    this->addChild(wall);
-    */
+    this->schedule(schedule_selector(Scene2::updateBlood), 0.1f);
     
     for (double i = 1; i <= 9;i=i+0.5)
     {
@@ -140,32 +129,26 @@ bool Scene2::init()
     background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
     this->addChild(background, -1);
     
-    
-           // myHero.HeroCreate("Ninja.png");//创建英雄
     myHero = Hero("Knight.png");
     myHero._heroValue.setBlood(s2_blood);
     myHero._heroValue.setEnergy(s2_energy);
     myHero._heroValue.setShield(s2_shield);
 	myHero._heroValue.setMoney(s2_money);
     
-    myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));//设置位置
+    myHero._sprite->setPosition(Vec2(originPoint.x + 0.5 * visibleSize.width, originPoint.y + 0.5 * visibleSize.height));
     myHero._sprite->setScale(0.08);
     
-    myHero.setWeapon(Hero::weaponTag);//武器类型
+    myHero.setWeapon(Hero::weaponTag);
     myHero._weapon._sprite->setPosition(myHero._sprite->getPosition());
     myHero._weapon._sprite->setScale(0.10);
     this->addChild(myHero._sprite, 1);
     this->addChild(myHero._weapon._sprite, 1);
     this->schedule(schedule_selector(Scene2::valueAdd), 1.0f);
-    //myHero._sprite->setTag(999);//添加Tag值
     
-    //myHero._heroValue.setBlood(5);//加血演示
-    //myHero._heroValue.setEnergy(10);
-    //添加药水
     potion1 = Potion("Blood.png");
     potion1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 + 200));
     potion1._sprite->setScale(0.10);
-    potion1._sprite->setTag(1);//药水的属性值
+    potion1._sprite->setTag(1);
     potion1.hideSelf();
     this->addChild(potion1._sprite, 1);
 
@@ -176,7 +159,7 @@ bool Scene2::init()
     potion2.hideSelf();
     this->addChild(potion2._sprite, 1);
     
-    box1 = Box(1, 1);//加入宝箱
+    box1 = Box(1, 1);
     box1._sprite->setPosition(Vec2(visibleSize.width/2, visibleSize.height/2 - 100));
     box1._sprite->setScale(0.5);
     box1.hideSelf();
@@ -190,32 +173,28 @@ bool Scene2::init()
     this->addChild(gate._sprite, 1);
     appearTime = 0;
     
-    this->monsterinit();//初始化怪物设置
+    this->monsterinit();
     
-    this->schedule(schedule_selector(Scene2::controlMoveArea), 0.1f);//控制外围边界
+    this->schedule(schedule_selector(Scene2::controlMoveArea), 0.1f);
     
-    
-    auto eventListener = EventListenerTouchOneByOne::create();//触摸事件监听
+    auto eventListener = EventListenerTouchOneByOne::create();
     eventListener->onTouchBegan = CC_CALLBACK_2(Scene2::onTouchBegan, this);
     eventListener->onTouchEnded = CC_CALLBACK_2(Scene2::onTouchEnded, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventListener, this);
     
-    auto contactListener = EventListenerPhysicsContact::create();//碰撞事件监听
+    auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = CC_CALLBACK_1(Scene2::onContactBegan, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
-    //键盘控制
-    auto keyListener = EventListenerKeyboard::create();//键盘事件监听
+    
+    auto keyListener = EventListenerKeyboard::create();
     keyListener->onKeyPressed = CC_CALLBACK_2(Scene2::onKeyPressed, this);
     keyListener->onKeyReleased = CC_CALLBACK_2(Scene2::onKeyReleased, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyListener, this);
     
     return true;
-    
-    
-    
 }
 
-void Scene2::menucloseCallBack(Ref* pSender)//关闭按钮的回调
+void Scene2::menucloseCallBack(Ref* pSender)
 {
     Director::getInstance()->pushScene(PauseScene::createScene());
 }
@@ -232,6 +211,7 @@ void Scene2::menucloseMusic(cocos2d::Ref *pSender)
         isMusicPlaying = true;
     }
 }
+
 void Scene2::nextScene()
 {
 	myHero._heroValue.setMoney(myHero._heroValue.money + 14);
@@ -241,23 +221,25 @@ void Scene2::nextScene()
 	s2_money = myHero._heroValue.money;
     Director::getInstance()->replaceScene(Scene3::createScene(s2_blood, s2_energy, s2_shield, s2_money));
 }
-bool Scene2::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)//触摸的回调
+
+bool Scene2::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* unused_event)
 {
     
     if(myHero.onTouchBegin(touch)== true)
         myHero._weapon.onTouchBegan(touch, unused_event);
     return true;
 }
+
 bool Scene2::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* unused_event)
 {
     
     myHero._weapon.onTouchEnded(touch, unused_event);
     return true;
 }
-bool Scene2::onContactBegan(cocos2d::PhysicsContact & contact)//碰撞的回调
+
+bool Scene2::onContactBegan(cocos2d::PhysicsContact & contact)
 {
-    
-    myHero.onContactBegin(contact);//成员函数处理碰撞信息//==false意味着没有节点被清除
+    myHero.onContactBegin(contact);
     potion1.onContactpresolve(contact);
     potion2.onContactpresolve(contact);
     box1.onContactBegin(contact);
@@ -270,15 +252,13 @@ bool Scene2::onContactBegan(cocos2d::PhysicsContact & contact)//碰撞的回调
     monster5.oncontactBegin(contact);
     monster6.oncontactBegin(contact);
     monster7.oncontactBegin(contact);
-    
-    
     controlMovingActor(contact);
     return true;
 }
 
-bool  Scene2::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)//按键按下的回调
+bool  Scene2::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event)
 {
-    myHero.onKeyPressed(keycode);//成员函数处理键盘信息//下同
+    myHero.onKeyPressed(keycode);
     potion1.onKeyPressed(keycode);
     potion2.onKeyPressed(keycode);
     if(box1.isOpen == true)
@@ -298,20 +278,16 @@ bool Scene2::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
     return true;
 }
 
-void Scene2::monsterinit()//怪物初始化
+void Scene2::monsterinit()
 {
-    
-    //this->scheduleOnce(schedule_selector(Scene2::addmonster), 0.1f);//在0.1s后添加怪物
     this->addmonster(1);
     srand((unsigned int)time(nullptr));
-    this->schedule(schedule_selector(Scene2::automoveM), 1.0f);//每隔一秒怪物运动d
-    this->schedule(schedule_selector(Scene2::autoshootM), 1.5f);//每隔一秒怪物射击
-    
+    this->schedule(schedule_selector(Scene2::automoveM), 1.0f);
+    this->schedule(schedule_selector(Scene2::autoshootM), 1.5f);
 }
 
-void Scene2::addmonster(float dt)//创建并添加怪物
+void Scene2::addmonster(float dt)
 {
-    
     monster1 = Monster(std::string("monster3.png"), std::string("bullet3.png"), 20, 1);
     monster2 = Monster(std::string("monster3.png"), std::string("bullet3.png"), 30, 2);
     monster3 = Monster(std::string("monster3.png"), std::string("bullet3.png"), 30, 2);
@@ -343,28 +319,25 @@ void Scene2::addmonster(float dt)//创建并添加怪物
     this->addChild(monster5._sprite, 1);
     this->addChild(monster6._sprite, 1);
     this->addChild(monster7._sprite, 1);
-    //monster1.setMonsterNum(4);
+
     Monster::mstrNum = 7;
 
 }
 
 void Scene2::automoveM(float dt)
 {
-    monster1.autoMove();//用类的成员函数控制怪物的运动
+    monster1.autoMove();
     monster2.autoMove();
     monster3.autoMove();
     monster4.autoMove();
     monster5.autoMove();
     monster6.autoMove(myHero._sprite->getPosition());
     monster7.autoMove(myHero._sprite->getPosition());
-    
-    
-    
 }
 
-void Scene2::autoshootM(float dt)//自动攻击
+void Scene2::autoshootM(float dt)
 {
-    auto destination = myHero._sprite->getPosition();//获取需要的坐标
+    auto destination = myHero._sprite->getPosition();
     monster1.autoShoot(destination);
     monster2.autoShoot(destination);
     monster3.autoShoot(destination);

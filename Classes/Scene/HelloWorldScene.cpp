@@ -23,7 +23,6 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
-//#include "FirstGameScene.hpp"
 #include "FightGroundScene.h"
 #include "WelcomeScene.h"
 //#include "SimpleAudioEngine.h"

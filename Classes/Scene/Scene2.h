@@ -20,6 +20,7 @@
 #include "Box.h"
 #include "Wall.h"
 USING_NS_CC;
+
 class Scene2 : public cocos2d::Scene
 {
 public:
@@ -35,10 +36,10 @@ public:
     bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
     CREATE_FUNC(Scene2);
 private:
-    void monsterinit();//*****
-    void addmonster(float dt);//*****
-    void automoveM(float dt);//*****
-    void autoshootM(float dt);//****
+    void monsterinit();
+    void addmonster(float dt);
+    void automoveM(float dt);
+    void autoshootM(float dt);
     void updateBlood(float dt);
     void valueAdd(float dt);
     void controlMoveArea(float dt);
@@ -70,4 +71,5 @@ private:
     Monster monster6;
     Monster monster7;
 };
+
 #endif /* Scene2_h */

@@ -1,5 +1,6 @@
 #ifndef Hero_h
 #define Hero_h
+
 #include "cocos2d.h"
 #include "Actor.h"
 #include "Weapon.h"
@@ -39,7 +40,6 @@ public:
             this->energy = 0;
         else if(energy >= fullEnergy)
             this->energy = fullEnergy;
-        
     }
     void setShield(int shield)
     {
@@ -49,12 +49,10 @@ public:
             this->shield = 0;
         else if(shield >= fullShield)
             this->shield = fullShield;
-        
     }
 	void setMoney(int money)
 	{
 		this->money = money;
-
 	}
 };
 
@@ -82,7 +80,5 @@ private:
     void stopMoveByTag(int tag);
     void usePotion();
 };
-
-
 
 #endif /* Hero_h */

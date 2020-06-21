@@ -1,4 +1,3 @@
-
 #ifndef Scene1_h
 #define Scene1_h
 
@@ -14,6 +13,7 @@
 #include "Box.h"
 #include "Wall.h"
 USING_NS_CC;
+
 class Scene1 : public cocos2d::Scene
 {
 public:
@@ -29,10 +29,10 @@ public:
     bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event * event);
     CREATE_FUNC(Scene1);
 private:
-    void monsterinit();//*****
-    void addmonster(float dt);//*****
-    void automoveM(float dt);//*****
-    void autoshootM(float dt);//****
+    void monsterinit();
+    void addmonster(float dt);
+    void automoveM(float dt);
+    void autoshootM(float dt);
     void updateBlood(float dt);
     void valueAdd(float dt);
     void controlMoveArea(float dt);
