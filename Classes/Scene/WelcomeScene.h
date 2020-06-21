@@ -11,14 +11,12 @@ public:
 
     virtual bool init();
     
-    // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
+    //enter game 
 	void menuStartCallBack(cocos2d::Ref* pSender);
+	//control music 
 	void menuCloseMusic(cocos2d::Ref* pSender);
-	void menuCloseEffect(Ref* pSender);
-    //add
-    bool isMusicPlaying;
-    // implement the "static create()" method manually
+
     CREATE_FUNC(Welcome);
 };
 
