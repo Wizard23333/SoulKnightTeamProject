@@ -153,5 +153,5 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 }
 void HelloWorld::startGameCallback(cocos2d::Ref* pSender)
 {
-    Director::getInstance()->replaceScene(TransitionSlideInT::create(2.0f, SaveMap::createScene()));
+    Director::getInstance()->replaceScene(TransitionSlideInT::create(2.0f, Welcome::createScene()));
 }
