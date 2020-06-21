@@ -31,18 +31,17 @@ bool Welcome::init()
 	auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
 	if (!audio->isBackgroundMusicPlaying()) {
 		audio->playBackgroundMusic("SoulKnightBgm.mp3", true);
-		audio->playBackgroundMusic(0.5); 
 	}
 
-
+	
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	//set MusicItem 
 	MenuItemImage *offMusic = MenuItemImage::create("MusicSelected.png", "MusicSelected.png");
 	MenuItemImage *onMusic = MenuItemImage::create("MusicNormal.png", "MusicNormal.png");
-	offMusic->setScale(0.5);
-	onMusic->setScale(0.5);
+	offMusic->setScale(2);
+	onMusic->setScale(2);
 
 	MenuItemToggle *musicItem = MenuItemToggle::createWithCallback(
 		CC_CALLBACK_1(Welcome::menuCloseMusic, this),
